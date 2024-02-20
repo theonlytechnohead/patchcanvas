@@ -6,16 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>PatchCanvas</title>
 	<link rel="stylesheet" href="style.css">
-	<!-- Include Paper.js from CDN -->
 	<script src="https://unpkg.com/paper@0.12.1/dist/paper-full.min.js"></script>
+	<script type="text/paperscript" src="grid.js" canvas="canvas" async></script>
+	<script type="text/paperscript" src="circle.js" canvas="canvas" async></script>
 </head>
 
 <body>
-	<!-- Your canvas element goes here -->
-	<canvas id="canvas"></canvas>
+	<canvas id="canvas" resize></canvas>
 
-	<!-- Your JavaScript code goes here -->
-	<script src="script.js"></script>
+	<!-- <script src="script.js"></script> -->
 </body>
 
 </html>
