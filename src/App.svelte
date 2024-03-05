@@ -1,61 +1,58 @@
 <script lang="ts">
-  import "@joint/core";
-  import { onMount } from "svelte";
-  import { connectors, dia, shapes } from "@joint/core";
-
-  let ref;
-
-  onMount(() => {
-    var namespace = shapes;
-
-    var graph = new dia.Graph({}, { cellNamespace: namespace });
-
-    var paper = new dia.Paper({
-      el: document.getElementById("holder"),
-      model: graph,
-      width: 600,
-      height: 600,
-      gridSize: 10,
-      drawGrid: true,
-      background: {
-        color: "rgba(0, 176, 255, 0.3)",
-      },
-      cellViewNamespace: namespace,
-    });
-
-    var rect = new shapes.standard.Rectangle();
-    rect.position(100, 30);
-    rect.resize(100, 40);
-    rect.attr({
-      body: {
-        fill: "blue",
-      },
-      label: {
-        text: "Hello",
-        fill: "white",
-      },
-    });
-    rect.addTo(graph);
-
-    var rect2 = rect.clone();
-    rect2.translate(300, 0);
-    rect2.attr("label/text", "World!");
-    rect2.addTo(graph);
-
-    var link = new shapes.standard.Link();
-    link.connector("curve", {
-      direction: connectors.curve.Directions.AUTO,
-      targetDirection: connectors.curve.TangentDirections.AUTO,
-    });
-    link.source(rect);
-    link.target(rect2);
-    link.addTo(graph);
-  });
+  import { writable } from 'svelte/store';
+  import {
+    SvelteFlow,
+    Controls,
+    Background,
+    BackgroundVariant,
+    MiniMap
+  } from '@xyflow/svelte';
+ 
+  // 👇 this is important! You need to import the styles for Svelte Flow to work
+  import '@xyflow/svelte/dist/style.css';
+ 
+  // We are using writables for the nodes and edges to sync them easily. When a user drags a node for example, Svelte Flow updates its position.
+  const nodes = writable([
+    {
+      id: '1',
+      type: 'input',
+      data: { label: 'Input Node' },
+      position: { x: 0, y: 0 }
+    },
+    {
+      id: '2',
+      type: 'default',
+      data: { label: 'Node' },
+      position: { x: 0, y: 150 }
+    }
+  ]);
+ 
+  // same for edges
+  const edges = writable([
+    {
+      id: '1-2',
+      type: 'default',
+      source: '1',
+      target: '2',
+      label: 'Edge Text'
+    }
+  ]);
+ 
+  const snapGrid = [25, 25];
 </script>
 
-<main class="app" bind:this={ref}>
-  <div id="holder"></div>
+<main>
+  <div style:height="500px">
+  <SvelteFlow
+    {nodes}
+    {edges}
+    {snapGrid}
+    fitView
+    on:nodeclick={(event) => console.log('on node click', event.detail.node)}
+  >
+    <Controls />
+    <Background variant={BackgroundVariant.Dots} />
+    <MiniMap />
+  </SvelteFlow>
+</div>
 </main>
-
-<style>
-</style>
