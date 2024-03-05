@@ -1,3 +1,16 @@
+[data-theme="dark"] {
+	--font-colour: white;
+}
+
+[data-theme="light"] {
+	--font-colour: black;
+}
+
+:root {
+	color: var(--font-colour);
+	font-family: system-ui;
+}
+
 body {
 	margin: 0;
 	padding: 0;

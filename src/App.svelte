@@ -6,11 +6,17 @@
     Background,
     BackgroundVariant,
     MiniMap,
+    ConnectionLineType,
+    Panel,
+    SvelteFlowProvider,
+    ControlButton,
+    type ColorMode,
   } from "@xyflow/svelte";
 
   // 👇 this is important! You need to import the styles for Svelte Flow to work
   import "@xyflow/svelte/dist/style.css";
   import "./style/flow.css";
+  import Sidebar from "./components/Sidebar.svelte";
 
   // We are using writables for the nodes and edges to sync them easily. When a user drags a node for example, Svelte Flow updates its position.
   const nodes = writable([
@@ -39,22 +45,50 @@
     },
   ]);
 
-  const snapGrid = [25, 25];
+  let theme: ColorMode
+  $: theme = document.documentElement.getAttribute("data-theme") as ColorMode ?? "dark" as ColorMode
 </script>
 
 <main>
   <div style:height="100%">
-    <SvelteFlow
-      {nodes}
-      {edges}
-      {snapGrid}
-      fitView
-      panOnScroll
-      on:nodeclick={(event) => console.log("on node click", event.detail.node)}
-    >
-      <Controls />
-      <Background variant={BackgroundVariant.Dots} />
-      <MiniMap />
-    </SvelteFlow>
+    <!-- https://svelteflow.dev/api-reference -->
+    <SvelteFlowProvider>
+      <SvelteFlow
+        {nodes}
+        {edges}
+        snapGrid={[25, 25]}
+        colorMode={theme}
+        fitView
+        minZoom={0.75}
+        maxZoom={10}
+        onlyRenderVisibleElements={true}
+        connectionLineType={ConnectionLineType.SmoothStep}
+        attributionPosition={"top-right"}
+        on:nodeclick={(event) =>
+          console.log("on node click", event.detail.node)}
+      >
+        <Background variant={BackgroundVariant.Dots} />
+        <MiniMap position={"top-right"} pannable={false} zoomable={false} />
+        <Controls
+          position={"bottom-right"}
+          showFitView={false}
+          showLock={false}
+        >
+          <ControlButton
+            on:click={() => {
+              if (theme === "dark") {
+                theme = "light"
+              } else {
+                theme = "dark"
+              }
+              document.documentElement.setAttribute("data-theme", theme)
+              document.querySelector('meta[name="color-scheme"]')?.setAttribute("content", theme)
+            }}>🌙</ControlButton
+          >
+        </Controls>
+        <Panel position={"bottom-left"}>© 2024 Craig Anderson</Panel>
+        <Sidebar />
+      </SvelteFlow>
+    </SvelteFlowProvider>
   </div>
 </main>
