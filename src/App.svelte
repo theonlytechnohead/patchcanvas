@@ -49,6 +49,7 @@
       {edges}
       {snapGrid}
       fitView
+      panOnScroll
       on:nodeclick={(event) => console.log("on node click", event.detail.node)}
     >
       <Controls />
