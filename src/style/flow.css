@@ -1,9 +1,0 @@
-/* https: //svelteflow.dev/learn/guides/theming#working-with-built-in-classes */
-
-.svelte-flow__node {
-	font-family: system-ui;
-}
-
-.svelte-flow__edge-label {
-	font-family: system-ui;
-}
