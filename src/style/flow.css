@@ -1,4 +1,9 @@
-/* https: //svelteflow.dev/learn/guides/theming#working-with-built-in-classes */
+/* https://svelteflow.dev/learn/guides/theming#working-with-built-in-classes */
+
+.svelte-flow__controls-button {
+	width: 3em;
+	height: 3em;
+}
 
 .svelte-flow__node {
 	color: var(--font-colour);

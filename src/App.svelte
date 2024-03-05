@@ -68,7 +68,13 @@
           console.log("on node click", event.detail.node)}
       >
         <Background variant={BackgroundVariant.Dots} />
-        <MiniMap position={"top-right"} pannable={false} zoomable={false} />
+        <MiniMap
+        position={"top-right"}
+        pannable={false}
+        zoomable={false} 
+        width={visualViewport?.width ? visualViewport?.width / 10 : undefined}
+        height={visualViewport?.height ? visualViewport?.height / 10 : undefined}
+        />
         <Controls
           position={"bottom-right"}
           showFitView={false}
@@ -86,7 +92,8 @@
             }}>🌙</ControlButton
           >
         </Controls>
-        <Panel position={"bottom-left"}>© 2024 Craig Anderson</Panel>
+        <Panel position={"top-left"}><h1>PatchCanvas</h1></Panel>
+        <Panel position={"bottom-left"}><a href="https://github.com/theonlytechnohead/patchcanvas">GitHub</a><br>© 2024 Craig Anderson</Panel>
         <Sidebar />
       </SvelteFlow>
     </SvelteFlowProvider>
