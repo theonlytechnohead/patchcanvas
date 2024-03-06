@@ -65,7 +65,14 @@
     event.preventDefault();
 
     if (event.dataTransfer) {
-      event.dataTransfer.dropEffect = "move";
+      // check the drop "target" and ensure that it is over the correct area (i.e. not a panel)
+      const element = document.elementFromPoint(event.clientX, event.clientY);
+      const allowedTargets = ".svelte-flow__pane, .svelte-flow__node, .svelte-flow__edge"
+      if (element?.matches(allowedTargets)) {
+        event.dataTransfer.dropEffect = "move";
+      } else {
+        event.dataTransfer.dropEffect = "none";
+      }
     }
   };
 
