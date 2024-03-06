@@ -1,9 +1,11 @@
 [data-theme="dark"] {
 	--font-colour: white;
+	--background-colour: black;
 }
 
 [data-theme="light"] {
 	--font-colour: black;
+	--background-colour: white;
 }
 
 :root {

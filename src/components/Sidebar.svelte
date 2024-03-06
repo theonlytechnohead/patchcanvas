@@ -1,5 +1,6 @@
 <script lang="ts">
   import { useEdges, useNodes } from "@xyflow/svelte";
+  import NodePanel from "./NodePanel.svelte";
 
   const nodes = useNodes();
   const edges = useEdges();
@@ -10,6 +11,8 @@
 </script>
 
 <aside>
+  <h1>PatchCanvas</h1>
+  <NodePanel />
   <p>Component list:</p>
   {#each $nodes as node}
     <div>
@@ -21,8 +24,7 @@
   <p>Connection list:</p>
   {#each $edges as edge}
     <div>
-      {edge.label}
-      from {getNodeName(edge.source)}
+      Connection from {getNodeName(edge.source)}
       to {getNodeName(edge.target)}
       {edge.selected ? " - selected" : ""}
     </div>
@@ -36,8 +38,13 @@
     opacity: 0.65;
   }
   aside {
-    position: fixed;
-    top: 4em;
-    left: 1em;
+    padding: 1em;
+    backdrop-filter: blur(0.5em);
+    background-color: color-mix(
+      in srgb,
+      color-mix(in srgb, var(--font-colour) 25%, var(--background-colour) 75%)
+        25%,
+      transparent 75%
+    );
   }
 </style>
