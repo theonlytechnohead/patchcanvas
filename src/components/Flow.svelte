@@ -8,7 +8,6 @@
     Background,
     BackgroundVariant,
     MiniMap,
-    ConnectionLineType,
     Panel,
     ControlButton,
     useSvelteFlow,
@@ -22,10 +21,10 @@
     type Edge,
   } from "@xyflow/svelte";
   import Sidebar from "./Sidebar.svelte";
-  import CustomEdge from "./edges/CustomEdge.svelte";
+  import ConnectionEdge from "./edges/ConnectionEdge.svelte";
   import type { ComponentType, SvelteComponent } from "svelte";
-  import CustomNode from "./nodes/CustomNode.svelte";
-  import CustomLine from "./lines/CustomLine.svelte";
+  import ConnectionNode from "./nodes/ConnectionNode.svelte";
+  import ConnectionLine from "./lines/ConnectionLine.svelte";
 
   // theming
   let theme: ColorMode;
@@ -34,11 +33,11 @@
     ("dark" as ColorMode);
 
   const nodeTypes = {
-    default: CustomNode,
+    default: ConnectionNode,
   } satisfies Record<string, ComponentType<SvelteComponent<NodeProps>>>;
 
   const edgeTypes = {
-    custom: CustomEdge,
+    custom: ConnectionEdge,
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
   const nodes = writable([
@@ -57,14 +56,14 @@
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "Custom node" },
+      data: { label: "POWER!!!", connection: "power" },
       dragHandle: ".drag-dots",
       position: { x: 200, y: 0 },
     },
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "Custom node" },
+      data: { label: "Testing node", connection: "all" },
       dragHandle: ".drag-dots",
       position: { x: 225, y: 125 },
     },
@@ -114,18 +113,19 @@
     if (!event.dataTransfer) {
       return null;
     }
-    const type = event.dataTransfer.getData("application/svelteflow");
+    const connection = event.dataTransfer.getData("application/svelteflow");
     const position = screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
     });
     const newNode = {
       id: `${Math.random()}`,
-      type,
+      type: "default",
       position,
-      data: { label: `${type} node` },
+      data: { label: `${connection} node`, connection: connection },
+      dragHandle: ".drag-dots",
       origin: [0.5, 0.0],
-    } satisfies Node;
+    };
     $nodes.push(newNode);
     $nodes = $nodes;
   };
@@ -152,7 +152,7 @@
   on:nodeclick={(event) => console.log("on node click", event.detail.node)}
   on:edgeclick={(event) => console.log("on edge click: ", event.detail.edge)}
 >
-  <CustomLine slot="connectionLine" />
+  <ConnectionLine slot="connectionLine" />
   <Background variant={BackgroundVariant.Dots} />
   <MiniMap
     position={"top-right"}

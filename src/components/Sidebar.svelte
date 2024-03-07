@@ -13,7 +13,7 @@
 <aside>
   <h1>PatchCanvas</h1>
   <NodePanel />
-  <p>Component list:</p>
+  <!-- <p>Component list:</p>
   {#each $nodes as node}
     <div>
       {node.data.label}
@@ -28,7 +28,7 @@
       to {getNodeName(edge.target)}
       {edge.selected ? " - selected" : ""}
     </div>
-  {/each}
+  {/each} -->
 </aside>
 
 <style>

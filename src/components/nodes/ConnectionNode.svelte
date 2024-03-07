@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Handle, Position, type NodeProps } from "@xyflow/svelte";
+	import { type NodeProps } from "@xyflow/svelte";
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
@@ -39,21 +39,30 @@
 <div style={data.labelStyle} class="label">
 	<span class="drag-handle drag-dots">{@html DragDots}</span>{data.label}
 </div>
-<ConnectionHandle id="dante" io="input" style="left: 10%;" />
-<ConnectionHandle id="dmx" io="input" style="left:20%;" />
-<ConnectionHandle id="ethernet" io="input" style="left:30%;" />
-<ConnectionHandle id="sdi" io="input" style="left:40%;" />
-<ConnectionHandle id="audio" io="input" style="left:50%;" />
-<ConnectionHandle id="midi" io="input" style="left:60%;" />
-<ConnectionHandle id="osc" io="input" style="left:70%;" />
-<ConnectionHandle id="power" io="input" style="left: 95%;" />
-<ConnectionHandle id="dante" io="output" style="left: 15%;" />
-<ConnectionHandle id="dmx" io="output" style="left: 25%;" />
-<ConnectionHandle id="ethernet" io="output" style="left: 35%;" />
-<ConnectionHandle id="sdi" io="output" style="left: 45%;" />
-<ConnectionHandle id="audio" io="output" style="left: 55%;" />
-<ConnectionHandle id="midi" io="output" style="left: 65%;" />
-<ConnectionHandle id="osc" io="output" style="left: 75%;" />
+
+{#if data.connection === "all"}
+	<ConnectionHandle id="dante" io="input" style="left: 10%;" />
+	<ConnectionHandle id="dmx" io="input" style="left:20%;" />
+	<ConnectionHandle id="ethernet" io="input" style="left:30%;" />
+	<ConnectionHandle id="sdi" io="input" style="left:40%;" />
+	<ConnectionHandle id="audio" io="input" style="left:50%;" />
+	<ConnectionHandle id="midi" io="input" style="left:60%;" />
+	<ConnectionHandle id="osc" io="input" style="left:70%;" />
+	<ConnectionHandle id="power" io="input" style="left: 95%;" />
+	<ConnectionHandle id="dante" io="output" style="left: 15%;" />
+	<ConnectionHandle id="dmx" io="output" style="left: 25%;" />
+	<ConnectionHandle id="ethernet" io="output" style="left: 35%;" />
+	<ConnectionHandle id="sdi" io="output" style="left: 45%;" />
+	<ConnectionHandle id="audio" io="output" style="left: 55%;" />
+	<ConnectionHandle id="midi" io="output" style="left: 65%;" />
+	<ConnectionHandle id="osc" io="output" style="left: 75%;" />
+{/if}
+{#if data.connection === "power"}
+	<ConnectionHandle id="power" io="output" style="left: 50%;" />
+{/if}
+{#if data.connection === "audio"}
+	<ConnectionHandle id="audio" io="input" style="left: 50%;" />
+{/if}
 
 <style>
 	.label {
