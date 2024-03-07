@@ -5,6 +5,7 @@
 		useEdges,
 		BaseEdge,
 	} from "@xyflow/svelte";
+	import { connections, type ConnectionType } from "../connectionTypes";
 
 	type $$Props = EdgeProps;
 	export let id: $$Props["id"];
@@ -50,7 +51,7 @@
 	labelStyle;
 	data;
 	interactionWidth;
-	style += "stroke: " + sourceHandleId;
+	style += `stroke: ${connections[(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)]};`;
 </script>
 
 <BaseEdge path={edgePath} {labelX} {labelY} {markerStart} {markerEnd} {style} />

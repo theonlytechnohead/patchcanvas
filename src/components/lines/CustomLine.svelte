@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Position, getSmoothStepPath, useConnection } from "@xyflow/svelte";
+	import { connections, type ConnectionType } from "../connectionTypes";
 	const connection = useConnection();
 	let path = "";
 
@@ -21,6 +22,9 @@
 			targetPosition: targetPosition ?? Position.Top,
 		});
 	}
+	let type: ConnectionType =
+		($connection.startHandle?.handleId as ConnectionType) ??
+		("" as ConnectionType);
 </script>
 
 {#if $connection.path}
@@ -28,7 +32,7 @@
 		fill="none"
 		stroke-width={1.5}
 		class="animated"
-		stroke={$connection.startHandle?.handleId ?? "var(--font-colour)"}
+		stroke={connections[type] ?? "var(--font-colour)"}
 		d={path}
 	/>
 	<circle
@@ -36,7 +40,7 @@
 		cy={$connection.targetY}
 		fill="var(--font-colour)"
 		r={3}
-		stroke={$connection.startHandle?.handleId ?? "var(--font-colour)"}
+		stroke={connections[type] ?? "var(--font-colour)"}
 		stroke-width={1.5}
 	/>
 {/if}
