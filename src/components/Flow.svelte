@@ -16,15 +16,30 @@
     type Node,
     type DefaultEdgeOptions,
     type FitViewOptions,
-    type Viewport,
+    type EdgeProps,
+    type NodeProps,
+    type Connection,
+    type Edge,
   } from "@xyflow/svelte";
   import Sidebar from "./Sidebar.svelte";
+  import CustomEdge from "./edges/CustomEdge.svelte";
+  import type { ComponentType, SvelteComponent } from "svelte";
+  import CustomNode from "./nodes/CustomNode.svelte";
+  import CustomLine from "./lines/CustomLine.svelte";
 
   // theming
   let theme: ColorMode;
   $: theme =
     (document.documentElement.getAttribute("data-theme") as ColorMode) ??
     ("dark" as ColorMode);
+
+  const nodeTypes = {
+    default: CustomNode,
+  } satisfies Record<string, ComponentType<SvelteComponent<NodeProps>>>;
+
+  const edgeTypes = {
+    custom: CustomEdge,
+  } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
   const nodes = writable([
     {
@@ -39,6 +54,20 @@
       data: { label: "Canvas" },
       position: { x: 0, y: 150 },
     },
+    {
+      id: crypto.randomUUID().toString(),
+      type: "default",
+      data: { label: "Custom node" },
+      dragHandle: ".drag-dots",
+      position: { x: 200, y: 0 },
+    },
+    {
+      id: crypto.randomUUID().toString(),
+      type: "default",
+      data: { label: "Custom node" },
+      dragHandle: ".drag-dots",
+      position: { x: 225, y: 125 },
+    },
   ]);
 
   const edges = writable([
@@ -50,9 +79,13 @@
     },
   ]);
 
+  function validateConnection(connection: Edge | Connection): boolean {
+    return connection.sourceHandle === connection.targetHandle;
+  }
+
   const defaultEdgeOptions = {
     animated: false,
-    type: "smoothstep",
+    type: "custom",
   } satisfies DefaultEdgeOptions;
 
   const fitViewOptions = {
@@ -63,11 +96,11 @@
   const { screenToFlowPosition } = useSvelteFlow();
   const onDragOver = (event: DragEvent) => {
     event.preventDefault();
-
     if (event.dataTransfer) {
       // check the drop "target" and ensure that it is over the correct area (i.e. not a panel)
       const element = document.elementFromPoint(event.clientX, event.clientY);
-      const allowedTargets = ".svelte-flow__pane, .svelte-flow__node, .svelte-flow__edge"
+      const allowedTargets =
+        ".svelte-flow__pane, .svelte-flow__node, .svelte-flow__edge";
       if (element?.matches(allowedTargets)) {
         event.dataTransfer.dropEffect = "move";
       } else {
@@ -100,8 +133,11 @@
 
 <SvelteFlow
   {nodes}
+  {nodeTypes}
   {edges}
+  {edgeTypes}
   {defaultEdgeOptions}
+  isValidConnection={validateConnection}
   snapGrid={[25, 25]}
   colorMode={theme}
   fitView
@@ -109,7 +145,6 @@
   minZoom={0.75}
   maxZoom={10}
   onlyRenderVisibleElements={true}
-  connectionLineType={ConnectionLineType.SmoothStep}
   attributionPosition={"top-right"}
   deleteKey={"Delete"}
   on:dragover={onDragOver}
@@ -117,6 +152,7 @@
   on:nodeclick={(event) => console.log("on node click", event.detail.node)}
   on:edgeclick={(event) => console.log("on edge click: ", event.detail.edge)}
 >
+  <CustomLine slot="connectionLine" />
   <Background variant={BackgroundVariant.Dots} />
   <MiniMap
     position={"top-right"}
