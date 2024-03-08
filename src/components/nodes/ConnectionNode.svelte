@@ -64,13 +64,17 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="drop-target" on:drop={(event) => onDrop(event)}></div>
 
-<div style={data.labelStyle} class="label">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div style={data.labelStyle} class="label" on:drop={(event) => onDrop(event)}>
 	<span class="drag-handle drag-dots">{@html DragDots}</span>{data.label}
-	<button on:click={() => addConnection("dante")}>+</button>
 </div>
 
-{#each data.connections as connection}
-	<ConnectionHandle id={connection} io="input" style="left: 0%;" />
+{#each data.connections as connection, index}
+	<ConnectionHandle
+		id={connection}
+		io="input"
+		style="left: calc(10% + {index}0%);"
+	/>
 {/each}
 
 {#if data.connection === "all"}
