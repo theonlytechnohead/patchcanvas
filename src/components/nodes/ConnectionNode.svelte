@@ -36,6 +36,20 @@
 	sourcePosition;
 	targetPosition;
 
+	const onDrop = (event: DragEvent) => {
+    event.preventDefault();
+    if (!event.dataTransfer) {
+      return null;
+    }
+    switch (event.dataTransfer.types[0]) {
+      case "application/patchcanvasnode":
+        break;
+      case "application/patchcanvasconnection":
+        console.log("new connection!");
+        break;
+    }
+  };
+
 	const updateNodeInternals = useUpdateNodeInternals();
 	function addConnection(connection: ConnectionType) {
 		data.connections.push(connection);

@@ -24,6 +24,7 @@
   import type { ComponentType, SvelteComponent } from "svelte";
   import ConnectionNode from "./nodes/ConnectionNode.svelte";
   import ConnectionLine from "./lines/ConnectionLine.svelte";
+  import type { ConnectionType } from "./connectionTypes";
 
   // theming
   let theme: ColorMode;
@@ -98,8 +99,15 @@
     if (event.dataTransfer) {
       // check the drop "target" and ensure that it is over the correct area (i.e. not a panel)
       const element = document.elementFromPoint(event.clientX, event.clientY);
-      const allowedTargets =
-        ".svelte-flow__pane, .svelte-flow__node, .svelte-flow__edge";
+      let allowedTargets = "";
+      switch (event.dataTransfer.types[0]) {
+        case "application/patchcanvasnode":
+          allowedTargets = ".svelte-flow__pane, .svelte-flow__edge";
+          break;
+        case "application/patchcanvasconnection":
+          allowedTargets = ".svelte-flow__node, .svelte-flow__node *";
+          break;
+      }
       if (element?.matches(allowedTargets)) {
         event.dataTransfer.dropEffect = "move";
       } else {
@@ -113,18 +121,31 @@
     if (!event.dataTransfer) {
       return null;
     }
-    const connection = event.dataTransfer.getData("application/svelteflow");
+    switch (event.dataTransfer.types[0]) {
+      case "application/patchcanvasnode":
+        const connection = event.dataTransfer.getData(
+          "application/patchcanvasnode",
+        );
+        addNode(connection, event.clientX, event.clientY);
+        break;
+      case "application/patchcanvasconnection":
+        // this is handled in the custom node itself
+        break;
+    }
+  };
+
+  function addNode(name: string, x: number, y: number) {
     const position = screenToFlowPosition({
-      x: event.clientX,
-      y: event.clientY,
+      x: x,
+      y: y,
     });
     const newNode = {
       id: crypto.randomUUID().toString(),
       type: "default",
       position,
       data: {
-        label: `${connection} node`,
-        connection: connection,
+        label: name,
+        connection: name as ConnectionType,
         connections: [],
       },
       dragHandle: ".drag-dots",
@@ -132,7 +153,7 @@
     };
     $nodes.push(newNode);
     $nodes = $nodes;
-  };
+  }
 </script>
 
 <SvelteFlow

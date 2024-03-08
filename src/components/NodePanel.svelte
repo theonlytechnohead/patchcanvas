@@ -4,7 +4,7 @@
       return null;
     }
 
-    event.dataTransfer.setData("application/svelteflow", connection);
+    event.dataTransfer.setData("application/patchcanvasnode", connection);
     event.dataTransfer.effectAllowed = "move";
   };
 </script>

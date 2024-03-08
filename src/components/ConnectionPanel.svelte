@@ -30,6 +30,15 @@
 		}
 		$edges = $edges;
 	}
+
+	const onDragStart = (event: DragEvent, connection: string) => {
+    if (!event.dataTransfer) {
+      return null;
+    }
+
+    event.dataTransfer.setData("application/patchcanvasconnection", connection);
+    event.dataTransfer.effectAllowed = "move";
+  };
 </script>
 
 {#each iterableConnections as [connection, colour]}
@@ -38,6 +47,8 @@
 		style="--connection: {colour};"
 		on:mouseenter={() => highlightEdges(connection)}
 		on:mouseleave={() => unhighlightEdges(connection)}
+		on:dragstart={(event) => onDragStart(event, connection)}
+		draggable={true}
 	>
 		{connection}
 	</div>
