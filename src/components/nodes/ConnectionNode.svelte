@@ -36,20 +36,23 @@
 	sourcePosition;
 	targetPosition;
 
+	const onDragOver = (event: DragEvent) => {
+		event.preventDefault();
+		// double check validation, etc.
+	};
+
 	const onDrop = (event: DragEvent, io: "input" | "output") => {
 		event.preventDefault();
 		if (!event.dataTransfer) {
 			return null;
 		}
-		switch (event.dataTransfer.types[0]) {
-			case "application/patchcanvasnode":
-				break;
-			case "application/patchcanvasconnection":
-				const connection = event.dataTransfer.getData(
-					"application/patchcanvasconnection",
-				);
-				addConnection(connection as ConnectionType, io);
-				break;
+		if (
+			event.dataTransfer.types[0] === "application/patchcanvasconnection"
+		) {
+			const connection = event.dataTransfer.getData(
+				"application/patchcanvasconnection",
+			);
+			addConnection(connection as ConnectionType, io);
 		}
 	};
 
@@ -71,11 +74,13 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class="input-drop-target"
+	on:dragover={(event) => onDragOver(event)}
 	on:drop={(event) => onDrop(event, "input")}
 ></div>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class="output-drop-target"
+	on:dragover={(event) => onDragOver(event)}
 	on:drop={(event) => onDrop(event, "output")}
 ></div>
 

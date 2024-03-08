@@ -63,7 +63,7 @@
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "tester", connection: "all", inputs: [], outputs: [], },
+      data: { label: "tester", connection: "all", inputs: [], outputs: [] },
       dragHandle: ".drag-dots",
       position: { x: 225, y: 125 },
     },
@@ -121,16 +121,11 @@
     if (!event.dataTransfer) {
       return null;
     }
-    switch (event.dataTransfer.types[0]) {
-      case "application/patchcanvasnode":
-        const connection = event.dataTransfer.getData(
-          "application/patchcanvasnode",
-        );
-        addNode(connection, event.clientX, event.clientY);
-        break;
-      case "application/patchcanvasconnection":
-        // this is handled in the custom node itself
-        break;
+    if (event.dataTransfer.types[0] === "application/patchcanvasnode") {
+      const connection = event.dataTransfer.getData(
+        "application/patchcanvasnode",
+      );
+      addNode(connection, event.clientX, event.clientY);
     }
   };
 
