@@ -36,7 +36,7 @@
 	sourcePosition;
 	targetPosition;
 
-	const onDrop = (event: DragEvent) => {
+	const onDrop = (event: DragEvent, io: "input" | "output") => {
 		event.preventDefault();
 		if (!event.dataTransfer) {
 			return null;
@@ -48,32 +48,55 @@
 				const connection = event.dataTransfer.getData(
 					"application/patchcanvasconnection",
 				);
-				addConnection(connection as ConnectionType);
+				addConnection(connection as ConnectionType, io);
 				break;
 		}
 	};
 
 	const updateNodeInternals = useUpdateNodeInternals();
-	function addConnection(connection: ConnectionType) {
-		data.connections.push(connection);
+	function addConnection(connection: ConnectionType, io: string) {
+		switch (io) {
+			case "input":
+				data.inputs.push(connection);
+				break;
+			case "output":
+				data.outputs.push(connection);
+				break;
+		}
 		data = data; // this is required for Svelte reactivity to work
 		updateNodeInternals(id); // this is required for xyflow to know we've done something
 	}
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="drop-target" on:drop={(event) => onDrop(event)}></div>
+<div
+	class="input-drop-target"
+	on:drop={(event) => onDrop(event, "input")}
+></div>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+	class="output-drop-target"
+	on:drop={(event) => onDrop(event, "output")}
+></div>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div style={data.labelStyle} class="label" on:drop={(event) => onDrop(event)}>
+<div style={data.labelStyle} class="label">
 	<span class="drag-handle drag-dots">{@html DragDots}</span>{data.label}
 </div>
 
-{#each data.connections as connection, index}
+{#each data.inputs as connection, index}
 	<ConnectionHandle
 		id={connection}
 		io="input"
 		style="left: calc(10% + {index}0%);"
+	/>
+{/each}
+
+{#each data.outputs as connection, index}
+	<ConnectionHandle
+		id={connection}
+		io="output"
+		style="left: calc(15% + {index}0%);"
 	/>
 {/each}
 
@@ -94,21 +117,22 @@
 	<ConnectionHandle id="midi" io="output" style="left: 65%;" />
 	<ConnectionHandle id="osc" io="output" style="left: 75%;" />
 {/if}
-{#if data.connection === "power"}
-	<ConnectionHandle id="power" io="output" style="left: 50%;" />
-{/if}
-{#if data.connection === "audio"}
-	<ConnectionHandle id="audio" io="input" style="left: 50%;" />
-{/if}
 
 <style>
-	.drop-target {
+	.input-drop-target {
 		position: absolute;
 		top: 0;
+		left: 0;
+		right: 0;
+		height: 10px;
+	}
+
+	.output-drop-target {
+		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
-		z-index: -1;
+		height: 10px;
 	}
 
 	.label {

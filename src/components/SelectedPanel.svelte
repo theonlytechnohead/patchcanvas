@@ -5,6 +5,6 @@
 
 {#each $nodes.filter((node) => node.selected) as node}
 	<div>
-		{node.data.label}: {node.data.connections}
+		{node.data.label}: {node.data.connection}
 	</div>
 {/each}

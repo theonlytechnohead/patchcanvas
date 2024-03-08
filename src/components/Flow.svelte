@@ -56,14 +56,14 @@
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "POWER!!!", connection: "power", connections: [] },
+      data: { label: "power", connection: "power", inputs: [], outputs: [] },
       dragHandle: ".drag-dots",
       position: { x: 200, y: 0 },
     },
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "Testing node", connection: "all", connections: [] },
+      data: { label: "tester", connection: "all", inputs: [], outputs: [], },
       dragHandle: ".drag-dots",
       position: { x: 225, y: 125 },
     },
@@ -105,7 +105,7 @@
           allowedTargets = ".svelte-flow__pane, .svelte-flow__edge";
           break;
         case "application/patchcanvasconnection":
-          allowedTargets = ".svelte-flow__node, .svelte-flow__node *";
+          allowedTargets = ".input-drop-target, .output-drop-target";
           break;
       }
       if (element?.matches(allowedTargets)) {
@@ -146,7 +146,8 @@
       data: {
         label: name,
         connection: name as ConnectionType,
-        connections: [],
+        inputs: [],
+        outputs: [],
       },
       dragHandle: ".drag-dots",
       origin: [0.5, 0.0],
