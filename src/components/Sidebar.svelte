@@ -8,7 +8,7 @@
   <h1>PatchCanvas</h1>
   <NodePanel />
   <ConnectionPanel />
-  <SelectedPanel />
+  <!-- <SelectedPanel /> -->
 </aside>
 
 <style>
