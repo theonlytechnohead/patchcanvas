@@ -53,7 +53,9 @@
 	labelStyle;
 	data;
 	interactionWidth;
-	style += `stroke: ${connections[(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)]};`;
+	$: {
+		style = `stroke: ${connections[(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)]};`;
+	}
 </script>
 
 <BaseEdge
@@ -73,7 +75,10 @@
 	:global(.svelte-flow__edge-path) {
 		transition: stroke-width 0.25s ease-in-out;
 	}
-	:global(svg:has(.highlight .svelte-flow__edge-path), svg:has(.selected .svelte-flow__edge-path)) {
+	:global(
+			svg:has(.highlight .svelte-flow__edge-path),
+			svg:has(.selected .svelte-flow__edge-path)
+		) {
 		z-index: 1;
 	}
 	:global(.highlight .svelte-flow__edge-path) {

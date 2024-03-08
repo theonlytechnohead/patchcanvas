@@ -43,38 +43,28 @@
   const nodes = writable([
     {
       id: crypto.randomUUID().toString(),
-      type: "input",
-      data: { label: "Patch" },
-      position: { x: 0, y: 0 },
-    },
-    {
-      id: crypto.randomUUID().toString(),
-      type: "output",
-      data: { label: "Canvas" },
-      position: { x: 0, y: 150 },
-    },
-    {
-      id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "power", connection: "power", inputs: [], outputs: [] },
-      dragHandle: ".drag-dots",
-      position: { x: 200, y: 0 },
+      data: { label: "Patch", connection: "", inputs: [], outputs: ["power"] },
+      position: { x: 0, y: 0 },
     },
     {
       id: crypto.randomUUID().toString(),
       type: "default",
       data: { label: "tester", connection: "all", inputs: [], outputs: [] },
       dragHandle: ".drag-dots",
-      position: { x: 225, y: 125 },
+      position: { x: 0, y: 100 },
     },
   ]);
 
   const edges = writable([
     {
       id: crypto.randomUUID().toString(),
-      type: "smoothstep",
+      type: "connection",
+      class: "",
       source: $nodes[0].id,
+      sourceHandle: "power",
       target: $nodes[1].id,
+      targetHandle: "power",
     },
   ]);
 

@@ -13,25 +13,18 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="nodes">
   <div
-    class="output-node node"
-    on:dragstart={(event) => onDragStart(event, "power")}
-    draggable={true}
-  >
-    power
-  </div>
-  <div
     class="default-node node"
     on:dragstart={(event) => onDragStart(event, "all")}
     draggable={true}
   >
-    all
+    tester
   </div>
   <div
-    class="input-node node"
-    on:dragstart={(event) => onDragStart(event, "audio")}
+    class="default-node node"
+    on:dragstart={(event) => onDragStart(event, "")}
     draggable={true}
   >
-    audio
+    empty
   </div>
 </div>
 
@@ -80,27 +73,10 @@
     width: 1em;
     height: 1em;
   }
-
-  .node.input-node::before {
-    top: -50%;
-  }
-  .node.input-node::after {
-    width: 0;
-    height: 0;
-  }
-
   .node.default-node::before {
     top: -50%;
   }
   .node.default-node::after {
-    bottom: 0;
-  }
-
-  .node.output-node::before {
-    width: 0;
-    height: 0;
-  }
-  .node.output-node::after {
     bottom: 0;
   }
 </style>
