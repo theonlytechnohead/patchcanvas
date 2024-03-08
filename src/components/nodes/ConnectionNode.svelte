@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { type NodeProps } from "@xyflow/svelte";
+	import { useUpdateNodeInternals, type NodeProps } from "@xyflow/svelte";
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
+	import type { ConnectionType } from "../connectionTypes";
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
@@ -34,11 +35,23 @@
 	dragging;
 	sourcePosition;
 	targetPosition;
+
+	const updateNodeInternals = useUpdateNodeInternals();
+	function addConnection(connection: ConnectionType) {
+		data.connections.push(connection);
+		data = data;  // this is required for Svelte reactivity to work
+		updateNodeInternals(id); // this is required for xyflow to know we've done something
+	}
 </script>
 
 <div style={data.labelStyle} class="label">
 	<span class="drag-handle drag-dots">{@html DragDots}</span>{data.label}
+	<button on:click={() => addConnection("dante")}>+</button>
 </div>
+
+{#each data.connections as connection}
+	<ConnectionHandle id={connection} io="input" style="left: 0%;" />
+{/each}
 
 {#if data.connection === "all"}
 	<ConnectionHandle id="dante" io="input" style="left: 10%;" />

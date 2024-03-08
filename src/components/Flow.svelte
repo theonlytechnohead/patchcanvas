@@ -12,7 +12,6 @@
     ControlButton,
     useSvelteFlow,
     type ColorMode,
-    type Node,
     type DefaultEdgeOptions,
     type FitViewOptions,
     type EdgeProps,
@@ -56,14 +55,14 @@
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "POWER!!!", connection: "power" },
+      data: { label: "POWER!!!", connection: "power", connections: [] },
       dragHandle: ".drag-dots",
       position: { x: 200, y: 0 },
     },
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "Testing node", connection: "all" },
+      data: { label: "Testing node", connection: "all", connections: [] },
       dragHandle: ".drag-dots",
       position: { x: 225, y: 125 },
     },
@@ -123,7 +122,11 @@
       id: crypto.randomUUID().toString(),
       type: "default",
       position,
-      data: { label: `${connection} node`, connection: connection },
+      data: {
+        label: `${connection} node`,
+        connection: connection,
+        connections: [],
+      },
       dragHandle: ".drag-dots",
       origin: [0.5, 0.0],
     };
