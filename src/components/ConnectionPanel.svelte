@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { useEdges, useNodes } from "@xyflow/svelte";
+	import { useEdges } from "@xyflow/svelte";
 	import { connections, type ConnectionType } from "./connectionTypes";
 
-	console.log(Object.entries(connections));
-
-	const nodes = useNodes();
 	const edges = useEdges();
 
-	function getNodeName(id: string) {
-		return $nodes.filter((node) => node.id == id)[0].data.label;
-	}
+	const iterableConnections: [ConnectionType, string][] = Object.entries(
+		connections,
+	) as [ConnectionType, string][];
 
-	function highlightEdges(type: ConnectionType) {
+	function highlightEdges(connection: ConnectionType) {
 		for (let edge of $edges) {
-			if (edge.sourceHandle === type[0]) {
+			if (edge.sourceHandle === connection) {
 				edge.class += "highlight";
 			} else {
 				edge.class += "fade-out";
@@ -22,48 +19,42 @@
 		$edges = $edges;
 	}
 
-	function unhighlightEdges(type: ConnectionType) {
+	function unhighlightEdges(connection: ConnectionType) {
+		connection = connection as ConnectionType;
 		for (let edge of $edges) {
-			if (edge.sourceHandle === type[0]) {
-				edge.class = edge.class.replace("highlight", "");
+			if (edge.sourceHandle === connection) {
+				edge.class = edge.class?.replace("highlight", "");
 			} else {
-				edge.class = edge.class.replace("fade-out", "");
+				edge.class = edge.class?.replace("fade-out", "");
 			}
 		}
 		$edges = $edges;
 	}
 </script>
 
-{#each Object.entries(connections) as connection}
+{#each iterableConnections as [connection, colour]}
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		style="--connection: {connection[1]};"
+		style="--connection: {colour};"
 		on:mouseenter={() => highlightEdges(connection)}
 		on:mouseleave={() => unhighlightEdges(connection)}
 	>
-		{connection[0]}
+		{connection}
 	</div>
 {/each}
-
-<!-- {#each $edges as edge}
-	<div>
-		Connection from {getNodeName(edge.source)}
-		to {getNodeName(edge.target)}
-		{edge.selected ? " - selected" : ""}
-	</div>
-{/each} -->
 
 <style>
 	div {
 		padding-left: 0.5em;
-		margin-block: 0.5em;
+		padding-block: 0.25em;
 
-		border-bottom: 1px solid var(--connection);
-		border-left: 0.25em solid var(--connection);
+		border-bottom: 2px solid var(--connection);
+		border-left: 0.5em solid var(--connection);
 
 		transition: border-left-width 0.1s ease-out;
 
 		&:hover {
-			border-left-width: 1em;
+			border-left-width: 1.25em;
 		}
 	}
 </style>

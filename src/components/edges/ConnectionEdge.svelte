@@ -68,10 +68,13 @@
 
 <style>
 	:global(.svelte-flow__edge) {
-		transition: opacity 0.5s ease-in-out;
+		transition: opacity 0.25s ease-in-out;
 	}
 	:global(.svelte-flow__edge-path) {
 		transition: stroke-width 0.25s ease-in-out;
+	}
+	:global(svg:has(.highlight .svelte-flow__edge-path)) {
+		z-index: 1;
 	}
 	:global(.highlight .svelte-flow__edge-path) {
 		stroke-width: 2;
