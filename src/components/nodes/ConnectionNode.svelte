@@ -36,12 +36,60 @@
 	sourcePosition;
 	targetPosition;
 
-	const onDragOver = (event: DragEvent) => {
+	let inputDiv: HTMLDivElement;
+	let outputDiv: HTMLDivElement;
+
+	function validateNewConnectionHandle(
+		existing: ConnectionType[],
+		connection: ConnectionType,
+	): boolean {
+		return !existing.includes(connection);
+	}
+
+	const onDragEnter = (
+		event: DragEvent,
+		io: "input" | "output",
+		div: any,
+	) => {
 		event.preventDefault();
-		// double check validation, etc.
+		event.stopPropagation();
+		if (!event.dataTransfer) {
+			return null;
+		}
+		if (
+			event.dataTransfer.types[0] === "application/patchcanvasconnection"
+		) {
+			const connection = event.dataTransfer.getData(
+				"application/patchcanvasconnection",
+			) as ConnectionType;
+			let valid = false;
+			switch (io) {
+				case "input":
+					valid = validateNewConnectionHandle(
+						data.inputs,
+						connection,
+					);
+					break;
+				case "output":
+					valid = validateNewConnectionHandle(
+						data.outputs,
+						connection,
+					);
+					break;
+			}
+			if (valid) {
+				div.style = "background-color: green;";
+				event.dataTransfer.dropEffect = "move";
+			} else event.dataTransfer.dropEffect = "none";
+		}
 	};
 
-	const onDrop = (event: DragEvent, io: "input" | "output") => {
+	const onDragLeave = (event: DragEvent, div: any) => {
+		event.preventDefault();
+		div.style = "";
+	};
+
+	const onDrop = (event: DragEvent, io: "input" | "output", div: any) => {
 		event.preventDefault();
 		if (!event.dataTransfer) {
 			return null;
@@ -51,8 +99,26 @@
 		) {
 			const connection = event.dataTransfer.getData(
 				"application/patchcanvasconnection",
-			);
-			addConnection(connection as ConnectionType, io);
+			) as ConnectionType;
+			let valid = false;
+			switch (io) {
+				case "input":
+					valid = validateNewConnectionHandle(
+						data.inputs,
+						connection,
+					);
+					break;
+				case "output":
+					valid = validateNewConnectionHandle(
+						data.outputs,
+						connection,
+					);
+					break;
+			}
+			if (valid) {
+				addConnection(connection, io);
+			}
+			div.style = "";
 		}
 	};
 
@@ -74,14 +140,18 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class="input-drop-target"
-	on:dragover={(event) => onDragOver(event)}
-	on:drop={(event) => onDrop(event, "input")}
+	bind:this={inputDiv}
+	on:dragenter={(event) => onDragEnter(event, "input", inputDiv)}
+	on:dragleave={(event) => onDragLeave(event, inputDiv)}
+	on:drop={(event) => onDrop(event, "input", inputDiv)}
 ></div>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class="output-drop-target"
-	on:dragover={(event) => onDragOver(event)}
-	on:drop={(event) => onDrop(event, "output")}
+	bind:this={outputDiv}
+	on:dragenter={(event) => onDragEnter(event, "output", outputDiv)}
+	on:dragleave={(event) => onDragLeave(event, outputDiv)}
+	on:drop={(event) => onDrop(event, "output", outputDiv)}
 ></div>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -130,6 +200,8 @@
 		left: 0;
 		right: 0;
 		height: 10px;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
 	}
 
 	.output-drop-target {
@@ -138,6 +210,8 @@
 		left: 0;
 		right: 0;
 		height: 10px;
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
 	}
 
 	.label {
