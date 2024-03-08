@@ -143,6 +143,12 @@
 		updateNodeInternals(id); // this is required for xyflow to know we've done something
 	}
 
+	function rename() {
+		let old: string = data.label;
+		data.label = prompt(`Rename '${data.label}' to:`, data.label);
+		if (data.label === null) data.label = old;
+	}
+
 	if (data.connection && data.connection === "all") {
 		if (!data.inputs.includes("dante")) data.inputs.push("dante");
 		if (!data.inputs.includes("dmx")) data.inputs.push("dmx");
@@ -180,9 +186,12 @@
 	on:drop={(event) => onDrop(event, "output", outputDiv)}
 ></div>
 
+<div class="hover"></div>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div style={data.labelStyle} class="label">
-	<span class="drag-handle drag-dots">{@html DragDots}</span>{data.label}
+	<span class="drag-handle drag-dots">{@html DragDots}</span>
+	{data.label}
+	<button on:click={() => rename()}>✎</button>
 </div>
 
 {#each data.inputs as connection, index}
@@ -233,10 +242,51 @@
 		border-bottom-right-radius: 3px;
 	}
 
+	.hover {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: -1;
+	}
+
 	.label {
 		display: flex;
 		justify-content: center;
 		font-size: 12px;
+
+		& button {
+			transform: scaleX(-1);
+			width: 1.25em;
+			aspect-ratio: 1/1;
+			padding: 0;
+			margin-inline-start: 0.25em;
+			font-size: 1em;
+			background: none;
+			border: 0;
+			opacity: 0;
+			border-radius: 0.25em;
+			transition: opacity 0.25s ease-in-out;
+
+			&:hover {
+				background-color: color-mix(
+					in srgb,
+					var(--font-colour) 10%,
+					transparent 90%
+				);
+			}
+			&:active {
+				background-color: color-mix(
+					in srgb,
+					var(--font-colour) 20%,
+					transparent 80%
+				);
+			}
+		}
+	}
+	:global(.svelte-flow__node:hover) .label button {
+		opacity: 1;
 	}
 	.drag-dots {
 		width: 0.5em;
