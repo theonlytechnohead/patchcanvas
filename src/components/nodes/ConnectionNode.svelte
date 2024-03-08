@@ -3,7 +3,7 @@
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
-	import type { ConnectionType } from "../connectionTypes";
+	import { type ConnectionType } from "../connectionTypes";
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
@@ -130,9 +130,12 @@
 		switch (io) {
 			case "input":
 				data.inputs.push(connection);
+				// TODO: sorting doesn't update correctly
+				// data.inputs.sort(sortTypes);
 				break;
 			case "output":
 				data.outputs.push(connection);
+				// data.outputs.sort(sortTypes);
 				break;
 		}
 		data = data; // this is required for Svelte reactivity to work
