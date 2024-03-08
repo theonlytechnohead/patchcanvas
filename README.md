@@ -1,5 +1,7 @@
 # PatchCanvas
 
+![Screenshot](screenshot.png)
+
 A tool for documenting patches between professional hardware and software components
 
 Check it out, it's live here: [theonlytechnohead.github.io/patchcanvas](https://theonlytechnohead.github.io/patchcanvas/)
