@@ -6,8 +6,8 @@
 	transition: stroke-width 0.25s ease-in-out;
 }
 
-svg:has(.highlight .svelte-flow__edge-path,
-	svg:has(.selected .svelte-flow__edge-path)) {
+svg:has(.highlight .svelte-flow__edge-path),
+	svg:has(.selected .svelte-flow__edge-path) {
 	z-index: 1;
 }
 
