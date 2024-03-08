@@ -80,7 +80,10 @@
 			if (valid) {
 				div.style = "background-color: green;";
 				event.dataTransfer.dropEffect = "move";
-			} else event.dataTransfer.dropEffect = "none";
+			} else {
+				div.style = "background-color: red;";
+				event.dataTransfer.dropEffect = "none";
+			}
 		}
 	};
 
