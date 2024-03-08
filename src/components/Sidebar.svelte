@@ -1,7 +1,7 @@
 <script lang="ts">
-  import NodePanel from "./NodePanel.svelte";
-  import ConnectionPanel from "./ConnectionPanel.svelte";
-  import SelectedPanel from "./SelectedPanel.svelte";
+  import NodePanel from "./panels/NodePanel.svelte";
+  import ConnectionPanel from "./panels/ConnectionPanel.svelte";
+  import SelectedPanel from "./panels/SelectedPanel.svelte";
 </script>
 
 <aside>

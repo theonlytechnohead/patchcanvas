@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { useEdges } from "@xyflow/svelte";
-	import { connections, type ConnectionType } from "./connectionTypes";
+	import { connections, type ConnectionType } from "../connectionTypes";
 
 	const edges = useEdges();
 
