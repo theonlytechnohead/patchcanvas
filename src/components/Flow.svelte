@@ -120,7 +120,7 @@
       y: event.clientY,
     });
     const newNode = {
-      id: `${Math.random()}`,
+      id: crypto.randomUUID().toString(),
       type: "default",
       position,
       data: { label: `${connection} node`, connection: connection },
