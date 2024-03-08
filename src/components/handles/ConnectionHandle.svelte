@@ -12,6 +12,7 @@
 	{id}
 	type={io === "input" ? "target" : "source"}
 	position={io === "input" ? Position.Top : Position.Bottom}
-	style={style + `background: ${connections[id]}; width: 8px; height: 8px;`}
+	style={style +
+		`background: ${connections[id]}; border: none; width: 8px; height: 8px;`}
 	isConnectable
 />

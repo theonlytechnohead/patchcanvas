@@ -142,6 +142,25 @@
 		data = data; // this is required for Svelte reactivity to work
 		updateNodeInternals(id); // this is required for xyflow to know we've done something
 	}
+
+	if (data.connection && data.connection === "all") {
+		if (!data.inputs.includes("dante")) data.inputs.push("dante");
+		if (!data.inputs.includes("dmx")) data.inputs.push("dmx");
+		if (!data.inputs.includes("ethernet")) data.inputs.push("ethernet");
+		if (!data.inputs.includes("sdi")) data.inputs.push("sdi");
+		if (!data.inputs.includes("audio")) data.inputs.push("audio");
+		if (!data.inputs.includes("midi")) data.inputs.push("midi");
+		if (!data.inputs.includes("osc")) data.inputs.push("osc");
+		if (!data.inputs.includes("power")) data.inputs.push("power");
+
+		if (!data.outputs.includes("dante")) data.outputs.push("dante");
+		if (!data.outputs.includes("dmx")) data.outputs.push("dmx");
+		if (!data.outputs.includes("ethernet")) data.outputs.push("ethernet");
+		if (!data.outputs.includes("sdi")) data.outputs.push("sdi");
+		if (!data.outputs.includes("audio")) data.outputs.push("audio");
+		if (!data.outputs.includes("midi")) data.outputs.push("midi");
+		if (!data.outputs.includes("osc")) data.outputs.push("osc");
+	}
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -170,11 +189,12 @@
 	<ConnectionHandle
 		id={connection}
 		io="input"
-		style="left: calc(10% + {connection === 'power'
+		style="left: calc(12px + {connection === 'power'
 			? '8'
-			: data.inputs.includes('power')
+			: data.inputs.includes('power') &&
+				  data.inputs.indexOf('power') < data.inputs.indexOf(connection)
 				? index - 1
-				: index}0%);"
+				: index} * 16px);"
 	/>
 {/each}
 
@@ -182,31 +202,15 @@
 	<ConnectionHandle
 		id={connection}
 		io="output"
-		style="left: calc(15% + {connection === 'power'
-			? '8'
-			: data.outputs.includes('power')
+		style="left: calc(12px + 12px + {connection === 'power'
+			? '7'
+			: data.outputs.includes('power') &&
+				  data.outputs.indexOf('power') <
+						data.outputs.indexOf(connection)
 				? index - 1
-				: index}0%);"
+				: index} * 16px);"
 	/>
 {/each}
-
-{#if data.connection === "all"}
-	<ConnectionHandle id="dante" io="input" style="left: 10%;" />
-	<ConnectionHandle id="dmx" io="input" style="left:20%;" />
-	<ConnectionHandle id="ethernet" io="input" style="left:30%;" />
-	<ConnectionHandle id="sdi" io="input" style="left:40%;" />
-	<ConnectionHandle id="audio" io="input" style="left:50%;" />
-	<ConnectionHandle id="midi" io="input" style="left:60%;" />
-	<ConnectionHandle id="osc" io="input" style="left:70%;" />
-	<ConnectionHandle id="power" io="input" style="left: 95%;" />
-	<ConnectionHandle id="dante" io="output" style="left: 15%;" />
-	<ConnectionHandle id="dmx" io="output" style="left: 25%;" />
-	<ConnectionHandle id="ethernet" io="output" style="left: 35%;" />
-	<ConnectionHandle id="sdi" io="output" style="left: 45%;" />
-	<ConnectionHandle id="audio" io="output" style="left: 55%;" />
-	<ConnectionHandle id="midi" io="output" style="left: 65%;" />
-	<ConnectionHandle id="osc" io="output" style="left: 75%;" />
-{/if}
 
 <style>
 	.input-drop-target {

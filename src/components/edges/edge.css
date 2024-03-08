@@ -3,16 +3,17 @@
 }
 
 .svelte-flow__edge-path {
+	stroke-width: 1.5;
 	transition: stroke-width 0.25s ease-in-out;
 }
 
 svg:has(.highlight .svelte-flow__edge-path),
-	svg:has(.selected .svelte-flow__edge-path) {
+svg:has(.selected .svelte-flow__edge-path) {
 	z-index: 1;
 }
 
 .highlight .svelte-flow__edge-path {
-	stroke-width: 2;
+	stroke-width: 2.5;
 }
 
 .selected .svelte-flow__edge-path {
