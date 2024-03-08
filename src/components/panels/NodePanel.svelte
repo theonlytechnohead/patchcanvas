@@ -13,17 +13,13 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="nodes">
   <div
-    class="default-node node"
+    class="top bottom"
     on:dragstart={(event) => onDragStart(event, "all")}
     draggable={true}
   >
     tester
   </div>
-  <div
-    class="default-node node"
-    on:dragstart={(event) => onDragStart(event, "")}
-    draggable={true}
-  >
+  <div on:dragstart={(event) => onDragStart(event, "")} draggable={true}>
     empty
   </div>
 </div>
@@ -40,7 +36,7 @@
     gap: 0.5em;
   }
 
-  .node {
+  .nodes > * {
     position: relative;
     cursor: grab;
     padding: 0.5em;
@@ -61,8 +57,8 @@
     }
   }
 
-  .node::before,
-  .node::after {
+  .nodes > .top::before,
+  .nodes > .bottom::after {
     content: "";
     display: inline-block;
     position: absolute;
@@ -73,10 +69,10 @@
     width: 1em;
     height: 1em;
   }
-  .node.default-node::before {
+  .nodes > .top::before {
     top: -50%;
   }
-  .node.default-node::after {
+  .nodes > .bottom::after {
     bottom: 0;
   }
 </style>
