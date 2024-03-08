@@ -44,7 +44,12 @@
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "Patch", connection: "", inputs: [], outputs: ["power"] },
+      data: {
+        label: "Patch",
+        connection: "",
+        inputs: [],
+        outputs: ["ethernet", "sdi", "audio", "power"],
+      },
       position: { x: 0, y: 0 },
     },
     {
@@ -57,6 +62,33 @@
   ]);
 
   const edges = writable([
+    {
+      id: crypto.randomUUID().toString(),
+      type: "connection",
+      class: "",
+      source: $nodes[0].id,
+      sourceHandle: "ethernet",
+      target: $nodes[1].id,
+      targetHandle: "ethernet",
+    },
+    {
+      id: crypto.randomUUID().toString(),
+      type: "connection",
+      class: "",
+      source: $nodes[0].id,
+      sourceHandle: "sdi",
+      target: $nodes[1].id,
+      targetHandle: "sdi",
+    },
+    {
+      id: crypto.randomUUID().toString(),
+      type: "connection",
+      class: "",
+      source: $nodes[0].id,
+      sourceHandle: "audio",
+      target: $nodes[1].id,
+      targetHandle: "audio",
+    },
     {
       id: crypto.randomUUID().toString(),
       type: "connection",
