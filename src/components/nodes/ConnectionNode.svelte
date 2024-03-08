@@ -135,6 +135,7 @@
 				break;
 			case "output":
 				data.outputs.push(connection);
+				// TODO: sorting doesn't update correctly
 				// data.outputs.sort(sortTypes);
 				break;
 		}
@@ -169,7 +170,11 @@
 	<ConnectionHandle
 		id={connection}
 		io="input"
-		style="left: calc(10% + {index}0%);"
+		style="left: calc(10% + {connection === 'power'
+			? '8'
+			: data.inputs.includes('power')
+				? index - 1
+				: index}0%);"
 	/>
 {/each}
 
@@ -177,7 +182,11 @@
 	<ConnectionHandle
 		id={connection}
 		io="output"
-		style="left: calc(15% + {index}0%);"
+		style="left: calc(15% + {connection === 'power'
+			? '8'
+			: data.outputs.includes('power')
+				? index - 1
+				: index}0%);"
 	/>
 {/each}
 
