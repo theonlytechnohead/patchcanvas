@@ -37,7 +37,7 @@
   } satisfies Record<string, ComponentType<SvelteComponent<NodeProps>>>;
 
   const edgeTypes = {
-    custom: ConnectionEdge,
+    connection: ConnectionEdge,
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
   const nodes = writable([
@@ -84,7 +84,8 @@
 
   const defaultEdgeOptions = {
     animated: false,
-    type: "custom",
+    type: "connection",
+    class: "",
   } satisfies DefaultEdgeOptions;
 
   const fitViewOptions = {
