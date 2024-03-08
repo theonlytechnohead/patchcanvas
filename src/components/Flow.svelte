@@ -50,7 +50,7 @@
     {
       id: crypto.randomUUID().toString(),
       type: "default",
-      data: { label: "tester", connection: "all", inputs: [], outputs: [] },
+      data: { label: "Canvas", connection: "all", inputs: [], outputs: [] },
       dragHandle: ".drag-dots",
       position: { x: 0, y: 100 },
     },
