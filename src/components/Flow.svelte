@@ -161,7 +161,7 @@
       type: "default",
       position,
       data: {
-        label: name,
+        label: "Unnamed node",
         connection: name as ConnectionType,
         inputs: [],
         outputs: [],

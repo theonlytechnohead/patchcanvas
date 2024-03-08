@@ -12,15 +12,15 @@
 <p>Drag'n'drop the nodes!</p>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="nodes">
+  <div on:dragstart={(event) => onDragStart(event, "")} draggable={true}>
+    empty
+  </div>
   <div
     class="top bottom"
     on:dragstart={(event) => onDragStart(event, "all")}
     draggable={true}
   >
     tester
-  </div>
-  <div on:dragstart={(event) => onDragStart(event, "")} draggable={true}>
-    empty
   </div>
 </div>
 
@@ -34,6 +34,7 @@
   .nodes {
     display: inline grid;
     gap: 0.5em;
+    margin-bottom: 0.5em;
   }
 
   .nodes > * {
@@ -44,15 +45,15 @@
     border: var(--font-colour) solid 0.1em;
     text-align: center;
 
-    &.input-node {
+    &.top {
       margin-top: 0.5em;
     }
 
-    &.default-node {
+    &.top.bottom {
       margin-block: 0.5em;
     }
 
-    &.output-node {
+    &.bottom {
       margin-bottom: 0.5em;
     }
   }
