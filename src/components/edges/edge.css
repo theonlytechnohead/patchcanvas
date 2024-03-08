@@ -1,0 +1,25 @@
+.svelte-flow__edge {
+	transition: opacity 0.25s ease-in-out;
+}
+
+.svelte-flow__edge-path {
+	transition: stroke-width 0.25s ease-in-out;
+}
+
+svg:has(.highlight .svelte-flow__edge-path,
+	svg:has(.selected .svelte-flow__edge-path)) {
+	z-index: 1;
+}
+
+.highlight .svelte-flow__edge-path {
+	stroke-width: 2;
+}
+
+.selected .svelte-flow__edge-path {
+	transition: none;
+	stroke-width: 2;
+}
+
+.fade-out {
+	opacity: 0.5;
+}

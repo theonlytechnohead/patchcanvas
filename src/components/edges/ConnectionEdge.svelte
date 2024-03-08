@@ -7,6 +7,8 @@
 	} from "@xyflow/svelte";
 	import { connections, type ConnectionType } from "../connectionTypes";
 
+	import "./edge.css";
+
 	type $$Props = EdgeProps;
 	export let id: $$Props["id"];
 	export let source: $$Props["source"];
@@ -67,28 +69,3 @@
 	{style}
 	class={edgeClass}
 />
-
-<style>
-	:global(.svelte-flow__edge) {
-		transition: opacity 0.25s ease-in-out;
-	}
-	:global(.svelte-flow__edge-path) {
-		transition: stroke-width 0.25s ease-in-out;
-	}
-	:global(
-			svg:has(.highlight .svelte-flow__edge-path),
-			svg:has(.selected .svelte-flow__edge-path)
-		) {
-		z-index: 1;
-	}
-	:global(.highlight .svelte-flow__edge-path) {
-		stroke-width: 2;
-	}
-	:global(.selected .svelte-flow__edge-path) {
-		transition: none;
-		stroke-width: 2;
-	}
-	:global(.fade-out) {
-		opacity: 0.5;
-	}
-</style>
