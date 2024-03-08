@@ -37,26 +37,32 @@
 	targetPosition;
 
 	const onDrop = (event: DragEvent) => {
-    event.preventDefault();
-    if (!event.dataTransfer) {
-      return null;
-    }
-    switch (event.dataTransfer.types[0]) {
-      case "application/patchcanvasnode":
-        break;
-      case "application/patchcanvasconnection":
-        console.log("new connection!");
-        break;
-    }
-  };
+		event.preventDefault();
+		if (!event.dataTransfer) {
+			return null;
+		}
+		switch (event.dataTransfer.types[0]) {
+			case "application/patchcanvasnode":
+				break;
+			case "application/patchcanvasconnection":
+				const connection = event.dataTransfer.getData(
+					"application/patchcanvasconnection",
+				);
+				addConnection(connection as ConnectionType);
+				break;
+		}
+	};
 
 	const updateNodeInternals = useUpdateNodeInternals();
 	function addConnection(connection: ConnectionType) {
 		data.connections.push(connection);
-		data = data;  // this is required for Svelte reactivity to work
+		data = data; // this is required for Svelte reactivity to work
 		updateNodeInternals(id); // this is required for xyflow to know we've done something
 	}
 </script>
+
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class="drop-target" on:drop={(event) => onDrop(event)}></div>
 
 <div style={data.labelStyle} class="label">
 	<span class="drag-handle drag-dots">{@html DragDots}</span>{data.label}
@@ -92,6 +98,14 @@
 {/if}
 
 <style>
+	.drop-target {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
 	.label {
 		display: flex;
 		justify-content: center;
