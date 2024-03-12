@@ -56,7 +56,12 @@
 	data;
 	interactionWidth;
 	$: {
-		style = `stroke: ${connections[(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)]};`;
+		let colour =
+			connections[
+				(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)
+			];
+		style = `stroke: ${colour};`;
+		// markerEnd = "power";
 	}
 </script>
 

@@ -18,13 +18,19 @@
     type NodeProps,
     type Connection,
     type Edge,
+    MarkerType,
   } from "@xyflow/svelte";
   import Sidebar from "./Sidebar.svelte";
   import ConnectionEdge from "./edges/ConnectionEdge.svelte";
   import type { ComponentType, SvelteComponent } from "svelte";
   import ConnectionNode from "./nodes/ConnectionNode.svelte";
   import ConnectionLine from "./lines/ConnectionLine.svelte";
-  import type { ConnectionType } from "./connectionTypes";
+  import { type ConnectionType, connections } from "./connectionTypes";
+  import ColouredMarker from "./markers/ColouredMarker.svelte";
+
+  const iterableConnections: [ConnectionType, string][] = Object.entries(
+    connections,
+  ) as [ConnectionType, string][];
 
   // theming
   let theme: ColorMode;
@@ -195,6 +201,9 @@
   on:nodeclick={(event) => console.log("on node click", event.detail.node)}
   on:edgeclick={(event) => console.log("on edge click: ", event.detail.edge)}
 >
+  {#each iterableConnections as [connection, colour]}
+    <ColouredMarker id={connection} type={MarkerType.ArrowClosed} />
+  {/each}
   <ConnectionLine slot="connectionLine" />
   <Background variant={BackgroundVariant.Dots} />
   <MiniMap
