@@ -61,7 +61,7 @@
 				(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)
 			];
 		style = `stroke: ${colour};`;
-		// markerEnd = "power";
+		markerEnd = `url(#${sourceHandleId})`;
 	}
 </script>
 
