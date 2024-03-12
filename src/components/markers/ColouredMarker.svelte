@@ -16,7 +16,11 @@
 
 	type;
 	$: {
-		color = connections[(id as ConnectionType) ?? ("" as ConnectionType)];
+		color =
+			connections[
+				(id.replace("line", "") as ConnectionType) ??
+					("" as ConnectionType)
+			];
 	}
 </script>
 
@@ -30,7 +34,7 @@
 			viewBox="-10 -10 20 20"
 			{markerUnits}
 			{orient}
-			refX="0"
+			refX={id.includes("line") ? "4" : "0"}
 			refY="0"
 		>
 			<polyline

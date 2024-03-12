@@ -28,13 +28,27 @@
 </script>
 
 {#if $connection.path}
-	<path
-		fill="none"
-		stroke-width={1.5}
-		class="animated"
-		stroke={connections[type] ?? "var(--font-colour)"}
-		d={path}
-	/>
+	{#if $connection.startHandle?.type == "target"}
+		<!-- draw arrow at start of path -->
+		<path
+			fill="none"
+			stroke-width={1.5}
+			class="animated"
+			stroke={connections[type] ?? "var(--font-colour)"}
+			d={path}
+			marker-start="url(#{$connection.startHandle?.handleId}line)"
+		/>
+	{:else if $connection.startHandle?.type == "source"}
+		<!-- draw arrow at start of path -->
+		<path
+			fill="none"
+			stroke-width={1.5}
+			class="animated"
+			stroke={connections[type] ?? "var(--font-colour)"}
+			d={path}
+			marker-end="url(#{$connection.startHandle?.handleId}line)"
+		/>
+	{/if}
 	<circle
 		cx={$connection.targetX}
 		cy={$connection.targetY}

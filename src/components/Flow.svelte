@@ -204,6 +204,9 @@
   {#each iterableConnections as [connection, colour]}
     <ColouredMarker id={connection} type={MarkerType.ArrowClosed} />
   {/each}
+  {#each iterableConnections as [connection, colour]}
+    <ColouredMarker id={connection + "line"} type={MarkerType.ArrowClosed} />
+  {/each}
   <ConnectionLine slot="connectionLine" />
   <Background variant={BackgroundVariant.Dots} />
   <MiniMap
