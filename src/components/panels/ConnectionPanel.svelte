@@ -17,6 +17,13 @@
 			}
 		}
 		$edges = $edges;
+		for (let handle of document.querySelectorAll(".svelte-flow__handle")) {
+			if (handle.getAttribute("data-handleid") === connection) {
+				handle.classList.add("highlight");
+			} else {
+				handle.classList.add("fade-out");
+			}
+		}
 	}
 
 	function unhighlightEdges(connection: ConnectionType) {
@@ -29,16 +36,26 @@
 			}
 		}
 		$edges = $edges;
+		for (let handle of document.querySelectorAll(".svelte-flow__handle")) {
+			if (handle.getAttribute("data-handleid") === connection) {
+				handle.classList.remove("highlight");
+			} else {
+				handle.classList.remove("fade-out");
+			}
+		}
 	}
 
 	const onDragStart = (event: DragEvent, connection: string) => {
-    if (!event.dataTransfer) {
-      return null;
-    }
+		if (!event.dataTransfer) {
+			return null;
+		}
 
-    event.dataTransfer.setData("application/patchcanvasconnection", connection);
-    event.dataTransfer.effectAllowed = "move";
-  };
+		event.dataTransfer.setData(
+			"application/patchcanvasconnection",
+			connection,
+		);
+		event.dataTransfer.effectAllowed = "move";
+	};
 </script>
 
 {#each iterableConnections as [connection, colour]}

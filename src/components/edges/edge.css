@@ -1,4 +1,5 @@
-.svelte-flow__edge {
+.svelte-flow__edge,
+.svelte-flow__handle {
 	transition: opacity 0.25s ease-in-out;
 }
 
