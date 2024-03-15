@@ -27,6 +27,7 @@
   import ConnectionLine from "./lines/ConnectionLine.svelte";
   import { type ConnectionType, connections } from "./connectionTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
+  import { initialEdges, initialNodes } from "./nodes_and_edges";
 
   const iterableConnections: [ConnectionType, string][] = Object.entries(
     connections,
@@ -46,65 +47,8 @@
     connection: ConnectionEdge,
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
-  const nodes = writable([
-    {
-      id: crypto.randomUUID().toString(),
-      type: "default",
-      data: {
-        label: "Patch",
-        connection: "",
-        inputs: [],
-        outputs: ["ethernet", "sdi", "audio", "power"],
-      },
-      position: { x: 0, y: 0 },
-    },
-    {
-      id: crypto.randomUUID().toString(),
-      type: "default",
-      data: { label: "Canvas", connection: "all", inputs: [], outputs: [] },
-      dragHandle: ".drag-dots",
-      position: { x: 0, y: 100 },
-    },
-  ]);
-
-  const edges = writable([
-    {
-      id: crypto.randomUUID().toString(),
-      type: "connection",
-      class: "",
-      source: $nodes[0].id,
-      sourceHandle: "ethernet",
-      target: $nodes[1].id,
-      targetHandle: "ethernet",
-    },
-    {
-      id: crypto.randomUUID().toString(),
-      type: "connection",
-      class: "",
-      source: $nodes[0].id,
-      sourceHandle: "sdi",
-      target: $nodes[1].id,
-      targetHandle: "sdi",
-    },
-    {
-      id: crypto.randomUUID().toString(),
-      type: "connection",
-      class: "",
-      source: $nodes[0].id,
-      sourceHandle: "audio",
-      target: $nodes[1].id,
-      targetHandle: "audio",
-    },
-    {
-      id: crypto.randomUUID().toString(),
-      type: "connection",
-      class: "",
-      source: $nodes[0].id,
-      sourceHandle: "power",
-      target: $nodes[1].id,
-      targetHandle: "power",
-    },
-  ]);
+  const nodes = writable(initialNodes);
+  const edges = writable(initialEdges);
 
   function validateConnection(connection: Edge | Connection): boolean {
     return connection.sourceHandle === connection.targetHandle;
@@ -173,7 +117,7 @@
         outputs: [],
       },
       dragHandle: ".drag-dots",
-      origin: [0.5, 0.0],
+      origin: [0.5, 0.0] as [number, number],
     };
     $nodes.push(newNode);
     $nodes = $nodes;
