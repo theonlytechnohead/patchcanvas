@@ -74,7 +74,8 @@
       let allowedTargets = "";
       switch (event.dataTransfer.types[0]) {
         case "application/patchcanvasnode":
-          allowedTargets = ".svelte-flow__pane, .svelte-flow__edge";
+          allowedTargets =
+            ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
           break;
         case "application/patchcanvasconnection":
           allowedTargets = ".input-drop-target, .output-drop-target";
@@ -94,14 +95,14 @@
       return null;
     }
     if (event.dataTransfer.types[0] === "application/patchcanvasnode") {
-      const connection = event.dataTransfer.getData(
-        "application/patchcanvasnode",
+      const data = JSON.parse(
+        event.dataTransfer.getData("application/patchcanvasnode"),
       );
-      addNode(connection, event.clientX, event.clientY);
+      addNode(data, event.clientX, event.clientY);
     }
   };
 
-  function addNode(name: string, x: number, y: number) {
+  function addNode(data: any, x: number, y: number) {
     const position = screenToFlowPosition({
       x: x,
       y: y,
@@ -110,16 +111,30 @@
       id: crypto.randomUUID().toString(),
       type: "default",
       position,
+      connectable: !data.group,
       data: {
-        label: "Unnamed node",
-        connection: name as ConnectionType,
-        inputs: [],
-        outputs: [],
+        label: "Unnamed " + (!data.group ? "node" : "group"),
+        group: data.group ?? false,
+        inputs: data.inputs ?? [],
+        outputs: data.outputs ?? [],
       },
+      class: data.group ? "group" : undefined,
       dragHandle: ".drag-dots",
       origin: [0.5, 0.0] as [number, number],
     };
     $nodes.push(newNode);
+    $nodes.sort((a, b) => {
+      if (a.data.group) {
+        if (b.data.group) {
+          return 0;
+        }
+        return -1;
+      }
+      if (b.data.group) {
+        return 1;
+      }
+      return 0;
+    });
     $nodes = $nodes;
   }
 </script>

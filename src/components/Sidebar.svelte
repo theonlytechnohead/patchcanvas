@@ -21,5 +21,8 @@
         25%,
       transparent 75%
     );
+    border: var(--xy-node-border-default);
+    border-width: 0.14em;
+    border-radius: calc(var(--xy-node-border-radius-default) * 2.5);
   }
 </style>

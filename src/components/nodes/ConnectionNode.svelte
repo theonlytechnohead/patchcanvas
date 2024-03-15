@@ -1,5 +1,14 @@
 <script lang="ts">
-	import { useUpdateNodeInternals, type NodeProps } from "@xyflow/svelte";
+	import {
+		useUpdateNodeInternals,
+		type NodeProps,
+		useNodes,
+		NodeResizeControl,
+	} from "@xyflow/svelte";
+
+	import "./nodes.css";
+
+	const nodes = useNodes();
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
@@ -149,50 +158,66 @@
 		if (data.label === null) data.label = old;
 	}
 
-	if (data.connection && data.connection === "all") {
-		if (!data.inputs.includes("dante")) data.inputs.push("dante");
-		if (!data.inputs.includes("dmx")) data.inputs.push("dmx");
-		if (!data.inputs.includes("ethernet")) data.inputs.push("ethernet");
-		if (!data.inputs.includes("sdi")) data.inputs.push("sdi");
-		if (!data.inputs.includes("audio")) data.inputs.push("audio");
-		if (!data.inputs.includes("midi")) data.inputs.push("midi");
-		if (!data.inputs.includes("osc")) data.inputs.push("osc");
-		if (!data.inputs.includes("power")) data.inputs.push("power");
-
-		if (!data.outputs.includes("dante")) data.outputs.push("dante");
-		if (!data.outputs.includes("dmx")) data.outputs.push("dmx");
-		if (!data.outputs.includes("ethernet")) data.outputs.push("ethernet");
-		if (!data.outputs.includes("sdi")) data.outputs.push("sdi");
-		if (!data.outputs.includes("audio")) data.outputs.push("audio");
-		if (!data.outputs.includes("midi")) data.outputs.push("midi");
-		if (!data.outputs.includes("osc")) data.outputs.push("osc");
+	function remove() {
+		let confirm = window.confirm(`Actually delete ${data.label}?`);
+		if (confirm) $nodes = $nodes.filter((n) => n.id != id);
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-	class="input-drop-target"
-	bind:this={inputDiv}
-	on:dragenter={(event) => onDragEnter(event, "input", inputDiv)}
-	on:dragleave={(event) => onDragLeave(event, inputDiv)}
-	on:drop={(event) => onDrop(event, "input", inputDiv)}
-></div>
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-	class="output-drop-target"
-	bind:this={outputDiv}
-	on:dragenter={(event) => onDragEnter(event, "output", outputDiv)}
-	on:dragleave={(event) => onDragLeave(event, outputDiv)}
-	on:drop={(event) => onDrop(event, "output", outputDiv)}
-></div>
+{#if !data.group}
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div
+		class="input-drop-target"
+		bind:this={inputDiv}
+		on:dragenter={(event) => onDragEnter(event, "input", inputDiv)}
+		on:dragleave={(event) => onDragLeave(event, inputDiv)}
+		on:drop={(event) => onDrop(event, "input", inputDiv)}
+	></div>
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div
+		class="output-drop-target"
+		bind:this={outputDiv}
+		on:dragenter={(event) => onDragEnter(event, "output", outputDiv)}
+		on:dragleave={(event) => onDragLeave(event, outputDiv)}
+		on:drop={(event) => onDrop(event, "output", outputDiv)}
+	></div>
+	<div class="hover"></div>
+{/if}
 
-<div class="hover"></div>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div style={data.labelStyle} class="label">
 	<span class="drag-handle drag-dots">{@html DragDots}</span>
 	{data.label}
-	<button on:click={() => rename()}>✎</button>
+	<button on:click={() => rename()} class="reverse">✎</button>
+	<button on:click={() => remove()}>❌</button>
 </div>
+
+{#if data.group}
+	<NodeResizeControl
+		minWidth={200}
+		minHeight={105}
+		style="background: transparent; border: none;"
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="15"
+			height="15"
+			viewBox="0 0 24 24"
+			stroke-width="2"
+			stroke="var(--font-colour)"
+			fill="none"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			style="position: absolute; right: 0.5em; bottom: 0.5em;"
+		>
+			<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+			<polyline points="16 20 20 20 20 16" />
+			<line x1="14" y1="14" x2="20" y2="20" />
+			<polyline points="8 4 4 4 4 8" />
+			<line x1="4" y1="4" x2="10" y2="10" />
+		</svg>
+	</NodeResizeControl>
+{/if}
 
 {#each data.inputs as connection, index}
 	<ConnectionHandle
@@ -257,17 +282,24 @@
 		font-size: 12px;
 
 		& button {
-			transform: scaleX(-1);
-			width: 1.25em;
-			aspect-ratio: 1/1;
 			padding: 0;
-			margin-inline-start: 0.25em;
-			font-size: 1em;
+			padding-bottom: 0.2em;
+
+			font-size: 0.9em;
 			background: none;
 			border: 0;
 			opacity: 0;
 			border-radius: 0.25em;
 			transition: opacity 0.25s ease-in-out;
+
+			&.reverse {
+				transform: scaleX(-1);
+				width: 1.25em;
+				font-size: 1em;
+				aspect-ratio: 1/1;
+				margin-inline-start: 0.25em;
+				padding: 0;
+			}
 
 			&:hover {
 				background-color: color-mix(
@@ -287,6 +319,18 @@
 	}
 	:global(.svelte-flow__node:hover) .label button {
 		opacity: 1;
+	}
+	:global(.svelte-flow__node .svelte-flow__resize-control svg) {
+		opacity: 0;
+		transition: opacity 0.25s ease-in-out;
+	}
+	:global(.svelte-flow__node:hover .svelte-flow__resize-control svg) {
+		opacity: 0.5;
+
+		&:hover {
+			transition: opacity 0.1s ease-in-out;
+			opacity: 1;
+		}
 	}
 	.drag-dots {
 		width: 0.5em;

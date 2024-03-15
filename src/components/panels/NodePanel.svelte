@@ -1,26 +1,41 @@
 <script lang="ts">
-  const onDragStart = (event: DragEvent, connection: string) => {
+  const onDragStart = (event: DragEvent, data: string) => {
     if (!event.dataTransfer) {
       return null;
     }
 
-    event.dataTransfer.setData("application/patchcanvasnode", connection);
+    event.dataTransfer.setData("application/patchcanvasnode", data);
     event.dataTransfer.effectAllowed = "move";
   };
 </script>
 
-<p>Drag'n'drop the nodes!</p>
+<p>Drag to the canvas!</p>
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="nodes">
-  <div on:dragstart={(event) => onDragStart(event, "")} draggable={true}>
-    empty
-  </div>
   <div
-    class="top bottom"
-    on:dragstart={(event) => onDragStart(event, "all")}
+    on:dragstart={(event) =>
+      onDragStart(
+        event,
+        JSON.stringify({
+          inputs: [],
+          outputs: [],
+        }),
+      )}
     draggable={true}
   >
-    tester
+    node
+  </div>
+  <div
+    on:dragstart={(event) =>
+      onDragStart(
+        event,
+        JSON.stringify({
+          group: true,
+        }),
+      )}
+    draggable={true}
+  >
+    group
   </div>
 </div>
 
@@ -32,48 +47,17 @@
   }
 
   .nodes {
-    display: inline grid;
+    display: flex;
     gap: 0.5em;
     margin-bottom: 0.5em;
   }
 
   .nodes > * {
-    position: relative;
+    flex-grow: 1;
     cursor: grab;
     padding: 0.5em;
     border-radius: 0.25em;
     border: var(--font-colour) solid 0.1em;
     text-align: center;
-
-    &.top {
-      margin-top: 0.5em;
-    }
-
-    &.top.bottom {
-      margin-block: 0.5em;
-    }
-
-    &.bottom {
-      margin-bottom: 0.5em;
-    }
-  }
-
-  .nodes > .top::before,
-  .nodes > .bottom::after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    transform: translate(-50%, 50%);
-    left: 50%;
-    border-radius: 100%;
-    background-color: var(--font-colour);
-    width: 1em;
-    height: 1em;
-  }
-  .nodes > .top::before {
-    top: -50%;
-  }
-  .nodes > .bottom::after {
-    bottom: 0;
   }
 </style>
