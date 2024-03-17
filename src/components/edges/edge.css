@@ -10,7 +10,7 @@
 
 svg:has(.highlight .svelte-flow__edge-path),
 svg:has(.selected .svelte-flow__edge-path) {
-	z-index: 1;
+	z-index: 2;
 }
 
 .highlight .svelte-flow__edge-path {

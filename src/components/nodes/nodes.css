@@ -2,9 +2,14 @@
 	background-color: rgba(127, 127, 127, 0.2);
 	width: calc(150px + 25px + 25px);
 	height: 155px;
+	z-index: -1 !important;
 
 	&.selected {
 		background-color: rgba(127, 127, 127, 0.4);
 		backdrop-filter: blur(0.5em);
 	}
+}
+
+.svelte-flow__nodes {
+	z-index: unset;
 }
