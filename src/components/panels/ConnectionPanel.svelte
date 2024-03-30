@@ -4,9 +4,9 @@
 
 	const edges = useEdges();
 
-	const iterableConnections: [ConnectionType, string][] = Object.entries(
+	const iterableConnections: [ConnectionType, [string, number]][] = Object.entries(
 		connections,
-	) as [ConnectionType, string][];
+	) as [ConnectionType, [string, number]][];
 
 	function highlightEdges(connection: ConnectionType) {
 		for (let edge of $edges) {
@@ -58,10 +58,10 @@
 	};
 </script>
 
-{#each iterableConnections as [connection, colour]}
+{#each iterableConnections as [connection, value]}
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		style="--connection: {colour};"
+		style="--connection: {value[0]};"
 		on:mouseenter={() => highlightEdges(connection)}
 		on:mouseleave={() => unhighlightEdges(connection)}
 		on:dragstart={(event) => onDragStart(event, connection)}

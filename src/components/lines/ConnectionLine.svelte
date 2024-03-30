@@ -34,7 +34,7 @@
 			fill="none"
 			stroke-width={1.5}
 			class="animated"
-			stroke={connections[type] ?? "var(--font-colour)"}
+			stroke={connections[type][0] ?? "var(--font-colour)"}
 			d={path}
 			marker-start="url(#{$connection.startHandle?.handleId}line)"
 		/>
@@ -44,7 +44,7 @@
 			fill="none"
 			stroke-width={1.5}
 			class="animated"
-			stroke={connections[type] ?? "var(--font-colour)"}
+			stroke={connections[type][0] ?? "var(--font-colour)"}
 			d={path}
 			marker-end="url(#{$connection.startHandle?.handleId}line)"
 		/>
@@ -54,7 +54,7 @@
 		cy={$connection.targetY}
 		fill="var(--font-colour)"
 		r={3}
-		stroke={connections[type] ?? "var(--font-colour)"}
+		stroke={connections[type][0] ?? "var(--font-colour)"}
 		stroke-width={1.5}
 	/>
 {/if}

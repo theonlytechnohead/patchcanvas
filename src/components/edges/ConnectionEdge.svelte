@@ -59,7 +59,7 @@
 		let colour =
 			connections[
 				(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)
-			];
+			][0];
 		style = `stroke: ${colour};`;
 		markerEnd = `url(#${sourceHandleId})`;
 	}

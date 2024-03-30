@@ -20,7 +20,7 @@
 			connections[
 				(id.replace("line", "") as ConnectionType) ??
 					("" as ConnectionType)
-			];
+			][0];
 	}
 </script>
 

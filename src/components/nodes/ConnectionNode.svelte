@@ -12,7 +12,7 @@
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
-	import { connections, type ConnectionType } from "../connectionTypes";
+	import { connections, sortTypes, type ConnectionType } from "../connectionTypes";
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
@@ -144,13 +144,9 @@
 		switch (io) {
 			case "input":
 				data.inputs.push(connection);
-				// TODO: sorting doesn't update correctly
-				// data.inputs.sort(sortTypes);
 				break;
 			case "output":
 				data.outputs.push(connection);
-				// TODO: sorting doesn't update correctly
-				// data.outputs.sort(sortTypes);
 				break;
 		}
 		data = data; // this is required for Svelte reactivity to work
@@ -179,11 +175,17 @@
 				`[data-id="${id}"] .input-drop-target`,
 			) as HTMLDivElement;
 			if (inputs) {
+				let inputConnections = [...data.inputs];
+				inputConnections.sort(sortTypes);
 				let colours = [];
-				for (let index = 0; index < data.inputs.length; index++) {
-					const input = data.inputs[index];
-					colours.push(connections[input]);
+				for (let index = 0; index < inputConnections.length; index++) {
+					const input = inputConnections[index];
+					let colour = connections[input][0];
+					let percentage = ((connections[input][1] * 16) / 150) * 100;
+					colour += ` ${percentage}%`
+					colours.push(colour);
 				}
+				colours.sort(sortTypes);
 				inputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
 			}
 
@@ -191,10 +193,15 @@
 				`[data-id="${id}"] .output-drop-target`,
 			) as HTMLDivElement;
 			if (outputs) {
+				let outputConnections = [...data.outputs];
+				outputConnections.sort(sortTypes);
 				let colours = [];
-				for (let index = 0; index < data.outputs.length; index++) {
-					const input = data.outputs[index];
-					colours.push(connections[input]);
+				for (let index = 0; index < outputConnections.length; index++) {
+					const output = outputConnections[index];
+					let colour = connections[output][0];
+					let percentage = (((connections[output][1] + 0.75) * 16) / 150) * 100;
+					colour += ` ${percentage}%`
+					colours.push(colour);
 				}
 				outputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
 			}
@@ -261,12 +268,6 @@
 	<ConnectionHandle
 		id={connection}
 		io="input"
-		style="left: calc(12px + {connection === 'power'
-			? '8'
-			: data.inputs.includes('power') &&
-				  data.inputs.indexOf('power') < data.inputs.indexOf(connection)
-				? index - 1
-				: index} * 16px);"
 	/>
 {/each}
 
@@ -274,13 +275,6 @@
 	<ConnectionHandle
 		id={connection}
 		io="output"
-		style="left: calc(12px + 12px + {connection === 'power'
-			? '7'
-			: data.outputs.includes('power') &&
-				  data.outputs.indexOf('power') <
-						data.outputs.indexOf(connection)
-				? index - 1
-				: index} * 16px);"
 	/>
 {/each}
 

@@ -1,24 +1,25 @@
-const ALL_CONNECTIONS = ["power",
+const ALL_CONNECTIONS = [
 	"dante",
 	"dmx",
 	"ethernet",
 	"sdi",
 	"audio",
 	"midi",
-	"osc"]
+	"osc",
+	"power"]
 type Connection = typeof ALL_CONNECTIONS;
 export type ConnectionType = Connection[number]
 
 // https://stackoverflow.com/questions/21687907/typescript-sorting-an-array
-export const connections: { [type in ConnectionType]: string } = {
-	"power": "var(--font-colour)",
-	"dante": "red",
-	"dmx": "dodgerblue",
-	"ethernet": "gold",
-	"sdi": "limegreen",
-	"audio": "orange",
-	"midi": "hotpink",
-	"osc": "magenta"
+export const connections: { [type in ConnectionType]: [string, number] } = {
+	"dante": ["red", 1],
+	"dmx": ["dodgerblue", 2],
+	"ethernet": ["gold", 3],
+	"sdi": ["limegreen", 4],
+	"audio": ["orange", 5],
+	"midi": ["hotpink", 6],
+	"osc": ["magenta", 7],
+	"power": ["var(--font-colour)", 8]
 }
 
 export function sortTypes(t1: ConnectionType, t2: ConnectionType): number {

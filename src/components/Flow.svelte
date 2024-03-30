@@ -29,9 +29,9 @@
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { initialEdges, initialNodes } from "./nodes_and_edges";
 
-  const iterableConnections: [ConnectionType, string][] = Object.entries(
+  const iterableConnections: [ConnectionType, [string, number]][] = Object.entries(
     connections,
-  ) as [ConnectionType, string][];
+  ) as [ConnectionType, [string, number]][];
 
   // theming
   let theme: ColorMode;
@@ -160,10 +160,10 @@
   on:nodeclick={(event) => console.log("on node click", event.detail.node)}
   on:edgeclick={(event) => console.log("on edge click: ", event.detail.edge)}
 >
-  {#each iterableConnections as [connection, colour]}
+  {#each iterableConnections as [connection, value]}
     <ColouredMarker id={connection} type={MarkerType.ArrowClosed} />
   {/each}
-  {#each iterableConnections as [connection, colour]}
+  {#each iterableConnections as [connection, value]}
     <ColouredMarker id={connection + "line"} type={MarkerType.ArrowClosed} />
   {/each}
   <ConnectionLine slot="connectionLine" />
