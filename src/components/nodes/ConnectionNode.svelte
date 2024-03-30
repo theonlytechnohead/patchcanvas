@@ -12,7 +12,7 @@
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
-	import { type ConnectionType } from "../connectionTypes";
+	import { connections, type ConnectionType } from "../connectionTypes";
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
@@ -96,12 +96,17 @@
 		}
 	};
 
-	const onDragLeave = (event: DragEvent, div: any) => {
+	const onDragLeave = (event: DragEvent, div: HTMLDivElement) => {
 		event.preventDefault();
-		div.style = "";
+		div.style.backgroundColor = "";
+		updateBackground();
 	};
 
-	const onDrop = (event: DragEvent, io: "input" | "output", div: any) => {
+	const onDrop = (
+		event: DragEvent,
+		io: "input" | "output",
+		div: HTMLDivElement,
+	) => {
 		event.preventDefault();
 		if (!event.dataTransfer) {
 			return null;
@@ -130,7 +135,7 @@
 			if (valid) {
 				addConnection(connection, io);
 			}
-			div.style = "";
+			div.style.backgroundColor = "";
 		}
 	};
 
@@ -161,6 +166,39 @@
 	function remove() {
 		let confirm = window.confirm(`Actually delete ${data.label}?`);
 		if (confirm) $nodes = $nodes.filter((n) => n.id != id);
+	}
+
+	$: {
+		data = data;
+		updateBackground();
+	}
+
+	function updateBackground() {
+		setTimeout(() => {
+			let inputs = document.querySelector(
+				`[data-id="${id}"] .input-drop-target`,
+			) as HTMLDivElement;
+			if (inputs) {
+				let colours = [];
+				for (let index = 0; index < data.inputs.length; index++) {
+					const input = data.inputs[index];
+					colours.push(connections[input]);
+				}
+				inputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
+			}
+
+			let outputs = document.querySelector(
+				`[data-id="${id}"] .output-drop-target`,
+			) as HTMLDivElement;
+			if (outputs) {
+				let colours = [];
+				for (let index = 0; index < data.outputs.length; index++) {
+					const input = data.outputs[index];
+					colours.push(connections[input]);
+				}
+				outputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
+			}
+		}, 0);
 	}
 </script>
 
@@ -248,23 +286,29 @@
 
 <style>
 	.input-drop-target {
+		opacity: 0.6;
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		height: 10px;
-		border-top-left-radius: 3px;
-		border-top-right-radius: 3px;
+		border-top-left-radius: 2px;
+		border-top-right-radius: 2px;
+
+		mask: linear-gradient(to bottom, white, transparent);
 	}
 
 	.output-drop-target {
+		opacity: 0.6;
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		height: 10px;
-		border-bottom-left-radius: 3px;
-		border-bottom-right-radius: 3px;
+		border-bottom-left-radius: 2px;
+		border-bottom-right-radius: 2px;
+
+		mask: linear-gradient(to top, white, transparent);
 	}
 
 	.hover {
@@ -302,6 +346,7 @@
 			}
 
 			&:hover {
+				opacity: 1 !important;
 				background-color: color-mix(
 					in srgb,
 					var(--font-colour) 10%,
@@ -318,7 +363,7 @@
 		}
 	}
 	:global(.svelte-flow__node:hover) .label button {
-		opacity: 1;
+		opacity: 0.5;
 	}
 	:global(.svelte-flow__node .svelte-flow__resize-control svg) {
 		opacity: 0;
