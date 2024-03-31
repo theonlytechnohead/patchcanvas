@@ -178,6 +178,7 @@
 				let inputConnections = [...data.inputs];
 				inputConnections.sort(sortTypes);
 				let colours = [];
+				colours.push("transparent");
 				for (let index = 0; index < inputConnections.length; index++) {
 					const input = inputConnections[index];
 					let colour = connections[input][0];
@@ -186,6 +187,7 @@
 					colours.push(colour);
 				}
 				colours.sort(sortTypes);
+				colours.push("transparent");
 				inputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
 			}
 
@@ -196,6 +198,7 @@
 				let outputConnections = [...data.outputs];
 				outputConnections.sort(sortTypes);
 				let colours = [];
+				colours.push("transparent");
 				for (let index = 0; index < outputConnections.length; index++) {
 					const output = outputConnections[index];
 					let colour = connections[output][0];
@@ -203,6 +206,8 @@
 					colour += ` ${percentage}%`
 					colours.push(colour);
 				}
+				colours.sort(sortTypes);
+				colours.push("transparent");
 				outputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
 			}
 		}, 0);
