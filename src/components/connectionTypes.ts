@@ -1,8 +1,8 @@
 const ALL_CONNECTIONS = [
 	"dante",
 	"dmx",
-	"ethernet",
 	"sdi",
+	"ethernet",
 	"audio",
 	"midi",
 	"osc",
@@ -14,8 +14,8 @@ export type ConnectionType = Connection[number]
 export const connections: { [type in ConnectionType]: [string, number] } = {
 	"dante": ["red", 1],
 	"dmx": ["dodgerblue", 2],
-	"ethernet": ["gold", 3],
-	"sdi": ["limegreen", 4],
+	"sdi": ["limegreen", 3],
+	"ethernet": ["gold", 4],
 	"audio": ["orange", 5],
 	"midi": ["hotpink", 6],
 	"osc": ["magenta", 7],
