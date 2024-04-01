@@ -58,7 +58,7 @@
 	const onDragEnter = (
 		event: DragEvent,
 		io: "input" | "output",
-		div: any,
+		div: HTMLDivElement,
 	) => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -66,11 +66,9 @@
 			return null;
 		}
 		if (
-			event.dataTransfer.types[0] === "application/patchcanvasconnection"
+			event.dataTransfer.types[0].includes("patchcanvasconnection/")
 		) {
-			const connection = event.dataTransfer.getData(
-				"application/patchcanvasconnection",
-			) as ConnectionType;
+			const connection = event.dataTransfer.types[0].replace("patchcanvasconnection/", "") as ConnectionType;
 			let valid = false;
 			switch (io) {
 				case "input":
@@ -88,9 +86,11 @@
 			}
 			if (valid) {
 				updateBackground([...(io === "input" ? data.inputs : data.outputs), connection], div);
+				div.style.backgroundColor = "green";
 				event.dataTransfer.dropEffect = "move";
 			} else {
-				div.style = "background-color: red;";
+				div.style.backgroundColor = "red";
+				div.style.backgroundImage = "";
 				event.dataTransfer.dropEffect = "none";
 			}
 		}
@@ -116,11 +116,9 @@
 			return null;
 		}
 		if (
-			event.dataTransfer.types[0] === "application/patchcanvasconnection"
+			event.dataTransfer.types[0].includes("patchcanvasconnection/")
 		) {
-			const connection = event.dataTransfer.getData(
-				"application/patchcanvasconnection",
-			) as ConnectionType;
+			const connection = event.dataTransfer.types[0].replace("patchcanvasconnection/", "") as ConnectionType;
 			let valid = false;
 			switch (io) {
 				case "input":
@@ -140,6 +138,7 @@
 				addConnection(connection, io);
 			}
 			div.style.backgroundColor = "";
+			updateBackground(io === "input" ? data.inputs : data.outputs, div);
 		}
 	};
 
@@ -168,12 +167,6 @@
 		if (confirm) $nodes = $nodes.filter((n) => n.id != id);
 	}
 
-	$: {
-		data = data;
-		updateBackground(data.inputs, inputDiv);
-		updateBackground(data.outputs, outputDiv);
-	}
-
 	function updateBackground(handles: ConnectionType[], div: HTMLDivElement) {
 		if (div === undefined) {
 			setTimeout(updateBackground, 0, handles, div);
@@ -199,6 +192,12 @@
 		colours.push("transparent");
 		div.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
 	}
+
+	// required to avoid 'use before assignment' warning
+	setTimeout(() => {
+		updateBackground(data.inputs, inputDiv);
+		updateBackground(data.outputs, outputDiv);
+	}, 0);
 </script>
 
 {#if !data.group}

@@ -51,8 +51,8 @@
 		}
 
 		event.dataTransfer.setData(
-			"application/patchcanvasconnection",
-			connection,
+			`patchcanvasconnection/${connection}`,
+			"",
 		);
 		event.dataTransfer.effectAllowed = "move";
 	};

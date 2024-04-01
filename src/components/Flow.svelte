@@ -72,14 +72,11 @@
       // check the drop "target" and ensure that it is over the correct area (i.e. not a panel)
       const element = document.elementFromPoint(event.clientX, event.clientY);
       let allowedTargets = "";
-      switch (event.dataTransfer.types[0]) {
-        case "application/patchcanvasnode":
+      if (event.dataTransfer.types[0] === "application/patchcanvasnode") {
           allowedTargets =
             ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
-          break;
-        case "application/patchcanvasconnection":
+      } else if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
           allowedTargets = ".drop-target";
-          break;
       }
       if (element?.matches(allowedTargets)) {
         event.dataTransfer.dropEffect = "move";
