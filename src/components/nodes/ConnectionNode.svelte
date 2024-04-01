@@ -87,7 +87,7 @@
 					break;
 			}
 			if (valid) {
-				div.style = "background-color: green;";
+				updateBackground([...(io === "input" ? data.inputs : data.outputs), connection], div);
 				event.dataTransfer.dropEffect = "move";
 			} else {
 				div.style = "background-color: red;";
@@ -99,7 +99,11 @@
 	const onDragLeave = (event: DragEvent, div: HTMLDivElement) => {
 		event.preventDefault();
 		div.style.backgroundColor = "";
-		updateBackground();
+		if (div === inputDiv) {
+			updateBackground(data.inputs, inputDiv);
+		} else {
+			updateBackground(data.outputs, outputDiv);
+		}
 	};
 
 	const onDrop = (
@@ -166,58 +170,41 @@
 
 	$: {
 		data = data;
-		updateBackground();
+		updateBackground(data.inputs, inputDiv);
+		updateBackground(data.outputs, outputDiv);
 	}
 
-	function updateBackground() {
-		setTimeout(() => {
-			let inputs = document.querySelector(
-				`[data-id="${id}"] .input-drop-target`,
-			) as HTMLDivElement;
-			if (inputs) {
-				let inputConnections = [...data.inputs];
-				inputConnections.sort(sortTypes);
-				let colours = [];
-				colours.push("transparent");
-				for (let index = 0; index < inputConnections.length; index++) {
-					const input = inputConnections[index];
-					let colour = connections[input][0];
-					let percentage = ((connections[input][1] * 16) / 150) * 100;
-					colour += ` ${percentage}%`
-					colours.push(colour);
-				}
-				colours.sort(sortTypes);
-				colours.push("transparent");
-				inputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
+	function updateBackground(handles: ConnectionType[], div: HTMLDivElement) {
+		if (div === undefined) {
+			setTimeout(updateBackground, 0, handles, div);
+			return;
+		}
+		let currentHandles = [...handles];
+		currentHandles.sort(sortTypes);
+		let colours = [];
+		colours.push("transparent 2%");
+		for (const connection in connections) {
+			let colour = "transparent";
+			if (currentHandles.includes(connection)) {
+				colour = connections[connection][0];
 			}
-
-			let outputs = document.querySelector(
-				`[data-id="${id}"] .output-drop-target`,
-			) as HTMLDivElement;
-			if (outputs) {
-				let outputConnections = [...data.outputs];
-				outputConnections.sort(sortTypes);
-				let colours = [];
-				colours.push("transparent");
-				for (let index = 0; index < outputConnections.length; index++) {
-					const output = outputConnections[index];
-					let colour = connections[output][0];
-					let percentage = (((connections[output][1] + 0.75) * 16) / 150) * 100;
-					colour += ` ${percentage}%`
-					colours.push(colour);
-				}
-				colours.sort(sortTypes);
-				colours.push("transparent");
-				outputs.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
+			let position = connections[connection][1];
+			if (div === outputDiv) {
+				position += 0.75;
 			}
-		}, 0);
+			let percentage = ((position * 16) / 150) * 100;
+			colour += ` ${percentage}%`;
+			colours.push(colour);
+		}
+		colours.push("transparent");
+		div.style.backgroundImage = `linear-gradient(to right, ${colours.join(", ")})`;
 	}
 </script>
 
 {#if !data.group}
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="input-drop-target"
+		class="drop-target inputs"
 		bind:this={inputDiv}
 		on:dragenter={(event) => onDragEnter(event, "input", inputDiv)}
 		on:dragleave={(event) => onDragLeave(event, inputDiv)}
@@ -225,7 +212,7 @@
 	></div>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="output-drop-target"
+		class="drop-target outputs"
 		bind:this={outputDiv}
 		on:dragenter={(event) => onDragEnter(event, "output", outputDiv)}
 		on:dragleave={(event) => onDragLeave(event, outputDiv)}
@@ -284,30 +271,27 @@
 {/each}
 
 <style>
-	.input-drop-target {
+	.drop-target {
 		opacity: 0.6;
 		position: absolute;
-		top: 0;
+		
 		left: 0;
 		right: 0;
 		height: 10px;
-		border-top-left-radius: 2px;
-		border-top-right-radius: 2px;
+		
+		&.inputs {
+			top: 0;
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+			mask: linear-gradient(to bottom, white, transparent);
+		}
 
-		mask: linear-gradient(to bottom, white, transparent);
-	}
-
-	.output-drop-target {
-		opacity: 0.6;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		height: 10px;
-		border-bottom-left-radius: 2px;
-		border-bottom-right-radius: 2px;
-
-		mask: linear-gradient(to top, white, transparent);
+		&.outputs {
+			bottom: 0;
+			border-bottom-left-radius: 2px;
+			border-bottom-right-radius: 2px;
+			mask: linear-gradient(to top, white, transparent);
+		}
 	}
 
 	.hover {

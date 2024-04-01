@@ -78,7 +78,7 @@
             ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
           break;
         case "application/patchcanvasconnection":
-          allowedTargets = ".input-drop-target, .output-drop-target";
+          allowedTargets = ".drop-target";
           break;
       }
       if (element?.matches(allowedTargets)) {
