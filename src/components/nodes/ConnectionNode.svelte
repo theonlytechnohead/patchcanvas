@@ -277,6 +277,8 @@
 		left: 0;
 		right: 0;
 		height: 10px;
+
+		transition: background-color 0.25s ease-in-out;
 		
 		&.inputs {
 			top: 0;
