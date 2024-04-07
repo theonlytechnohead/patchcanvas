@@ -12,7 +12,11 @@
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
 	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
-	import { connections, sortTypes, type ConnectionType } from "../connectionTypes";
+	import {
+		connections,
+		sortTypes,
+		type ConnectionType,
+	} from "../connectionTypes";
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
@@ -65,10 +69,11 @@
 		if (!event.dataTransfer) {
 			return null;
 		}
-		if (
-			event.dataTransfer.types[0].includes("patchcanvasconnection/")
-		) {
-			const connection = event.dataTransfer.types[0].replace("patchcanvasconnection/", "") as ConnectionType;
+		if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
+			const connection = event.dataTransfer.types[0].replace(
+				"patchcanvasconnection/",
+				"",
+			) as ConnectionType;
 			let valid = false;
 			switch (io) {
 				case "input":
@@ -85,7 +90,13 @@
 					break;
 			}
 			if (valid) {
-				updateBackground([...(io === "input" ? data.inputs : data.outputs), connection], div);
+				updateBackground(
+					[
+						...(io === "input" ? data.inputs : data.outputs),
+						connection,
+					],
+					div,
+				);
 				div.style.backgroundColor = "green";
 				event.dataTransfer.dropEffect = "move";
 			} else {
@@ -115,10 +126,11 @@
 		if (!event.dataTransfer) {
 			return null;
 		}
-		if (
-			event.dataTransfer.types[0].includes("patchcanvasconnection/")
-		) {
-			const connection = event.dataTransfer.types[0].replace("patchcanvasconnection/", "") as ConnectionType;
+		if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
+			const connection = event.dataTransfer.types[0].replace(
+				"patchcanvasconnection/",
+				"",
+			) as ConnectionType;
 			let valid = false;
 			switch (io) {
 				case "input":
@@ -139,6 +151,28 @@
 			}
 			div.style.backgroundColor = "";
 			updateBackground(io === "input" ? data.inputs : data.outputs, div);
+		}
+	};
+
+	const eraserDrop = (event: DragEvent) => {
+		event.preventDefault();
+		if (!event.dataTransfer) {
+			return null;
+		}
+		if (event.dataTransfer.types[0] === "application/patchcanvaseraser") {
+			if ((event.target as HTMLDivElement).attributes.getNamedItem("data-nodeid")?.value !== id)
+				return null;
+			let connection = (
+				event.target as HTMLDivElement
+			).attributes.getNamedItem("data-handleid")?.value as ConnectionType;
+			let io =
+				(event.target as HTMLDivElement).attributes.getNamedItem(
+					"data-handlepos",
+				)?.value === "top"
+					? "input"
+					: "output";
+			removeConnection(connection, io);
+			updateBackground(io === "input" ? data.inputs : data.outputs, io === "input" ? inputDiv : outputDiv);
 		}
 	};
 
@@ -168,7 +202,7 @@
 	}
 
 	function updateBackground(handles: ConnectionType[], div: HTMLDivElement) {
-		if (div === undefined) {
+		if (div === undefined || div === null) {
 			setTimeout(updateBackground, 0, handles, div);
 			return;
 		}
@@ -198,6 +232,19 @@
 		updateBackground(data.inputs, inputDiv);
 		updateBackground(data.outputs, outputDiv);
 	}, 0);
+
+	function removeConnection(connection: ConnectionType, io: string) {
+		switch (io) {
+			case "input":
+				data.inputs = data.inputs.filter((c: ConnectionType) => c !== connection);
+				break;
+			case "output":
+				data.outputs = data.outputs.filter((c: ConnectionType) => c !== connection);
+				break;
+		}
+		data = data;
+		updateNodeInternals(id);
+	}
 </script>
 
 {#if !data.group}
@@ -256,24 +303,18 @@
 {/if}
 
 {#each data.inputs as connection, index}
-	<ConnectionHandle
-		id={connection}
-		io="input"
-	/>
+	<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
 {/each}
 
 {#each data.outputs as connection, index}
-	<ConnectionHandle
-		id={connection}
-		io="output"
-	/>
+	<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
 {/each}
 
 <style>
 	.drop-target {
 		opacity: 0.6;
 		position: absolute;
-		
+
 		left: 0;
 		right: 0;
 		height: 10px;

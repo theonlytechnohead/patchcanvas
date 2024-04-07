@@ -77,6 +77,8 @@
             ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
       } else if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
           allowedTargets = ".drop-target";
+      } else if (event.dataTransfer.types[0] === "application/patchcanvaseraser") {
+        allowedTargets = ".svelte-flow__handle"
       }
       if (element?.matches(allowedTargets)) {
         event.dataTransfer.dropEffect = "move";

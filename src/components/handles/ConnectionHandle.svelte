@@ -5,6 +5,9 @@
 	export let id: ConnectionType;
 	export let io: string;
 	export let style: string = "";
+	export let drop: (event: DragEvent) => null | undefined
+
+	addEventListener("drop", drop);
 </script>
 
 <!-- it is necessary to manually set the width/height to a specific pixel value because Chrome can't render properly -->
