@@ -41,7 +41,7 @@
 		inputs: ConnectionType[];
 		outputs: ConnectionType[];
 		group: boolean;
-	}
+	};
 	dragHandle;
 	type;
 	isConnectable;
@@ -98,7 +98,9 @@
 			if (valid) {
 				updateBackground(
 					[
-						...(io === "input" ? nodeData.inputs : nodeData.outputs),
+						...(io === "input"
+							? nodeData.inputs
+							: nodeData.outputs),
 						connection,
 					],
 					div,
@@ -156,7 +158,10 @@
 				addConnection(connection, io);
 			}
 			div.style.backgroundColor = "";
-			updateBackground(io === "input" ? nodeData.inputs : nodeData.outputs, div);
+			updateBackground(
+				io === "input" ? nodeData.inputs : nodeData.outputs,
+				div,
+			);
 		}
 	};
 
@@ -166,7 +171,11 @@
 			return null;
 		}
 		if (event.dataTransfer.types[0] === "application/patchcanvaseraser") {
-			if ((event.target as HTMLDivElement).attributes.getNamedItem("data-nodeid")?.value !== id)
+			if (
+				(event.target as HTMLDivElement).attributes.getNamedItem(
+					"data-nodeid",
+				)?.value !== id
+			)
 				return null;
 			let connection = (
 				event.target as HTMLDivElement
@@ -178,7 +187,10 @@
 					? "input"
 					: "output";
 			removeConnection(connection, io);
-			updateBackground(io === "input" ? nodeData.inputs : nodeData.outputs, io === "input" ? inputDiv : outputDiv);
+			updateBackground(
+				io === "input" ? nodeData.inputs : nodeData.outputs,
+				io === "input" ? inputDiv : outputDiv,
+			);
 		}
 	};
 
@@ -241,10 +253,14 @@
 	function removeConnection(connection: ConnectionType, io: string) {
 		switch (io) {
 			case "input":
-				nodeData.inputs = nodeData.inputs.filter((c: ConnectionType) => c !== connection);
+				nodeData.inputs = nodeData.inputs.filter(
+					(c: ConnectionType) => c !== connection,
+				);
 				break;
 			case "output":
-				nodeData.outputs = nodeData.outputs.filter((c: ConnectionType) => c !== connection);
+				nodeData.outputs = nodeData.outputs.filter(
+					(c: ConnectionType) => c !== connection,
+				);
 				break;
 		}
 		nodeData = nodeData;
@@ -307,13 +323,17 @@
 	</NodeResizeControl>
 {/if}
 
-{#each nodeData.inputs as connection, index}
-	<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
-{/each}
+{#key nodeData.inputs}
+	{#each nodeData.inputs as connection, index}
+		<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
+	{/each}
+{/key}
 
-{#each nodeData.outputs as connection, index}
-	<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
-{/each}
+{#key nodeData.outputs}
+	{#each nodeData.outputs as connection, index}
+		<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
+	{/each}
+{/key}
 
 <style>
 	.drop-target {
@@ -325,7 +345,7 @@
 		height: 10px;
 
 		transition: background-color 0.25s ease-in-out;
-		
+
 		&.inputs {
 			top: 0;
 			border-top-left-radius: 2px;
