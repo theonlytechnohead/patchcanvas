@@ -323,17 +323,13 @@
 	</NodeResizeControl>
 {/if}
 
-{#key nodeData.inputs}
-	{#each nodeData.inputs as connection, index}
-		<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
-	{/each}
-{/key}
+{#each nodeData.inputs as connection (connection)}
+	<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
+{/each}
 
-{#key nodeData.outputs}
-	{#each nodeData.outputs as connection, index}
-		<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
-	{/each}
-{/key}
+{#each nodeData.outputs as connection (connection)}
+	<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
+{/each}
 
 <style>
 	.drop-target {

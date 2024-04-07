@@ -1,14 +1,12 @@
 <script lang="ts">
   import NodePanel from "./panels/NodePanel.svelte";
   import ConnectionPanel from "./panels/ConnectionPanel.svelte";
-  import SelectedPanel from "./panels/SelectedPanel.svelte";
 </script>
 
 <aside>
   <h1>PatchCanvas</h1>
   <NodePanel />
   <ConnectionPanel />
-  <!-- <SelectedPanel /> -->
 </aside>
 
 <style>
