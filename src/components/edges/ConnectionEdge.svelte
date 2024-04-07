@@ -11,6 +11,7 @@
 
 	type $$Props = EdgeProps;
 	export let id: $$Props["id"];
+	export let type: $$Props["type"]
 	export let source: $$Props["source"];
 	export let sourceX: $$Props["sourceX"];
 	export let sourceY: $$Props["sourceY"];
@@ -46,6 +47,7 @@
 	const onEdgeClick = () =>
 		edges.update((eds) => eds.filter((edge) => edge.id !== id));
 
+	type;
 	source;
 	target;
 	targetHandleId;

@@ -508,19 +508,20 @@
   resolved "https://registry.yarnpkg.com/@types/pug/-/pug-2.0.10.tgz#52f8dbd6113517aef901db20b4f3fca543b88c1f"
   integrity sha512-Sk/uYFOBAB7mb74XcpizmH0KOR2Pv3D2Hmrh1Dmy5BmK3MpdSa5kqZcg6EKBdklU0bFXX9gCfzvpnyUehrPIuA==
 
-"@xyflow/svelte@^0.0.37":
-  version "0.0.37"
-  resolved "https://registry.yarnpkg.com/@xyflow/svelte/-/svelte-0.0.37.tgz#7bdec87f1fade10036684a9b0bd086c1976ea338"
-  integrity sha512-7aXtKB2rdifwY+ifL7J5ofbX6wvUUZrIvvwCl4RcLtlC5QKqtpGmz/UDVQKTJJjiY1qTXvXyajrPT2qKNZL3aQ==
+"@xyflow/svelte@^0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@xyflow/svelte/-/svelte-0.0.40.tgz#6abab0eca9154a690eb059db24934e099465506a"
+  integrity sha512-cDBaZgKm0oIX7t39HwJqHPZsLRqlNjzPEoh/Q9PvHinM77BDSPksZaQ72M1m7Vw/r6+HkPCNxQzqycSkTrwJNg==
   dependencies:
     "@svelte-put/shortcut" "^3.1.0"
-    "@xyflow/system" "0.0.18"
+    "@xyflow/system" "0.0.21"
     classcat "^5.0.4"
+    svelte-preprocess "^5.1.3"
 
-"@xyflow/system@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@xyflow/system/-/system-0.0.18.tgz#c059347cc8250db011932ef9fe5575cef398f65f"
-  integrity sha512-OPRax1cKJLstvDrrb2sIxWZS+OhggP1cd9NA40ZAGTWDHTZLtVenujp3VrU6wyx0JQ4S8bN3InTQ6wuH3JTrzQ==
+"@xyflow/system@0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@xyflow/system/-/system-0.0.21.tgz#aff160a7e79614ddb0663666c7494d50c2197f9e"
+  integrity sha512-IvvJkC495u8mIA4Xm35dnQp0a5JUwzRm8eDBWKNyI3lAw93dOr85cKSrCNSuQ5M5SWNy2teFCFvnQEgVjwK3dg==
   dependencies:
     "@types/d3" "^7.4.0"
     "@types/d3-drag" "^3.0.1"

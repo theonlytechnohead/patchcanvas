@@ -20,11 +20,11 @@
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
-	export let data: $$Props["data"];
-	export let dragHandle: $$Props["dragHandle"];
+	export let data: $$Props["data"] | Data;
+	export let dragHandle: $$Props["dragHandle"] = undefined;
 	export let type: $$Props["type"];
 	export let isConnectable: $$Props["isConnectable"];
-	export let selected: $$Props["selected"];
+	export let selected: $$Props["selected"] = undefined;
 	export let zIndex: $$Props["zIndex"];
 	export let positionAbsoluteX: $$Props["positionAbsoluteX"];
 	export let positionAbsoluteY: $$Props["positionAbsoluteY"];
@@ -35,7 +35,13 @@
 	export let targetPosition: $$Props["targetPosition"] = undefined;
 
 	id;
-	data;
+	let nodeData = data as Data;
+	type Data = {
+		label: string;
+		inputs: ConnectionType[];
+		outputs: ConnectionType[];
+		group: boolean;
+	}
 	dragHandle;
 	type;
 	isConnectable;
@@ -78,13 +84,13 @@
 			switch (io) {
 				case "input":
 					valid = validateNewConnectionHandle(
-						data.inputs,
+						nodeData.inputs,
 						connection,
 					);
 					break;
 				case "output":
 					valid = validateNewConnectionHandle(
-						data.outputs,
+						nodeData.outputs,
 						connection,
 					);
 					break;
@@ -92,7 +98,7 @@
 			if (valid) {
 				updateBackground(
 					[
-						...(io === "input" ? data.inputs : data.outputs),
+						...(io === "input" ? nodeData.inputs : nodeData.outputs),
 						connection,
 					],
 					div,
@@ -111,9 +117,9 @@
 		event.preventDefault();
 		div.style.backgroundColor = "";
 		if (div === inputDiv) {
-			updateBackground(data.inputs, inputDiv);
+			updateBackground(nodeData.inputs, inputDiv);
 		} else {
-			updateBackground(data.outputs, outputDiv);
+			updateBackground(nodeData.outputs, outputDiv);
 		}
 	};
 
@@ -135,13 +141,13 @@
 			switch (io) {
 				case "input":
 					valid = validateNewConnectionHandle(
-						data.inputs,
+						nodeData.inputs,
 						connection,
 					);
 					break;
 				case "output":
 					valid = validateNewConnectionHandle(
-						data.outputs,
+						nodeData.outputs,
 						connection,
 					);
 					break;
@@ -150,7 +156,7 @@
 				addConnection(connection, io);
 			}
 			div.style.backgroundColor = "";
-			updateBackground(io === "input" ? data.inputs : data.outputs, div);
+			updateBackground(io === "input" ? nodeData.inputs : nodeData.outputs, div);
 		}
 	};
 
@@ -172,7 +178,7 @@
 					? "input"
 					: "output";
 			removeConnection(connection, io);
-			updateBackground(io === "input" ? data.inputs : data.outputs, io === "input" ? inputDiv : outputDiv);
+			updateBackground(io === "input" ? nodeData.inputs : nodeData.outputs, io === "input" ? inputDiv : outputDiv);
 		}
 	};
 
@@ -180,24 +186,23 @@
 	function addConnection(connection: ConnectionType, io: string) {
 		switch (io) {
 			case "input":
-				data.inputs.push(connection);
+				nodeData.inputs.push(connection);
 				break;
 			case "output":
-				data.outputs.push(connection);
+				nodeData.outputs.push(connection);
 				break;
 		}
-		data = data; // this is required for Svelte reactivity to work
+		nodeData = nodeData; // this is required for Svelte reactivity to work
 		updateNodeInternals(id); // this is required for xyflow to know we've done something
 	}
 
 	function rename() {
-		let old: string = data.label;
-		data.label = prompt(`Rename '${data.label}' to:`, data.label);
-		if (data.label === null) data.label = old;
+		let newName = prompt(`Rename '${nodeData.label}' to:`, nodeData.label);
+		if (newName !== null) nodeData.label = newName;
 	}
 
 	function remove() {
-		let confirm = window.confirm(`Actually delete ${data.label}?`);
+		let confirm = window.confirm(`Actually delete ${nodeData.label}?`);
 		if (confirm) $nodes = $nodes.filter((n) => n.id != id);
 	}
 
@@ -229,25 +234,25 @@
 
 	// required to avoid 'use before assignment' warning
 	setTimeout(() => {
-		updateBackground(data.inputs, inputDiv);
-		updateBackground(data.outputs, outputDiv);
+		updateBackground(nodeData.inputs, inputDiv);
+		updateBackground(nodeData.outputs, outputDiv);
 	}, 0);
 
 	function removeConnection(connection: ConnectionType, io: string) {
 		switch (io) {
 			case "input":
-				data.inputs = data.inputs.filter((c: ConnectionType) => c !== connection);
+				nodeData.inputs = nodeData.inputs.filter((c: ConnectionType) => c !== connection);
 				break;
 			case "output":
-				data.outputs = data.outputs.filter((c: ConnectionType) => c !== connection);
+				nodeData.outputs = nodeData.outputs.filter((c: ConnectionType) => c !== connection);
 				break;
 		}
-		data = data;
+		nodeData = nodeData;
 		updateNodeInternals(id);
 	}
 </script>
 
-{#if !data.group}
+{#if !nodeData.group}
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
 		class="drop-target inputs"
@@ -268,14 +273,14 @@
 {/if}
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div style={data.labelStyle} class="label">
+<div class="label">
 	<span class="drag-handle drag-dots">{@html DragDots}</span>
-	{data.label}
+	{nodeData.label}
 	<button on:click={() => rename()} class="reverse">✎</button>
 	<button on:click={() => remove()}>❌</button>
 </div>
 
-{#if data.group}
+{#if nodeData.group}
 	<NodeResizeControl
 		minWidth={200}
 		minHeight={105}
@@ -302,11 +307,11 @@
 	</NodeResizeControl>
 {/if}
 
-{#each data.inputs as connection, index}
+{#each nodeData.inputs as connection, index}
 	<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
 {/each}
 
-{#each data.outputs as connection, index}
+{#each nodeData.outputs as connection, index}
 	<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
 {/each}
 
