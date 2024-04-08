@@ -1,10 +1,11 @@
 <script lang="ts">
   import NodePanel from "./panels/NodePanel.svelte";
   import ConnectionPanel from "./panels/ConnectionPanel.svelte";
+  import SavePanel from "./panels/SavePanel.svelte";
 </script>
 
 <aside>
-  <h1>PatchCanvas</h1>
+  <SavePanel />
   <NodePanel />
   <ConnectionPanel />
 </aside>
@@ -22,9 +23,5 @@
     border: var(--xy-node-border-default);
     border-width: 0.14em;
     border-radius: calc(var(--xy-node-border-radius-default) * 2.5);
-  }
-
-  h1 {
-    margin: 0;
   }
 </style>

@@ -43,7 +43,6 @@
   p {
     font-style: italic;
     opacity: 0.65;
-    margin-top: 0;
     margin-bottom: 0.5em;
   }
 
