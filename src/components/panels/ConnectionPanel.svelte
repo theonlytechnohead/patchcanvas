@@ -44,7 +44,8 @@
 			}
 		}
 	}
-
+	
+	let clone: HTMLDivElement;
 	const onDragStart = (event: DragEvent, connection: string) => {
 		if (!event.dataTransfer) {
 			return null;
@@ -52,10 +53,20 @@
 
 		event.dataTransfer.setData(`patchcanvasconnection/${connection}`, "");
 		event.dataTransfer.effectAllowed = "move";
+
+		let div = event.target as HTMLDivElement;
+		clone = div.cloneNode(true) as HTMLDivElement;
+		clone.classList.add("dragging");
+		clone.style.position = "absolute";
+		clone.style.top = "0";
+		clone.style.right = "0";
+		clone.style.zIndex = "-1";
+		clone.style.setProperty("--connection", connections[connection][0]);
+		document.body.appendChild(clone);
+		event.dataTransfer.setDragImage(clone, -16, 0);
 	};
 
 	let eraser: HTMLDivElement;
-	let clone: HTMLDivElement;
 	const onEraserStart = (event: DragEvent) => {
 		if (!event.dataTransfer) {
 			return null;
@@ -71,34 +82,26 @@
 		clone.style.right = "0";
 		clone.style.zIndex = "-1";
 		document.body.appendChild(clone);
-		event.dataTransfer?.setDragImage(clone, 0, 0);
+		event.dataTransfer.setDragImage(clone, -16, 0);
 	};
 
-	const onEraserEnd = () => {
+	const onDragEnd = () => {
 		clone.remove();
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-	bind:this={eraser}
-	class="eraser"
-	on:dragstart={(event) => onEraserStart(event)}
-	on:dragend={onEraserEnd}
-	draggable={true}
->
-	{@html EraserIcon} erase
-</div>
-<div id="coverup"></div>
+<p>Connections</p>
 
 <div class="connections">
 	{#each iterableConnections as [connection, value]}
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
+			class="connection"
 			style="--connection: {value[0]};"
 			on:mouseenter={() => highlightEdges(connection)}
 			on:mouseleave={() => unhighlightEdges(connection)}
 			on:dragstart={(event) => onDragStart(event, connection)}
+			on:dragend={onDragEnd}
 			draggable={true}
 		>
 			{connection}
@@ -106,7 +109,23 @@
 	{/each}
 </div>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+	bind:this={eraser}
+	class="eraser"
+	on:dragstart={(event) => onEraserStart(event)}
+	on:dragend={onDragEnd}
+	draggable={true}
+>
+	{@html EraserIcon} erase
+</div>
+
 <style>
+	p {
+		margin-bottom: 0.5em;
+		font-style: italic;
+		opacity: 0.65;
+	}
 	.eraser {
 		padding-left: 0.5em;
 		padding-block: 0.25em;
@@ -129,9 +148,9 @@
 		}
 	}
 	.connections {
-		margin-top: 1em;
+		margin-bottom: 0.5em;
 	}
-	.connections div {
+	.connection {
 		padding-left: 0.5em;
 		padding-block: 0.25em;
 
@@ -142,6 +161,21 @@
 
 		&:hover {
 			border-left-width: 1.25em;
+		}
+		&.dragging {
+			border: none;
+		}
+		&.dragging::before {
+			content: '';
+			position: relative;
+			display: inline-block;
+			top: 0;
+			left: 0;
+			width: 1em;
+			height: 1em;
+			border-radius: 1em;
+			margin-inline-end: 0.5em;
+			background-color: var(--connection);
 		}
 	}
 </style>
