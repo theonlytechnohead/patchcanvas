@@ -27,11 +27,11 @@
   import ConnectionLine from "./lines/ConnectionLine.svelte";
   import { type ConnectionType, connections } from "./connectionTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
+  import { save } from "./stores";
   import { initialEdges, initialNodes } from "./nodes_and_edges";
 
-  const iterableConnections: [ConnectionType, [string, number]][] = Object.entries(
-    connections,
-  ) as [ConnectionType, [string, number]][];
+  const iterableConnections: [ConnectionType, [string, number]][] =
+    Object.entries(connections) as [ConnectionType, [string, number]][];
 
   // theming
   let theme: ColorMode;
@@ -49,6 +49,11 @@
 
   const nodes = writable(initialNodes);
   const edges = writable(initialEdges);
+
+  $: {
+    $save.nodes = $nodes;
+    $save.edges = $edges;
+  }
 
   function validateConnection(connection: Edge | Connection): boolean {
     return connection.sourceHandle === connection.targetHandle;
@@ -73,12 +78,16 @@
       const element = document.elementFromPoint(event.clientX, event.clientY);
       let allowedTargets = "";
       if (event.dataTransfer.types[0] === "application/patchcanvasnode") {
-          allowedTargets =
-            ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
-      } else if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
-          allowedTargets = ".drop-target";
-      } else if (event.dataTransfer.types[0] === "application/patchcanvaseraser") {
-        allowedTargets = ".svelte-flow__handle"
+        allowedTargets =
+          ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
+      } else if (
+        event.dataTransfer.types[0].includes("patchcanvasconnection/")
+      ) {
+        allowedTargets = ".drop-target";
+      } else if (
+        event.dataTransfer.types[0] === "application/patchcanvaseraser"
+      ) {
+        allowedTargets = ".svelte-flow__handle";
       }
       if (element?.matches(allowedTargets)) {
         event.dataTransfer.dropEffect = "move";

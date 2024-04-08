@@ -1,11 +1,25 @@
+<script lang="ts">
+	import { save, initialSave } from "../stores";
+
+	function reset() {
+		$save = initialSave;
+		$save.uniqueFlow = [{}]
+	}
+
+	function rename() {
+		let newName = prompt(undefined, $save.title);
+		if (newName !== null) $save.title = newName;
+	}
+</script>
+
 <div class="title">
-	<h1>PatchCanvas</h1>
-	<button>Rename</button>
+	<h1>{$save.title}</h1>
+	<button on:click={rename}>Rename</button>
 </div>
 
 <div class="buttons">
-<button>Load</button>
-<button>Save</button>
+	<button on:click={reset}>New</button>
+	<button>idk</button>
 </div>
 
 <style>

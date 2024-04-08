@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@xyflow/svelte": "^0.0.40",
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "svelte-persisted-store": "^0.9.1"
   }
 }
