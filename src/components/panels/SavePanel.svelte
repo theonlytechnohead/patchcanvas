@@ -1,14 +1,38 @@
 <script lang="ts">
+	import { get } from "svelte/store";
+	import { downloadText } from "download.js";
 	import { save, initialSave } from "../stores";
 
 	function reset() {
-		$save = initialSave;
-		$save.uniqueFlow = [{}]
+		load(initialSave);
+	}
+
+	let importFiles: FileList;
+	function upload() {
+		if (!importFiles[0]) return;
+
+		let reader = new FileReader();
+		reader.readAsText(importFiles[0]);
+		reader.onload = (event: ProgressEvent<FileReader>) => {
+			let data = JSON.parse(event.target?.result as string);
+			load(data);
+		};
+	}
+
+	function load(data: any) {
+		$save = data;
+		$save.uniqueFlow = [{}];
 	}
 
 	function rename() {
 		let newName = prompt(undefined, $save.title);
 		if (newName !== null) $save.title = newName;
+	}
+
+	function out() {
+		let data = JSON.stringify(get(save));
+
+		downloadText($save.title + ".patch", data);
 	}
 </script>
 
@@ -19,7 +43,16 @@
 
 <div class="buttons">
 	<button on:click={reset}>New</button>
-	<button>idk</button>
+	<button>
+		Import
+		<input
+			type="file"
+			accept=".patch"
+			bind:files={importFiles}
+			on:change={upload}
+		/>
+	</button>
+	<button on:click={out}>Export</button>
 </div>
 
 <style>
@@ -50,8 +83,22 @@
 		margin-top: 0.25em;
 
 		& button {
+			position: relative;
 			flex-grow: 1;
 			padding-block: 0.5em;
+			
+			& input[type="file"] {
+				position: absolute;
+				box-sizing: border-box;
+				margin: -2px;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				width: calc(100% + 2px + 2px);
+				height: calc(100% + 2px + 2px);
+				opacity: 0;
+			}
 		}
 	}
 </style>

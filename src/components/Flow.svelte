@@ -27,6 +27,7 @@
   import ConnectionLine from "./lines/ConnectionLine.svelte";
   import { type ConnectionType, connections } from "./connectionTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
+  import { get } from "svelte/store";
   import { save } from "./stores";
   import { initialEdges, initialNodes } from "./nodes_and_edges";
 
@@ -47,8 +48,9 @@
     connection: ConnectionEdge,
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
-  const nodes = writable(initialNodes);
-  const edges = writable(initialEdges);
+  // deep-copy the current save nodes & edges to initialise properly
+  const nodes = writable(JSON.parse(JSON.stringify(get(save).nodes)));
+  const edges = writable(JSON.parse(JSON.stringify(get(save).edges)));
 
   $: {
     $save.nodes = $nodes;
