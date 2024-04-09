@@ -4,7 +4,7 @@
 
 A tool for documenting patches between professional hardware and software components
 
-Check it out, it's live here: [theonlytechnohead.github.io/patchcanvas](https://theonlytechnohead.github.io/patchcanvas/)
+Check it out, it's live here: [patchcanvas.net](https://patchcanvas.net/)
 
 ## Developer overview
 
