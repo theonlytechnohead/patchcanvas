@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+  import { initialSave } from "./stores";
+
+  let savePanel: SavePanel;
+  export const reset = function () {
+    if (savePanel)
+      savePanel.load(initialSave);
+  };
+</script>
+
 <script lang="ts">
   import NodePanel from "./panels/NodePanel.svelte";
   import ConnectionPanel from "./panels/ConnectionPanel.svelte";
@@ -5,7 +15,7 @@
 </script>
 
 <aside>
-  <SavePanel />
+  <SavePanel bind:this={savePanel} />
   <NodePanel />
   <ConnectionPanel />
 </aside>

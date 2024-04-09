@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { get } from "svelte/store";
 	import { downloadText } from "download.js";
-	import { save, initialSave } from "../stores";
-
-	function reset() {
-		load(initialSave);
-	}
+	import { save } from "../stores";
+	import { reset } from "../Sidebar.svelte";
 
 	let importFiles: FileList;
 	function upload() {
@@ -19,7 +16,7 @@
 		};
 	}
 
-	function load(data: any) {
+	export function load(data: any) {
 		$save = data;
 		$save.uniqueFlow = [{}];
 	}

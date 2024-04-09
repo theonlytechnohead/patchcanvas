@@ -21,7 +21,7 @@
     MarkerType,
     type Node,
   } from "@xyflow/svelte";
-  import Sidebar from "./Sidebar.svelte";
+  import Sidebar, { reset } from "./Sidebar.svelte";
   import ConnectionEdge from "./edges/ConnectionEdge.svelte";
   import type { ComponentType, SvelteComponent } from "svelte";
   import ConnectionNode from "./nodes/ConnectionNode.svelte";
@@ -29,7 +29,16 @@
   import { type ConnectionType, connections } from "./connectionTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
-  import { preferences, save } from "./stores";
+  import { LATEST_SAVE, preferences, save } from "./stores";
+
+  if ($save.version != LATEST_SAVE) {
+    console.log("Version mismatch: " + $save.version + " != " + LATEST_SAVE);
+    setTimeout(() => {
+      reset();
+    }, 0);
+  } else {
+    console.log("Using latest save version: " + $save.version);
+  }
 
   // theming
   document.documentElement.setAttribute("data-theme", $preferences.theme);
