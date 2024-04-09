@@ -29,16 +29,16 @@
   import { type ConnectionType, connections } from "./connectionTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
-  import { save } from "./stores";
+  import { preferences, save } from "./stores";
+
+  // theming
+  document.documentElement.setAttribute("data-theme", $preferences.theme);
+  document
+    .querySelector('meta[name="color-scheme"]')
+    ?.setAttribute("content", $preferences.theme);
 
   const iterableConnections: [ConnectionType, [string, number]][] =
     Object.entries(connections) as [ConnectionType, [string, number]][];
-
-  // theming
-  let theme: ColorMode;
-  $: theme =
-    (document.documentElement.getAttribute("data-theme") as ColorMode) ??
-    ("dark" as ColorMode);
 
   const nodeTypes = {
     default: ConnectionNode,
@@ -165,7 +165,7 @@
   {defaultEdgeOptions}
   isValidConnection={validateConnection}
   snapGrid={[25, 25]}
-  colorMode={theme}
+  colorMode={$preferences.theme}
   fitView
   {fitViewOptions}
   minZoom={0.75}
@@ -196,22 +196,24 @@
   <Controls position={"bottom-right"} showFitView={false} showLock={false}>
     <ControlButton
       on:click={function () {
-        document.querySelector('[media="print"]')?.setAttribute("media", "screen");
+        document
+          .querySelector('[media="print"]')
+          ?.setAttribute("media", "screen");
         document.addEventListener("fullscreenchange", exitFullscreen);
         document.documentElement.requestFullscreen();
       }}>⛶</ControlButton
     >
     <ControlButton
       on:click={() => {
-        if (theme === "dark") {
-          theme = "light";
+        if ($preferences.theme === "dark") {
+          $preferences.theme = "light";
         } else {
-          theme = "dark";
+          $preferences.theme = "dark";
         }
-        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.setAttribute("data-theme", $preferences.theme);
         document
           .querySelector('meta[name="color-scheme"]')
-          ?.setAttribute("content", theme);
+          ?.setAttribute("content", $preferences.theme);
       }}>🌙</ControlButton
     >
   </Controls>
