@@ -154,6 +154,7 @@
 		margin-bottom: 0.5em;
 		font-style: italic;
 		opacity: 0.65;
+		transition: margin-top 0.5s ease-in-out;
 	}
 	.eraser {
 		padding-left: 0.5em;
@@ -222,6 +223,12 @@
 				top: 0;
 				left: 0.25em;
 			}
+		}
+	}
+
+	@media (max-aspect-ratio: 1/1) {
+		p {
+			margin-top: 0;
 		}
 	}
 </style>

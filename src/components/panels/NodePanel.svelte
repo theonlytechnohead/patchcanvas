@@ -44,6 +44,8 @@
     font-style: italic;
     opacity: 0.65;
     margin-bottom: 0.5em;
+
+    transition: margin-top 0.5s ease-in-out;
   }
 
   .nodes {
@@ -59,5 +61,11 @@
     border-radius: 0.25em;
     border: var(--font-colour) solid 0.1em;
     text-align: center;
+  }
+
+  @media (max-aspect-ratio: 1/1) {
+    p {
+      margin-top: 0;
+    }
   }
 </style>
