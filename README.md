@@ -1,4 +1,4 @@
-# PatchCanvas
+# ![icon](public/favicon.ico) PatchCanvas
 
 ![Screenshot](screenshot.png)
 
