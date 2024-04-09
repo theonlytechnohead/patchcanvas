@@ -199,7 +199,7 @@
         document.querySelector('[media="print"]')?.setAttribute("media", "screen");
         document.addEventListener("fullscreenchange", exitFullscreen);
         document.documentElement.requestFullscreen();
-      }}>📄</ControlButton
+      }}>⛶</ControlButton
     >
     <ControlButton
       on:click={() => {
