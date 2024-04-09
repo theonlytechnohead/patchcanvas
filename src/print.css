@@ -1,0 +1,16 @@
+.svelte-flow__background-pattern.dots {
+	fill: transparent !important;
+}
+
+.svelte-flow__panel {
+	display: none !important;
+}
+
+.drop-target {
+	display: none;
+}
+
+.svelte-flow__handle,
+.group {
+	print-color-adjust: exact
+}

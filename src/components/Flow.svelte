@@ -19,6 +19,7 @@
     type Connection,
     type Edge,
     MarkerType,
+    type Node,
   } from "@xyflow/svelte";
   import Sidebar from "./Sidebar.svelte";
   import ConnectionEdge from "./edges/ConnectionEdge.svelte";
@@ -29,7 +30,6 @@
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
   import { save } from "./stores";
-  import { initialEdges, initialNodes } from "./nodes_and_edges";
 
   const iterableConnections: [ConnectionType, [string, number]][] =
     Object.entries(connections) as [ConnectionType, [string, number]][];
@@ -133,7 +133,7 @@
       origin: [0.5, 0.0] as [number, number],
     };
     $nodes.push(newNode);
-    $nodes.sort((a, b) => {
+    $nodes.sort((a: Node, b: Node) => {
       if (a.data.group) {
         if (b.data.group) {
           return 0;
@@ -146,6 +146,14 @@
       return 0;
     });
     $nodes = $nodes;
+  }
+
+  function exitFullscreen(this: Document, event: Event) {
+    if (!document.fullscreenElement) {
+      document
+        .querySelector('[href="/src/print.css"]')
+        ?.setAttribute("media", "print");
+    }
   }
 </script>
 
@@ -186,6 +194,13 @@
     height={visualViewport?.height ? visualViewport?.height / 10 : undefined}
   />
   <Controls position={"bottom-right"} showFitView={false} showLock={false}>
+    <ControlButton
+      on:click={function () {
+        document.querySelector('[media="print"]')?.removeAttribute("media");
+        document.addEventListener("fullscreenchange", exitFullscreen);
+        document.documentElement.requestFullscreen();
+      }}>📄</ControlButton
+    >
     <ControlButton
       on:click={() => {
         if (theme === "dark") {
