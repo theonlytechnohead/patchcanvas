@@ -151,7 +151,7 @@
   function exitFullscreen(this: Document, event: Event) {
     if (!document.fullscreenElement) {
       document
-        .querySelector('[href="/src/print.css"]')
+        .querySelector('[media="screen"]')
         ?.setAttribute("media", "print");
     }
   }
@@ -196,7 +196,7 @@
   <Controls position={"bottom-right"} showFitView={false} showLock={false}>
     <ControlButton
       on:click={function () {
-        document.querySelector('[media="print"]')?.removeAttribute("media");
+        document.querySelector('[media="print"]')?.setAttribute("media", "screen");
         document.addEventListener("fullscreenchange", exitFullscreen);
         document.documentElement.requestFullscreen();
       }}>📄</ControlButton
