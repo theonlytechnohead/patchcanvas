@@ -10,6 +10,10 @@
 	display: none;
 }
 
+.svelte-flow__node .label > * {
+	display: none;
+}
+
 .svelte-flow__handle,
 .group {
 	print-color-adjust: exact
