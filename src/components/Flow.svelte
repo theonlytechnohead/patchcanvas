@@ -30,12 +30,35 @@
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
   import { LATEST_SAVE, preferences, save } from "./stores";
+  import { initialEdges, initialNodes } from "./nodes_and_edges";
+  import lodash from "lodash";
 
   if ($save.version != LATEST_SAVE) {
     console.log("Version mismatch: " + $save.version + " != " + LATEST_SAVE);
-    setTimeout(() => {
-      reset();
-    }, 0);
+
+    if (
+      $save.nodes.length === initialNodes.length &&
+      $save.edges.length === initialEdges.length &&
+      $save.nodes.every((value, index, array) => {
+        return lodash.isMatch(value, initialNodes[index]);
+      }) &&
+      $save.edges.every((value, index, array) => {
+        return lodash.isMatch(value, initialEdges[index]);
+      })
+    ) {
+      console.log("Still default, updating without confirmation");
+      setTimeout(() => {
+        reset();
+      }, 0);
+    } else {
+      console.log("Edited, prompt for confirmation");
+      let confirmConvert = confirm(
+        `Your patch is out of date\nDo you want to update to the latest version?\n(v${$save.version} -> v${LATEST_SAVE})`,
+      );
+      if (confirmConvert) {
+        // TODO: convert!
+      }
+    }
   } else {
     console.log("Using latest save version: " + $save.version);
   }
