@@ -1,5 +1,6 @@
 .svelte-flow__edge,
-.svelte-flow__handle {
+.svelte-flow__handle,
+.svelte-flow__node .label {
 	transition: opacity 0.25s ease-in-out;
 }
 

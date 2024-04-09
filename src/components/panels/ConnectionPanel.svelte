@@ -8,6 +8,32 @@
 	const iterableConnections: [ConnectionType, [string, number]][] =
 		Object.entries(connections) as [ConnectionType, [string, number]][];
 
+	function highlightAllHandles() {
+		for (let edge of $edges) {
+			edge.class += "fade-out";
+		}
+		$edges = $edges;
+		for (let label of document.querySelectorAll(".svelte-flow__node .label")) {
+			label.classList.add("fade-out");
+		}
+		for (let handle of document.querySelectorAll(".svelte-flow__handle")) {
+			handle.classList.add("highlight");
+		}
+	}
+
+	function unhighlightAllHandles() {
+		for (let edge of $edges) {
+			edge.class = edge.class?.replace("fade-out", "");
+		}
+		$edges = $edges;
+		for (let label of document.querySelectorAll(".svelte-flow__node .label")) {
+			label.classList.remove("fade-out");
+		}
+		for (let handle of document.querySelectorAll(".svelte-flow__handle")) {
+			handle.classList.remove("highlight");
+		}
+	}
+
 	function highlightEdges(connection: ConnectionType) {
 		for (let edge of $edges) {
 			if (edge.sourceHandle === connection) {
@@ -113,6 +139,8 @@
 <div
 	bind:this={eraser}
 	class="eraser"
+	on:mouseenter={highlightAllHandles}
+	on:mouseleave={unhighlightAllHandles}
 	on:dragstart={(event) => onEraserStart(event)}
 	on:dragend={onDragEnd}
 	draggable={true}
