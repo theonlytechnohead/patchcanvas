@@ -1,5 +1,5 @@
 <svg
-	viewBox="2 -2 24 26"
+	viewBox="1 -3 24 28"
 	id="Layer_1"
 	data-name="Layer 1"
 	xmlns="http://www.w3.org/2000/svg"
