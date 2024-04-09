@@ -5,8 +5,8 @@
 
 	const edges = useEdges();
 
-	const iterableConnections: [ConnectionType, [string, number]][] =
-		Object.entries(connections) as [ConnectionType, [string, number]][];
+	const iterableConnections: [ConnectionType, [string, number, string]][] =
+		Object.entries(connections) as [ConnectionType, [string, number, string]][];
 
 	function highlightAllHandles() {
 		for (let edge of $edges) {
@@ -130,6 +130,7 @@
 			on:dragend={onDragEnd}
 			draggable={true}
 		>
+		<div class="icon">{@html value[2]}</div>
 			{connection}
 		</div>
 	{/each}
@@ -179,6 +180,7 @@
 		margin-bottom: 0.5em;
 	}
 	.connection {
+		position: relative;
 		padding-left: 0.5em;
 		padding-block: 0.25em;
 
@@ -192,6 +194,10 @@
 		}
 		&.dragging {
 			border: none;
+
+			& .icon {
+				display: none;
+			}
 		}
 		&.dragging::before {
 			content: '';
@@ -204,6 +210,18 @@
 			border-radius: 1em;
 			margin-inline-end: 0.5em;
 			background-color: var(--connection);
+		}
+
+		& .icon {
+			display: inline-block;
+			width: 1em;
+
+			& svg {
+				position: absolute;
+				height: 100%;
+				top: 0;
+				left: 0.25em;
+			}
 		}
 	}
 </style>

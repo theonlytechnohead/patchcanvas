@@ -37,8 +37,8 @@
     .querySelector('meta[name="color-scheme"]')
     ?.setAttribute("content", $preferences.theme);
 
-  const iterableConnections: [ConnectionType, [string, number]][] =
-    Object.entries(connections) as [ConnectionType, [string, number]][];
+  const iterableConnections: [ConnectionType, [string, number, string]][] =
+    Object.entries(connections) as [ConnectionType, [string, number, string]][];
 
   const nodeTypes = {
     default: ConnectionNode,
