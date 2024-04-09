@@ -1,4 +1,4 @@
-# ![icon](public/favicon.ico) PatchCanvas
+#  <img src="public/favicon.ico" alt="PatchCanvas icon" width="25" height="25"> PatchCanvas
 
 ![Screenshot](screenshot.png)
 
