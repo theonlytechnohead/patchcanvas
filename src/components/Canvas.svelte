@@ -247,5 +247,5 @@
     ><a href="https://github.com/theonlytechnohead/patchcanvas">GitHub</a><br
     />© 2024 Craig Anderson</Panel
   >
-  <Panel position={"top-left"}><Sidebar /></Panel>
+  <Sidebar />
 </SvelteFlow>

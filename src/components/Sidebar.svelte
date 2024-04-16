@@ -1,42 +1,65 @@
 <script lang="ts" context="module">
   import { save } from "./stores";
 
-  let savePanel: SavePanel;
+  let savesPanel: SavesPanel;
   export const reset = function () {
-    if (savePanel) savePanel.load(save);
+    if (savesPanel) savesPanel.load(save);
   };
 </script>
 
 <script lang="ts">
   import NodePanel from "./panels/NodePanel.svelte";
   import ProtocolPanel from "./panels/ProtocolPanel.svelte";
-  import SavePanel from "./panels/SavePanel.svelte";
+  import CanvasPanel from "./panels/CanvasPanel.svelte";
+  import SavesPanel from "./panels/SavesPanel.svelte";
+  import { Panel } from "@xyflow/svelte";
+
+  let showCanvases: boolean;
 </script>
 
-<aside>
-  <div>
-    <SavePanel bind:this={savePanel} />
-  </div>
-  <div>
-    <NodePanel />
-  </div>
-  <div class="rotate">
-    <ProtocolPanel />
-  </div>
-</aside>
+<Panel position={"top-left"} class="main">
+  <aside class={showCanvases ? "hide" : ""}>
+    <div>
+      <CanvasPanel bind:showCanvases />
+    </div>
+
+    <div>
+      <NodePanel />
+    </div>
+    <div class="rotate">
+      <ProtocolPanel />
+    </div>
+  </aside>
+</Panel>
+
+{#if showCanvases}
+  <Panel position={"top-left"}>
+    <aside class="absolute">
+      <div>
+        <SavesPanel bind:showCanvases bind:this={savesPanel} />
+      </div>
+    </aside>
+  </Panel>
+{/if}
 
 <style>
   :global(.svelte-flow__minimap) {
     transition: 0.5s opacity 0.2s ease-in-out;
   }
-  :global(.svelte-flow__panel:has(aside)) {
-    transition-property: margin, right;
+  :global(.svelte-flow__panel.main:has(aside)) {
+    transition-property: margin, right, left;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
     right: calc(100% - 15em);
   }
 
+  :global(.svelte-flow__panel.main:has(aside.hide)) {
+    left: -15em;
+    right: 100%;
+  }
+
   aside {
+    box-sizing: border-box;
     padding: 1em;
     backdrop-filter: blur(0.5em);
     background-color: color-mix(
@@ -52,11 +75,17 @@
     transition-property: border-top-left-radius, border-top-right-radius;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
+
+    &.absolute {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 
   .rotate {
     width: 11em;
-    transition: all 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
   }
 
   @media (max-aspect-ratio: 1/1) {
@@ -65,9 +94,14 @@
       transition: 0.3s opacity 0.1s ease-in-out;
     }
 
-    :global(.svelte-flow__panel:has(aside)) {
+    :global(.svelte-flow__panel.main:has(aside)) {
       margin: 0;
       right: 0;
+    }
+
+    :global(.svelte-flow__panel.main:has(aside.hide)) {
+      left: -100%;
+      right: 100%;
     }
 
     aside {

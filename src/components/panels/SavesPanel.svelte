@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { get } from "svelte/store";
 	import { downloadText } from "download.js";
-	import { current } from "../stores";
 	import { reset } from "../Sidebar.svelte";
+	import { current } from "../stores";
+
+	export let showCanvases: boolean;
 
 	let importFiles: FileList;
 	function upload() {
@@ -21,11 +23,6 @@
 		$current.uniqueFlow = [{}];
 	}
 
-	function rename() {
-		let newName = prompt(undefined, $current.title);
-		if (newName !== null) $current.title = newName;
-	}
-
 	function out() {
 		let data = JSON.stringify(get(current));
 
@@ -33,12 +30,8 @@
 	}
 </script>
 
-<div class="title">
-	<h1>{$current.title}</h1>
-	<button on:click={rename}>Rename</button>
-</div>
-
 <div class="buttons">
+	<button on:click={() => showCanvases = !showCanvases}>Back</button>
 	<button on:click={reset}>New</button>
 	<button>
 		Import
@@ -53,27 +46,6 @@
 </div>
 
 <style>
-	.title {
-		position: relative;
-		& h1 {
-			margin: 0;
-		}
-		& button {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			width: 100%;
-			opacity: 0;
-
-			transition: opacity 0.2s ease-in-out;
-
-			&:hover {
-				opacity: 1;
-			}
-		}
-	}
 	.buttons {
 		display: flex;
 		gap: 0.5em;
