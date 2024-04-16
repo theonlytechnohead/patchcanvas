@@ -74,7 +74,7 @@
 
   :global(.svelte-flow__panel.saves aside) {
     max-height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   aside {
