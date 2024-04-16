@@ -21,5 +21,5 @@ export const save = {
 }
 export const current = persisted("current", save)
 
-export const initialSaves: typeof save[] = []
+export const initialSaves: { [name: string]: typeof save } = {}
 export const saves = persisted("saves", initialSaves)

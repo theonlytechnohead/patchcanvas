@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { get } from "svelte/store";
 	import { downloadText } from "download.js";
 	import { reset } from "../Sidebar.svelte";
-	import { current, saves } from "../stores";
+	import { current, saves, type save } from "../stores";
 
 	export let showCanvases: boolean;
 
@@ -23,10 +22,17 @@
 		$current.uniqueFlow = [{}];
 	}
 
-	function out() {
-		let data = JSON.stringify(get(current));
+	function out(data: typeof save) {
+		downloadText($current.title + ".patch", JSON.stringify(data));
+	}
 
-		downloadText($current.title + ".patch", data);
+	export function store(data: typeof save) {
+		$saves[data.title] = JSON.parse(JSON.stringify(data));
+	}
+
+	function removeStore(name: string) {
+		delete $saves[name];
+		$saves = $saves;
 	}
 </script>
 
@@ -44,29 +50,42 @@
 			on:change={upload}
 		/>
 	</button>
-	<button on:click={out}>Export</button>
 </div>
 
-<div class="current">
+<div class="loaded">
 	<h2>Loaded</h2>
 	<div class="save">
 		<div class="title">
-			<span class="name">{$current.title}</span>&nbsp;<span class="version">(v{$current.version})</span>
+			<span class="name">{$current.title}</span>&nbsp;<span
+				class="version">(v{$current.version})</span
+			>
 		</div>
 		<div class="contents">
 			{$current.nodes.length} nodes, {$current.edges.length} patches
 		</div>
+		<button on:click={() => store($current)}>Save</button>
+		<button on:click={() => out($current)}>Export</button>
 	</div>
 </div>
 
 <div class="saves">
-	<h2>Stored</h2>
-	{#if $saves.length === 0}
-		<p>No canvases currently stored on this browser</p>
+	<h2>Saved</h2>
+	{#if Object.keys($saves).length === 0}
+		<p>No canvases saved<br />(on this browser)</p>
 	{/if}
-	{#each $saves as save (save)}
-		<div class="save">
-			{save}
+	{#each Object.entries($saves) as [name, s] (name)}
+		<div class="save {name === $current.title ? 'current' : ''}">
+			<div class="title">
+				<span class="name">{s.title}</span>&nbsp;<span class="version"
+					>(v{s.version})</span
+				>
+			</div>
+			<div class="contents">
+				{s.nodes.length} nodes, {s.edges.length} patches
+			</div>
+			<button on:click={() => load(s)}>Load</button>
+			<button on:click={() => out(s)}>Export</button>
+			<button on:click={() => removeStore(name)}>Delete</button>
 		</div>
 	{/each}
 </div>
@@ -104,11 +123,20 @@
 			}
 		}
 	}
-	.current, .saves {
+
+	.loaded,
+	.saves {
 		margin-top: 1em;
 	}
 
+	.saves {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
 	.saves > p {
+		margin: 0;
 		opacity: 0.65;
 		font-size: 0.85em;
 		font-style: italic;
@@ -118,7 +146,20 @@
 		display: inline-block;
 		border-radius: 0.5em;
 		padding: 0.25em 0.5em;
-		background-color: color-mix( in srgb, color-mix(in srgb, var(--font-colour) 50%, var(--background-colour) 50%) 25%, transparent 75% );
+		background-color: color-mix(
+			in srgb,
+			color-mix(
+					in srgb,
+					var(--font-colour) 50%,
+					var(--background-colour) 50%
+				)
+				25%,
+			transparent 75%
+		);
+
+		&.current {
+			outline: 0.1em solid limegreen;
+		}
 
 		& .title {
 			& span.title {
@@ -135,6 +176,11 @@
 
 		& .contents {
 			font-size: 0.85em;
+		}
+
+		& button:first-of-type {
+			font-size: 0.85em;
+			margin-left: -0.25em;
 		}
 	}
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { store } from "../Sidebar.svelte";
 	import { current } from "../stores";
 
 	export let showCanvases: boolean;
@@ -16,7 +17,7 @@
 
 <div class="buttons">
 	<button on:click={() => showCanvases = !showCanvases}>Canvases</button>
-	<button>Save</button>
+	<button on:click={() => store()}>Save</button>
 </div>
 
 <style>

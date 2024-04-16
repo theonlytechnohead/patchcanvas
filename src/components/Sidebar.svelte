@@ -5,6 +5,9 @@
   export const reset = function () {
     if (savesPanel) savesPanel.load(save);
   };
+  export const store = function () {
+    if (savesPanel) savesPanel.store(save);
+  }
 </script>
 
 <script lang="ts">
