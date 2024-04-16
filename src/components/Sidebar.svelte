@@ -60,14 +60,21 @@
   }
 
   :global(.svelte-flow__panel.saves:has(aside)) {
-    transition-property: top;
+    transition-property: top, bottom;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
     top: -100%;
+    bottom: 100%;
   }
 
   :global(.svelte-flow__panel.saves:has(aside.show)) {
     top: 0;
+    bottom: 0;
+  }
+
+  :global(.svelte-flow__panel.saves aside) {
+    max-height: 100%;
+    overflow-y: scroll;
   }
 
   aside {
@@ -87,12 +94,6 @@
     transition-property: border-top-left-radius, border-top-right-radius;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
-
-    &.absolute {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
   }
 
   .rotate {
@@ -116,7 +117,7 @@
       right: 100%;
     }
 
-    :global(.svelte-flow__panel.saves:has(aside.show)) {
+    :global(.svelte-flow__panel.saves:has(aside)) {
       margin: 0;
       right: 0;
     }
@@ -130,6 +131,10 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1em;
+    }
+
+    :global(.svelte-flow__panel.saves aside) {
+      height: 100%;
     }
 
     .rotate {
