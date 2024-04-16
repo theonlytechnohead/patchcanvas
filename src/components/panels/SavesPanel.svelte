@@ -54,7 +54,7 @@
 
 <div class="loaded">
 	<h2>Loaded</h2>
-	<div class="save">
+	<div class="save current">
 		<div class="title">
 			<span class="name">{$current.title}</span>&nbsp;<span
 				class="version">(v{$current.version})</span
@@ -133,6 +133,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+		gap: 0.5em;
 	}
 
 	.saves > p {
