@@ -52,8 +52,8 @@
 	</button>
 </div>
 
+<h2>Loaded</h2>
 <div class="loaded">
-	<h2>Loaded</h2>
 	<div class="save current">
 		<div class="title">
 			<span class="name">{$current.title}</span>&nbsp;<span
@@ -68,8 +68,8 @@
 	</div>
 </div>
 
+<h2>Saved</h2>
 <div class="saves">
-	<h2>Saved</h2>
 	{#if Object.keys($saves).length === 0}
 		<p>No canvases saved<br />(on this browser)</p>
 	{/if}
@@ -97,6 +97,7 @@
 	}
 	h2 {
 		font-weight: normal;
+		margin-top: 0.5em;
 		margin-bottom: 0.25em;
 	}
 	.buttons {
@@ -122,11 +123,6 @@
 				opacity: 0;
 			}
 		}
-	}
-
-	.loaded,
-	.saves {
-		margin-top: 1em;
 	}
 
 	.saves {
