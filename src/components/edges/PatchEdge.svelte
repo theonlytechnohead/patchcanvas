@@ -5,13 +5,13 @@
 		useEdges,
 		BaseEdge,
 	} from "@xyflow/svelte";
-	import { connections, type ConnectionType } from "../connectionTypes";
+	import { protocols, type ProtocolType } from "../protocolTypes";
 
 	import "./edge.css";
 
 	type $$Props = EdgeProps;
 	export let id: $$Props["id"];
-	export let type: $$Props["type"]
+	export let type: $$Props["type"];
 	export let source: $$Props["source"];
 	export let sourceX: $$Props["sourceX"];
 	export let sourceY: $$Props["sourceY"];
@@ -43,9 +43,9 @@
 		targetPosition,
 	});
 
-	const edges = useEdges();
+	const patches = useEdges();
 	const onEdgeClick = () =>
-		edges.update((eds) => eds.filter((edge) => edge.id !== id));
+		patches.update((eds) => eds.filter((edge) => edge.id !== id));
 
 	type;
 	source;
@@ -59,8 +59,8 @@
 	interactionWidth;
 	$: {
 		let colour =
-			connections[
-				(sourceHandleId as ConnectionType) ?? ("" as ConnectionType)
+			protocols[
+				(sourceHandleId as ProtocolType) ?? ("" as ProtocolType)
 			][0];
 		style = `stroke: ${colour};`;
 		markerEnd = `url(#${sourceHandleId})`;

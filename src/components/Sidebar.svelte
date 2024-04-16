@@ -9,7 +9,7 @@
 
 <script lang="ts">
   import NodePanel from "./panels/NodePanel.svelte";
-  import ConnectionPanel from "./panels/ConnectionPanel.svelte";
+  import ProtocolPanel from "./panels/ProtocolPanel.svelte";
   import SavePanel from "./panels/SavePanel.svelte";
 </script>
 
@@ -21,7 +21,7 @@
     <NodePanel />
   </div>
   <div class="rotate">
-    <ConnectionPanel />
+    <ProtocolPanel />
   </div>
 </aside>
 

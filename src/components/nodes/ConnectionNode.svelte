@@ -11,12 +11,12 @@
 	const nodes = useNodes();
 
 	import DragDots from "../../svg/drag-dots.svelte?raw";
-	import ConnectionHandle from "../handles/ConnectionHandle.svelte";
+	import PortHandle from "../handles/PortHandle.svelte";
 	import {
-		connections,
-		sortTypes,
-		type ConnectionType,
-	} from "../connectionTypes";
+		protocols,
+		sortProtocols,
+		type ProtocolType,
+	} from "../protocolTypes";
 
 	type $$Props = NodeProps;
 	export let id: $$Props["id"];
@@ -38,8 +38,8 @@
 	let nodeData = data as Data;
 	type Data = {
 		label: string;
-		inputs: ConnectionType[];
-		outputs: ConnectionType[];
+		inputs: ProtocolType[];
+		outputs: ProtocolType[];
 		group: boolean;
 	};
 	dragHandle;
@@ -58,11 +58,11 @@
 	let inputDiv: HTMLDivElement;
 	let outputDiv: HTMLDivElement;
 
-	function validateNewConnectionHandle(
-		existing: ConnectionType[],
-		connection: ConnectionType,
+	function validateNewProtocol(
+		existing: ProtocolType[],
+		protocol: ProtocolType,
 	): boolean {
-		return !existing.includes(connection);
+		return !existing.includes(protocol);
 	}
 
 	const onDragEnter = (
@@ -75,23 +75,23 @@
 		if (!event.dataTransfer) {
 			return null;
 		}
-		if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
-			const connection = event.dataTransfer.types[0].replace(
-				"patchcanvasconnection/",
+		if (event.dataTransfer.types[0].includes("patchcanvasprotocol/")) {
+			const protocol = event.dataTransfer.types[0].replace(
+				"patchcanvasprotocol/",
 				"",
-			) as ConnectionType;
+			) as ProtocolType;
 			let valid = false;
 			switch (io) {
 				case "input":
-					valid = validateNewConnectionHandle(
+					valid = validateNewProtocol(
 						nodeData.inputs,
-						connection,
+						protocol,
 					);
 					break;
 				case "output":
-					valid = validateNewConnectionHandle(
+					valid = validateNewProtocol(
 						nodeData.outputs,
-						connection,
+						protocol,
 					);
 					break;
 			}
@@ -101,7 +101,7 @@
 						...(io === "input"
 							? nodeData.inputs
 							: nodeData.outputs),
-						connection,
+						protocol,
 					],
 					div,
 				);
@@ -134,28 +134,28 @@
 		if (!event.dataTransfer) {
 			return null;
 		}
-		if (event.dataTransfer.types[0].includes("patchcanvasconnection/")) {
-			const connection = event.dataTransfer.types[0].replace(
-				"patchcanvasconnection/",
+		if (event.dataTransfer.types[0].includes("patchcanvasprotocol/")) {
+			const protocol = event.dataTransfer.types[0].replace(
+				"patchcanvasprotocol/",
 				"",
-			) as ConnectionType;
+			) as ProtocolType;
 			let valid = false;
 			switch (io) {
 				case "input":
-					valid = validateNewConnectionHandle(
+					valid = validateNewProtocol(
 						nodeData.inputs,
-						connection,
+						protocol,
 					);
 					break;
 				case "output":
-					valid = validateNewConnectionHandle(
+					valid = validateNewProtocol(
 						nodeData.outputs,
-						connection,
+						protocol,
 					);
 					break;
 			}
 			if (valid) {
-				addConnection(connection, io);
+				addProtocol(protocol, io);
 			}
 			div.style.backgroundColor = "";
 			updateBackground(
@@ -177,16 +177,16 @@
 				)?.value !== id
 			)
 				return null;
-			let connection = (
+			let protocol = (
 				event.target as HTMLDivElement
-			).attributes.getNamedItem("data-handleid")?.value as ConnectionType;
+			).attributes.getNamedItem("data-handleid")?.value as ProtocolType;
 			let io =
 				(event.target as HTMLDivElement).attributes.getNamedItem(
 					"data-handlepos",
 				)?.value === "top"
 					? "input"
 					: "output";
-			removeConnection(connection, io);
+			removeProtocol(protocol, io);
 			updateBackground(
 				io === "input" ? nodeData.inputs : nodeData.outputs,
 				io === "input" ? inputDiv : outputDiv,
@@ -195,13 +195,13 @@
 	};
 
 	const updateNodeInternals = useUpdateNodeInternals();
-	function addConnection(connection: ConnectionType, io: string) {
+	function addProtocol(protocol: ProtocolType, io: string) {
 		switch (io) {
 			case "input":
-				nodeData.inputs.push(connection);
+				nodeData.inputs.push(protocol);
 				break;
 			case "output":
-				nodeData.outputs.push(connection);
+				nodeData.outputs.push(protocol);
 				break;
 		}
 		nodeData = nodeData; // this is required for Svelte reactivity to work
@@ -218,21 +218,21 @@
 		if (confirm) $nodes = $nodes.filter((n) => n.id != id);
 	}
 
-	function updateBackground(handles: ConnectionType[], div: HTMLDivElement) {
+	function updateBackground(handles: ProtocolType[], div: HTMLDivElement) {
 		if (div === undefined || div === null) {
 			setTimeout(updateBackground, 0, handles, div);
 			return;
 		}
 		let currentHandles = [...handles];
-		currentHandles.sort(sortTypes);
+		currentHandles.sort(sortProtocols);
 		let colours = [];
 		colours.push("transparent 2%");
-		for (const connection in connections) {
+		for (const connection in protocols) {
 			let colour = "transparent";
 			if (currentHandles.includes(connection)) {
-				colour = connections[connection][0];
+				colour = protocols[connection][0];
 			}
-			let position = connections[connection][1];
+			let position = protocols[connection][1];
 			if (div === outputDiv) {
 				position += 0.75;
 			}
@@ -250,16 +250,16 @@
 		updateBackground(nodeData.outputs, outputDiv);
 	}, 0);
 
-	function removeConnection(connection: ConnectionType, io: string) {
+	function removeProtocol(protocol: ProtocolType, io: string) {
 		switch (io) {
 			case "input":
 				nodeData.inputs = nodeData.inputs.filter(
-					(c: ConnectionType) => c !== connection,
+					(c: ProtocolType) => c !== protocol,
 				);
 				break;
 			case "output":
 				nodeData.outputs = nodeData.outputs.filter(
-					(c: ConnectionType) => c !== connection,
+					(c: ProtocolType) => c !== protocol,
 				);
 				break;
 		}
@@ -323,12 +323,12 @@
 	</NodeResizeControl>
 {/if}
 
-{#each nodeData.inputs as connection (connection)}
-	<ConnectionHandle id={connection} io="input" drop={eraserDrop} />
+{#each nodeData.inputs as protocol (protocol)}
+	<PortHandle id={protocol} io="input" drop={eraserDrop} />
 {/each}
 
-{#each nodeData.outputs as connection (connection)}
-	<ConnectionHandle id={connection} io="output" drop={eraserDrop} />
+{#each nodeData.outputs as protocol (protocol)}
+	<PortHandle id={protocol} io="output" drop={eraserDrop} />
 {/each}
 
 <style>

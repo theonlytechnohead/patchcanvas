@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SvelteFlowProvider } from "@xyflow/svelte";
-  import Flow from "./components/Flow.svelte";
+  import Canvas from "./components/Canvas.svelte";
   import { save } from "./components/stores";
 </script>
 
@@ -9,7 +9,7 @@
     <!-- https://svelteflow.dev/api-reference -->
     <SvelteFlowProvider>
       {#each $save.uniqueFlow as flow (flow)}
-        <Flow />
+        <Canvas />
       {/each}
     </SvelteFlowProvider>
   </div>

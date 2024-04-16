@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Position, getSmoothStepPath, useConnection } from "@xyflow/svelte";
-	import { connections, type ConnectionType } from "../connectionTypes";
-	const connection = useConnection();
+	import { protocols, type ProtocolType } from "../protocolTypes";
+	const patch = useConnection();
 	let path = "";
 
 	$: {
@@ -12,7 +12,7 @@
 			targetX,
 			targetY,
 			targetPosition,
-		} = $connection;
+		} = $patch;
 		[path] = getSmoothStepPath({
 			sourceX: sourceX ?? 0,
 			sourceY: sourceY ?? 0,
@@ -22,39 +22,39 @@
 			targetPosition: targetPosition ?? Position.Top,
 		});
 	}
-	let type: ConnectionType =
-		($connection.startHandle?.handleId as ConnectionType) ??
-		("" as ConnectionType);
+	let type: ProtocolType =
+		($patch.startHandle?.handleId as ProtocolType) ??
+		("" as ProtocolType);
 </script>
 
-{#if $connection.path}
-	{#if $connection.startHandle?.type == "target"}
+{#if $patch.path}
+	{#if $patch.startHandle?.type == "target"}
 		<!-- draw arrow at start of path -->
 		<path
 			fill="none"
 			stroke-width={1.5}
 			class="animated"
-			stroke={connections[type][0] ?? "var(--font-colour)"}
+			stroke={protocols[type][0] ?? "var(--font-colour)"}
 			d={path}
-			marker-start="url(#{$connection.startHandle?.handleId}line)"
+			marker-start="url(#{$patch.startHandle?.handleId}line)"
 		/>
-	{:else if $connection.startHandle?.type == "source"}
+	{:else if $patch.startHandle?.type == "source"}
 		<!-- draw arrow at start of path -->
 		<path
 			fill="none"
 			stroke-width={1.5}
 			class="animated"
-			stroke={connections[type][0] ?? "var(--font-colour)"}
+			stroke={protocols[type][0] ?? "var(--font-colour)"}
 			d={path}
-			marker-end="url(#{$connection.startHandle?.handleId}line)"
+			marker-end="url(#{$patch.startHandle?.handleId}line)"
 		/>
 	{/if}
 	<circle
-		cx={$connection.targetX}
-		cy={$connection.targetY}
+		cx={$patch.targetX}
+		cy={$patch.targetY}
 		fill="var(--font-colour)"
 		r={3}
-		stroke={connections[type][0] ?? "var(--font-colour)"}
+		stroke={protocols[type][0] ?? "var(--font-colour)"}
 		stroke-width={1.5}
 	/>
 {/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type MarkerProps } from "@xyflow/system";
 
-	import { connections, type ConnectionType } from "../connectionTypes";
+	import { protocols, type ProtocolType } from "../protocolTypes";
 
 	type $$Props = MarkerProps;
 
@@ -17,9 +17,8 @@
 	type;
 	$: {
 		color =
-			connections[
-				(id.replace("line", "") as ConnectionType) ??
-					("" as ConnectionType)
+			protocols[
+				(id.replace("line", "") as ProtocolType) ?? ("" as ProtocolType)
 			][0];
 	}
 </script>

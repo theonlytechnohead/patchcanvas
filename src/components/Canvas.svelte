@@ -11,7 +11,6 @@
     Panel,
     ControlButton,
     useSvelteFlow,
-    type ColorMode,
     type DefaultEdgeOptions,
     type FitViewOptions,
     type EdgeProps,
@@ -22,11 +21,11 @@
     type Node,
   } from "@xyflow/svelte";
   import Sidebar, { reset } from "./Sidebar.svelte";
-  import ConnectionEdge from "./edges/ConnectionEdge.svelte";
+  import PatchEdge from "./edges/PatchEdge.svelte";
   import type { ComponentType, SvelteComponent } from "svelte";
   import ConnectionNode from "./nodes/ConnectionNode.svelte";
-  import ConnectionLine from "./lines/ConnectionLine.svelte";
-  import { type ConnectionType, connections } from "./connectionTypes";
+  import PatchLine from "./lines/PatchLine.svelte";
+  import { iterableProtocols } from "./protocolTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
   import { LATEST_SAVE, preferences, save } from "./stores";
@@ -53,7 +52,7 @@
     } else {
       console.log("Edited, prompt for confirmation");
       let confirmConvert = confirm(
-        `Your patch is out of date\nDo you want to update to the latest version?\n(v${$save.version} -> v${LATEST_SAVE})`,
+        `Your canvas is out of date\nDo you want to update to the latest version?\n(v${$save.version} -> v${LATEST_SAVE})`,
       );
       if (confirmConvert) {
         // TODO: convert!
@@ -69,15 +68,12 @@
     .querySelector('meta[name="color-scheme"]')
     ?.setAttribute("content", $preferences.theme);
 
-  const iterableConnections: [ConnectionType, [string, number, string]][] =
-    Object.entries(connections) as [ConnectionType, [string, number, string]][];
-
   const nodeTypes = {
     default: ConnectionNode,
   } satisfies Record<string, ComponentType<SvelteComponent<NodeProps>>>;
 
   const edgeTypes = {
-    connection: ConnectionEdge,
+    connection: PatchEdge,
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
   // deep-copy the current save nodes & edges to initialise properly
@@ -115,7 +111,7 @@
         allowedTargets =
           ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
       } else if (
-        event.dataTransfer.types[0].includes("patchcanvasconnection/")
+        event.dataTransfer.types[0].includes("patchcanvasprotocol/")
       ) {
         allowedTargets = ".drop-target";
       } else if (
@@ -210,13 +206,13 @@
   on:nodeclick={(event) => console.log("on node click", event.detail.node)}
   on:edgeclick={(event) => console.log("on edge click: ", event.detail.edge)}
 >
-  {#each iterableConnections as [connection, value]}
-    <ColouredMarker id={connection} type={MarkerType.ArrowClosed} />
+  {#each iterableProtocols as [protocol, value] (value[1])}
+    <ColouredMarker id={protocol} type={MarkerType.ArrowClosed} />
   {/each}
-  {#each iterableConnections as [connection, value]}
-    <ColouredMarker id={connection + "line"} type={MarkerType.ArrowClosed} />
+  {#each iterableProtocols as [protocol, value] (value[1])}
+    <ColouredMarker id={protocol + "line"} type={MarkerType.ArrowClosed} />
   {/each}
-  <ConnectionLine slot="connectionLine" />
+  <PatchLine slot="connectionLine" />
   <Background variant={BackgroundVariant.Dots} />
   <MiniMap
     position={"top-right"}

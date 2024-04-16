@@ -1,19 +1,18 @@
 <script lang="ts">
 	import { useEdges } from "@xyflow/svelte";
-	import { connections, type ConnectionType } from "../connectionTypes";
+	import { iterableProtocols, protocols, type ProtocolType } from "../protocolTypes";
 	import EraserIcon from "../../svg/eraser-icon.svelte?raw";
 
 	const edges = useEdges();
-
-	const iterableConnections: [ConnectionType, [string, number, string]][] =
-		Object.entries(connections) as [ConnectionType, [string, number, string]][];
 
 	function highlightAllHandles() {
 		for (let edge of $edges) {
 			edge.class += "fade-out";
 		}
 		$edges = $edges;
-		for (let label of document.querySelectorAll(".svelte-flow__node .label")) {
+		for (let label of document.querySelectorAll(
+			".svelte-flow__node .label",
+		)) {
 			label.classList.add("fade-out");
 		}
 		for (let handle of document.querySelectorAll(".svelte-flow__handle")) {
@@ -26,7 +25,9 @@
 			edge.class = edge.class?.replace("fade-out", "");
 		}
 		$edges = $edges;
-		for (let label of document.querySelectorAll(".svelte-flow__node .label")) {
+		for (let label of document.querySelectorAll(
+			".svelte-flow__node .label",
+		)) {
 			label.classList.remove("fade-out");
 		}
 		for (let handle of document.querySelectorAll(".svelte-flow__handle")) {
@@ -34,7 +35,7 @@
 		}
 	}
 
-	function highlightEdges(connection: ConnectionType) {
+	function highlightEdges(connection: ProtocolType) {
 		for (let edge of $edges) {
 			if (edge.sourceHandle === connection) {
 				edge.class += "highlight";
@@ -52,8 +53,8 @@
 		}
 	}
 
-	function unhighlightEdges(connection: ConnectionType) {
-		connection = connection as ConnectionType;
+	function unhighlightEdges(connection: ProtocolType) {
+		connection = connection as ProtocolType;
 		for (let edge of $edges) {
 			if (edge.sourceHandle === connection) {
 				edge.class = edge.class?.replace("highlight", "");
@@ -70,14 +71,14 @@
 			}
 		}
 	}
-	
+
 	let clone: HTMLDivElement;
 	const onDragStart = (event: DragEvent, connection: string) => {
 		if (!event.dataTransfer) {
 			return null;
 		}
 
-		event.dataTransfer.setData(`patchcanvasconnection/${connection}`, "");
+		event.dataTransfer.setData(`patchcanvasprotocol/${connection}`, "");
 		event.dataTransfer.effectAllowed = "move";
 
 		let div = event.target as HTMLDivElement;
@@ -87,7 +88,7 @@
 		clone.style.top = "0";
 		clone.style.right = "0";
 		clone.style.zIndex = "-1";
-		clone.style.setProperty("--connection", connections[connection][0]);
+		clone.style.setProperty("--connection", protocols[connection][0]);
 		document.body.appendChild(clone);
 		event.dataTransfer.setDragImage(clone, -16, 0);
 	};
@@ -113,25 +114,25 @@
 
 	const onDragEnd = () => {
 		clone.remove();
-	}
+	};
 </script>
 
-<p>Connections</p>
+<p>Protocols</p>
 
-<div class="connections">
-	{#each iterableConnections as [connection, value]}
+<div class="protocols">
+	{#each iterableProtocols as [protocol, value]}
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
-			class="connection"
-			style="--connection: {value[0]};"
-			on:mouseenter={() => highlightEdges(connection)}
-			on:mouseleave={() => unhighlightEdges(connection)}
-			on:dragstart={(event) => onDragStart(event, connection)}
+			class="protocol"
+			style="--protocol: {value[0]};"
+			on:mouseenter={() => highlightEdges(protocol)}
+			on:mouseleave={() => unhighlightEdges(protocol)}
+			on:dragstart={(event) => onDragStart(event, protocol)}
 			on:dragend={onDragEnd}
 			draggable={true}
 		>
-		<div class="icon">{@html value[2]}</div>
-			{connection}
+			<div class="icon">{@html value[2]}</div>
+			{protocol}
 		</div>
 	{/each}
 </div>
@@ -177,16 +178,16 @@
 			border: none;
 		}
 	}
-	.connections {
+	.protocols {
 		margin-bottom: 0.5em;
 	}
-	.connection {
+	.protocol {
 		position: relative;
 		padding-left: 0.5em;
 		padding-block: 0.25em;
 
-		border-bottom: 2px solid var(--connection);
-		border-left: 0.5em solid var(--connection);
+		border-bottom: 2px solid var(--protocol);
+		border-left: 0.5em solid var(--protocol);
 
 		transition: border-left-width 0.1s ease-out;
 
@@ -201,7 +202,7 @@
 			}
 		}
 		&.dragging::before {
-			content: '';
+			content: "";
 			position: relative;
 			display: inline-block;
 			top: 0;
@@ -210,7 +211,7 @@
 			height: 1em;
 			border-radius: 1em;
 			margin-inline-end: 0.5em;
-			background-color: var(--connection);
+			background-color: var(--protocol);
 		}
 
 		& .icon {
