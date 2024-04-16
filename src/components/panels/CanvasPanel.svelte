@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { current } from "../stores";
 
-	export let showCanvases = false;
+	export let showCanvases: boolean;
 
 	function rename() {
 		let newName = prompt(undefined, $current.title);

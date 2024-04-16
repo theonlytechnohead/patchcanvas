@@ -14,7 +14,7 @@
   import SavesPanel from "./panels/SavesPanel.svelte";
   import { Panel } from "@xyflow/svelte";
 
-  let showCanvases: boolean;
+  let showCanvases: boolean = false;
 </script>
 
 <Panel position={"top-left"} class="main">
@@ -32,15 +32,13 @@
   </aside>
 </Panel>
 
-{#if showCanvases}
-  <Panel position={"top-left"}>
-    <aside class="absolute">
-      <div>
-        <SavesPanel bind:showCanvases bind:this={savesPanel} />
-      </div>
-    </aside>
-  </Panel>
-{/if}
+<Panel position={"top-left"} class="saves">
+  <aside class={showCanvases ? "show" : ""}>
+    <div>
+      <SavesPanel bind:showCanvases bind:this={savesPanel} />
+    </div>
+  </aside>
+</Panel>
 
 <style>
   :global(.svelte-flow__minimap) {
@@ -56,6 +54,17 @@
   :global(.svelte-flow__panel.main:has(aside.hide)) {
     left: -15em;
     right: 100%;
+  }
+
+  :global(.svelte-flow__panel.saves:has(aside)) {
+    transition-property: top;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in-out;
+    top: -100%;
+  }
+
+  :global(.svelte-flow__panel.saves:has(aside.show)) {
+    top: 0;
   }
 
   aside {
@@ -104,10 +113,17 @@
       right: 100%;
     }
 
+    :global(.svelte-flow__panel.saves:has(aside.show)) {
+      margin: 0;
+      right: 0;
+    }
+
     aside {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
+    }
 
+    :global(.svelte-flow__panel.main aside) {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1em;
