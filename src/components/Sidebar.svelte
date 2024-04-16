@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
-  import { initialSave } from "./stores";
+  import { save } from "./stores";
 
   let savePanel: SavePanel;
   export const reset = function () {
-    if (savePanel) savePanel.load(initialSave);
+    if (savePanel) savePanel.load(save);
   };
 </script>
 
@@ -49,7 +49,7 @@
     border-width: 0.14em;
     border-radius: calc(var(--xy-node-border-radius-default) * 2.5);
 
-    transition-property:  border-top-left-radius, border-top-right-radius;
+    transition-property: border-top-left-radius, border-top-right-radius;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
   }

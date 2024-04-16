@@ -12,11 +12,14 @@ export const initialPreferences = {
 export const preferences = persisted("preferences", initialPreferences)
 
 
-export const initialSave = {
+export const save = {
 	version: LATEST_SAVE,
 	uniqueFlow: [{}], // every {} is fully unique, i.e. {} === {} evaluates to false
 	title: "PatchCanvas",
 	nodes: initialNodes,
 	edges: initialEdges
 }
-export const save = persisted("save", initialSave)
+export const current = persisted("current", save)
+
+export const initialSaves: typeof save[] = []
+export const saves = persisted("saves", initialSaves)

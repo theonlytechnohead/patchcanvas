@@ -28,20 +28,20 @@
   import { iterableProtocols } from "./protocolTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
-  import { LATEST_SAVE, preferences, save } from "./stores";
+  import { LATEST_SAVE, preferences, current } from "./stores";
   import { initialEdges, initialNodes } from "./nodes_and_edges";
   import lodash from "lodash";
 
-  if ($save.version != LATEST_SAVE) {
-    console.log("Version mismatch: " + $save.version + " != " + LATEST_SAVE);
+  if ($current.version != LATEST_SAVE) {
+    console.log("Version mismatch: " + $current.version + " != " + LATEST_SAVE);
 
     if (
-      $save.nodes.length === initialNodes.length &&
-      $save.edges.length === initialEdges.length &&
-      $save.nodes.every((value, index, array) => {
+      $current.nodes.length === initialNodes.length &&
+      $current.edges.length === initialEdges.length &&
+      $current.nodes.every((value, index, array) => {
         return lodash.isMatch(value, initialNodes[index]);
       }) &&
-      $save.edges.every((value, index, array) => {
+      $current.edges.every((value, index, array) => {
         return lodash.isMatch(value, initialEdges[index]);
       })
     ) {
@@ -52,14 +52,14 @@
     } else {
       console.log("Edited, prompt for confirmation");
       let confirmConvert = confirm(
-        `Your canvas is out of date\nDo you want to update to the latest version?\n(v${$save.version} -> v${LATEST_SAVE})`,
+        `Your canvas is out of date\nDo you want to update to the latest version?\n(v${$current.version} -> v${LATEST_SAVE})`,
       );
       if (confirmConvert) {
         // TODO: convert!
       }
     }
   } else {
-    console.log("Using latest save version: " + $save.version);
+    console.log("Using latest save version: " + $current.version);
   }
 
   // theming
@@ -77,12 +77,12 @@
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
   // deep-copy the current save nodes & edges to initialise properly
-  const nodes = writable(JSON.parse(JSON.stringify(get(save).nodes)));
-  const edges = writable(JSON.parse(JSON.stringify(get(save).edges)));
+  const nodes = writable(JSON.parse(JSON.stringify(get(current).nodes)));
+  const edges = writable(JSON.parse(JSON.stringify(get(current).edges)));
 
   $: {
-    $save.nodes = $nodes;
-    $save.edges = $edges;
+    $current.nodes = $nodes;
+    $current.edges = $edges;
   }
 
   function validateConnection(connection: Edge | Connection): boolean {
@@ -110,9 +110,7 @@
       if (event.dataTransfer.types[0] === "application/patchcanvasnode") {
         allowedTargets =
           ".svelte-flow__pane, .svelte-flow__edge, .svelte-flow__node.group";
-      } else if (
-        event.dataTransfer.types[0].includes("patchcanvasprotocol/")
-      ) {
+      } else if (event.dataTransfer.types[0].includes("patchcanvasprotocol/")) {
         allowedTargets = ".drop-target";
       } else if (
         event.dataTransfer.types[0] === "application/patchcanvaseraser"

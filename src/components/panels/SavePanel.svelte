@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { get } from "svelte/store";
 	import { downloadText } from "download.js";
-	import { save } from "../stores";
+	import { current } from "../stores";
 	import { reset } from "../Sidebar.svelte";
 
 	let importFiles: FileList;
@@ -17,24 +17,24 @@
 	}
 
 	export function load(data: any) {
-		$save = data;
-		$save.uniqueFlow = [{}];
+		$current = data;
+		$current.uniqueFlow = [{}];
 	}
 
 	function rename() {
-		let newName = prompt(undefined, $save.title);
-		if (newName !== null) $save.title = newName;
+		let newName = prompt(undefined, $current.title);
+		if (newName !== null) $current.title = newName;
 	}
 
 	function out() {
-		let data = JSON.stringify(get(save));
+		let data = JSON.stringify(get(current));
 
-		downloadText($save.title + ".patch", data);
+		downloadText($current.title + ".patch", data);
 	}
 </script>
 
 <div class="title">
-	<h1>{$save.title}</h1>
+	<h1>{$current.title}</h1>
 	<button on:click={rename}>Rename</button>
 </div>
 
@@ -83,7 +83,7 @@
 			position: relative;
 			flex-grow: 1;
 			padding-block: 0.5em;
-			
+
 			& input[type="file"] {
 				position: absolute;
 				box-sizing: border-box;
