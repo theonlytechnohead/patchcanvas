@@ -37,7 +37,7 @@
 
 <Panel position={"top-left"} class="saves">
   <aside class={showCanvases ? "show" : ""}>
-    <div>
+    <div class="scroller">
       <SavesPanel bind:showCanvases bind:this={savesPanel} />
     </div>
   </aside>
@@ -74,7 +74,16 @@
 
   :global(.svelte-flow__panel.saves aside) {
     max-height: 100%;
-    overflow-y: auto;
+    display: flex;
+    padding: 0;
+    overflow: hidden;
+    
+    & .scroller {
+      padding: 1em;
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-gutter: stable;
+    }
   }
 
   aside {
