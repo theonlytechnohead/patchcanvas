@@ -25,6 +25,7 @@
 		position: relative;
 		& h1 {
 			margin: 0;
+			overflow-wrap: break-word;
 		}
 		& button {
 			position: absolute;
