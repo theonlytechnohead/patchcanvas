@@ -4,27 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d dist",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tsconfig/svelte": "^5.0.2",
-    "svelte": "^4.2.11",
-    "svelte-check": "^3.6.4",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "gh-pages": "^6.3.0",
+    "svelte": "^4.2.19",
+    "svelte-check": "^3.8.6",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   },
   "dependencies": {
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.15",
     "@xyflow/svelte": "^0.0.40",
     "download.js": "^1.0.0",
-    "gh-pages": "^6.1.1",
     "lodash": "^4.17.21",
-    "svelte-persisted-store": "^0.9.1"
+    "svelte-persisted-store": "^0.9.4"
   }
 }
