@@ -2,7 +2,7 @@
 	fill: transparent !important;
 }
 
-.svelte-flow__panel {
+.svelte-flow__panel:not(.key) {
 	display: none !important;
 }
 
@@ -10,7 +10,7 @@
 	display: none;
 }
 
-.svelte-flow__node .label > * {
+.svelte-flow__node .label>* {
 	display: none;
 }
 

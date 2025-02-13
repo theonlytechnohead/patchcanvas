@@ -16,6 +16,7 @@
   import CanvasPanel from "./panels/CanvasPanel.svelte";
   import SavesPanel from "./panels/SavesPanel.svelte";
   import { Panel } from "@xyflow/svelte";
+  import KeyPanel from "./panels/KeyPanel.svelte";
 
   let showCanvases: boolean = false;
 </script>
@@ -33,6 +34,10 @@
       <ProtocolPanel />
     </div>
   </aside>
+</Panel>
+
+<Panel position={"top-left"} class="key">
+  <KeyPanel />
 </Panel>
 
 <Panel position={"top-left"} class="saves">

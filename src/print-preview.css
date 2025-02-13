@@ -1,0 +1,51 @@
+@media screen {
+
+	[print-preview="false"] .key {
+		display: none !important;
+	}
+
+
+	[print-preview="true"] {
+
+		& {
+
+			html,
+			body {
+				width: 100%;
+			}
+
+			body {
+				display: flex;
+				justify-content: center;
+			}
+
+			main {
+				margin: 10mm auto;
+				width: 210mm;
+				height: 297mm;
+				box-shadow: 0 0.5em 2.5em 0em grey;
+			}
+
+			.svelte-flow__background-pattern.dots {
+				fill: transparent !important;
+			}
+
+			.svelte-flow__panel:not(.key) {
+				display: none !important;
+			}
+
+			.drop-target {
+				display: none;
+			}
+
+			.svelte-flow__node .label>* {
+				display: none;
+			}
+
+			.svelte-flow__handle,
+			.group {
+				print-color-adjust: exact
+			}
+		}
+	}
+}

@@ -68,6 +68,16 @@
     .querySelector('meta[name="color-scheme"]')
     ?.setAttribute("content", $preferences.theme);
 
+  // print-preview keyboard shortcut
+  document.documentElement.setAttribute("print-preview", String(false));
+  document.addEventListener("keyup", (e) => {
+    if (e.code === "KeyP") {
+      const previewing =
+        document.documentElement.getAttribute("print-preview") === String(true);
+      document.documentElement.setAttribute("print-preview", `${!previewing}`);
+    }
+  });
+
   const nodeTypes = {
     default: ConnectionNode,
   } satisfies Record<string, ComponentType<SvelteComponent<NodeProps>>>;
