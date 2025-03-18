@@ -1,13 +1,13 @@
 <script lang="ts" context="module">
-  import { save } from "./stores";
+  import { current, save } from "./stores";
 
   let savesPanel: SavesPanel;
   export const reset = function () {
     if (savesPanel) savesPanel.load(save);
   };
   export const store = function () {
-    if (savesPanel) savesPanel.store(save);
-  }
+    if (savesPanel) savesPanel.store(get(current));
+  };
 </script>
 
 <script lang="ts">
@@ -17,6 +17,7 @@
   import SavesPanel from "./panels/SavesPanel.svelte";
   import { Panel } from "@xyflow/svelte";
   import KeyPanel from "./panels/KeyPanel.svelte";
+  import { get } from "svelte/store";
 
   let showCanvases: boolean = false;
 </script>
@@ -82,7 +83,7 @@
     display: flex;
     padding: 0;
     overflow: hidden;
-    
+
     & .scroller {
       padding: 1em;
       flex: 1;

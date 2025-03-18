@@ -1,6 +1,7 @@
 import { persisted } from "svelte-persisted-store";
 import { initialEdges, initialNodes } from "./nodes_and_edges";
 import type { ColorMode } from "@xyflow/svelte";
+import { writable } from "svelte/store";
 
 export const LATEST_PREFERENCES = 1;
 export const LATEST_SAVE = 1;
@@ -23,3 +24,5 @@ export const current = persisted("current", save)
 
 export const initialSaves: { [name: string]: typeof save } = {}
 export const saves = persisted("saves", initialSaves)
+
+export const mode = writable<"wpbc" | undefined>()

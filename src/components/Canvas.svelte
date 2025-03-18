@@ -22,7 +22,7 @@
   } from "@xyflow/svelte";
   import Sidebar, { reset } from "./Sidebar.svelte";
   import PatchEdge from "./edges/PatchEdge.svelte";
-  import type { ComponentType, SvelteComponent } from "svelte";
+  import { type ComponentType, type SvelteComponent } from "svelte";
   import ConnectionNode from "./nodes/ConnectionNode.svelte";
   import PatchLine from "./lines/PatchLine.svelte";
   import { iterableProtocols } from "./protocolTypes";
@@ -87,8 +87,8 @@
   } satisfies Record<string, ComponentType<SvelteComponent<EdgeProps>>>;
 
   // deep-copy the current save nodes & edges to initialise properly
-  const nodes = writable(JSON.parse(JSON.stringify(get(current).nodes)));
-  const edges = writable(JSON.parse(JSON.stringify(get(current).edges)));
+  const nodes = writable(structuredClone(get(current).nodes));
+  const edges = writable(structuredClone(get(current).edges));
 
   $: {
     $current.nodes = $nodes;

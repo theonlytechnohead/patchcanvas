@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { downloadText } from "download.js";
 	import { reset } from "../Sidebar.svelte";
-	import { current, saves, type save } from "../stores";
+	import { current, mode, save, saves } from "../stores";
+	import { get } from "svelte/store";
 
 	export let showCanvases: boolean;
 
@@ -27,7 +28,23 @@
 	}
 
 	export function store(data: typeof save) {
-		$saves[data.title] = JSON.parse(JSON.stringify(data));
+		if (get(mode) === undefined) $saves[data.title] = structuredClone(data);
+		else storeExternally(structuredClone(data));
+	}
+
+	function storeExternally(data: typeof save) {
+		const m = get(mode);
+		if (m === undefined) return;
+
+		const file = new File([JSON.stringify(data)], data.title + ".patch");
+		const form = new FormData();
+		form.append(m, file);
+
+		const xhr = new XMLHttpRequest();
+		xhr.open("POST", "https://anderserver.ddns.net/patchcanvas/upload");
+		xhr.onreadystatechange = (e) =>
+			xhr.responseText && console.log(xhr.responseText);
+		xhr.send(form);
 	}
 
 	function removeStore(name: string) {

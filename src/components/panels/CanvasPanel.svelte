@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { store } from "../Sidebar.svelte";
-	import { current } from "../stores";
+	import { store } from "../Sidebar.svelte";
+	import { current, mode } from "../stores";
 
 	export let showCanvases: boolean;
 
@@ -12,11 +12,16 @@
 
 <div class="title">
 	<h1>{$current.title}</h1>
-	<button on:click={rename}>Rename</button>
+	{#if $mode === undefined}
+		<button on:click={rename}>Rename</button>
+	{/if}
 </div>
 
 <div class="buttons">
-	<button on:click={() => showCanvases = !showCanvases}>Canvases</button>
+	{#if $mode === undefined}
+		<button on:click={() => (showCanvases = !showCanvases)}>Canvases</button
+		>
+	{/if}
 	<button on:click={() => store()}>Save</button>
 </div>
 
