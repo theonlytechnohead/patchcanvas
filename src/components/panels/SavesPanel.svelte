@@ -36,6 +36,13 @@
 		const m = get(mode);
 		if (m === undefined) return;
 
+		switch (m) {
+			case "wpbc":
+				const password = window.prompt("Password:");
+				if (password === null || password !== "wpbc1") return;
+				break;
+		}
+
 		const file = new File([JSON.stringify(data)], data.title + ".patch");
 		const form = new FormData();
 		form.append(m, file);
