@@ -75,6 +75,7 @@
       const previewing =
         document.documentElement.getAttribute("print-preview") === String(true);
       document.documentElement.setAttribute("print-preview", `${!previewing}`);
+      fitView(fitViewOptions);
     }
   });
 
@@ -110,7 +111,7 @@
     duration: 1000,
   } satisfies FitViewOptions;
 
-  const { screenToFlowPosition } = useSvelteFlow();
+  const { screenToFlowPosition, fitView } = useSvelteFlow();
   const onDragOver = (event: DragEvent) => {
     event.preventDefault();
     if (event.dataTransfer) {
