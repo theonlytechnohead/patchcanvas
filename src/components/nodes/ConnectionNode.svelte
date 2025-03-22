@@ -369,11 +369,17 @@
 	.label {
 		display: flex;
 		justify-content: center;
+		align-items: end;
 		font-size: 12px;
 
 		& button {
+			height: 100%;
+			aspect-ratio: 1/1;
+			margin: 0;
+			margin-inline-start: 0.15em;
 			padding: 0;
-			padding-bottom: 0.2em;
+
+			align-self: center;
 
 			font-size: 0.9em;
 			background: none;
@@ -386,9 +392,6 @@
 				transform: scaleX(-1);
 				width: 1.25em;
 				font-size: 1em;
-				aspect-ratio: 1/1;
-				margin-inline-start: 0.25em;
-				padding: 0;
 			}
 
 			&:hover {
@@ -425,15 +428,21 @@
 	}
 	.drag-dots {
 		width: 0.5em;
+
+		padding-block-start: 0.15em;
 		padding-inline: 0.25em;
+
 		opacity: 0.6;
+
+		align-self: stretch;
+
 		&:hover,
 		&:active {
 			opacity: 1;
 		}
 		& svg {
 			width: 100%;
-			height: 110%;
+			height: 100%;
 		}
 	}
 </style>
