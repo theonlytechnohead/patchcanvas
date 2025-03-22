@@ -7,7 +7,7 @@
     "dev": "vite --host",
     "build": "vite build",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d dist -m \"$(git log --format=%s -1)\"",
+    "deploy": "gh-pages -d dist -m '$(git log --format=%B -1)'",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
