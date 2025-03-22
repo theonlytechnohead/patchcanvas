@@ -1,7 +1,7 @@
 <script lang="ts">
   import { SvelteFlowProvider } from "@xyflow/svelte";
   import Canvas from "./components/Canvas.svelte";
-  import { current, mode } from "./components/stores";
+  import { current, mode, save } from "./components/stores";
   import { onMount, tick } from "svelte";
 
   mode.set("wpbc");
@@ -17,11 +17,11 @@
         // fetch the canvas from anderserver
         fetch(`https://anderserver.ddns.net/patchcanvas/wpbc/${canvas}.patch`)
           .then((r) => r.json())
-          .then((c) => {
+          .then((c: typeof save) => {
             console.log("Fetched requested canvas, updating...");
             $current = structuredClone(c);
-            if ($current.mode !== $mode)
-              throw new Error("Fetched a save with an incorrect mode!");
+            if (c.mode !== $mode)
+              throw new Error(`Fetched a save with an incorrect mode!\nWanted: ${$mode}, fetched: ${c.mode}`);
             tick()
               .then(() => ($current.updated = true))
               .then(() => (loaded = true))
