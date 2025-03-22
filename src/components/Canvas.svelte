@@ -77,7 +77,7 @@
       document.documentElement.setAttribute("print-preview", `${!previewing}`);
       fitView({
         duration: 500,
-        padding: 0.1
+        padding: 0.1,
       });
     }
   });
@@ -199,7 +199,8 @@
     $nodes = $nodes;
   }
 
-  function exitFullscreen(this: Document, event: Event) {
+  function exitFullscreen(this: Document, _: Event) {
+    fitView(fitViewOptions);
     if (!document.fullscreenElement) {
       document
         .querySelector('[media="screen"]')

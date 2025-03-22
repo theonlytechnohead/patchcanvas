@@ -1,34 +1,33 @@
 <script lang="ts">
-	import { Position, getSmoothStepPath, useConnection } from "@xyflow/svelte";
+	import { Position, getBezierPath, useConnection } from "@xyflow/svelte";
 	import { protocols, type ProtocolType } from "../protocolTypes";
+
 	const patch = useConnection();
+
 	let path = "";
 
 	$: {
 		let {
-			sourceX,
-			sourceY,
-			sourcePosition,
-			targetX,
-			targetY,
-			targetPosition,
+			from,
+			fromPosition,
+			to,
+			toPosition,
 		} = $patch;
-		[path] = getSmoothStepPath({
-			sourceX: sourceX ?? 0,
-			sourceY: sourceY ?? 0,
-			sourcePosition: sourcePosition ?? Position.Bottom,
-			targetX: targetX ?? 0,
-			targetY: targetY ?? 0,
-			targetPosition: targetPosition ?? Position.Top,
+		[path] = getBezierPath({
+			sourceX: from?.x ?? 0,
+			sourceY: from?.y ?? 0,
+			sourcePosition: fromPosition ?? Position.Bottom,
+			targetX: to?.x ?? 0,
+			targetY: to?.y ?? 0,
+			targetPosition: toPosition ?? Position.Top,
 		});
 	}
 	let type: ProtocolType =
-		($patch.startHandle?.handleId as ProtocolType) ??
-		("" as ProtocolType);
+		($patch.fromHandle?.id as ProtocolType) ?? ("" as ProtocolType);
 </script>
 
-{#if $patch.path}
-	{#if $patch.startHandle?.type == "target"}
+{#if $patch.inProgress}
+	{#if $patch.fromHandle?.type == "target"}
 		<!-- draw arrow at start of path -->
 		<path
 			fill="none"
@@ -36,9 +35,9 @@
 			class="animated"
 			stroke={protocols[type][0] ?? "var(--font-colour)"}
 			d={path}
-			marker-start="url(#{$patch.startHandle?.handleId}line)"
+			marker-start="url(#{$patch.fromHandle?.id}line)"
 		/>
-	{:else if $patch.startHandle?.type == "source"}
+	{:else if $patch.fromHandle?.type == "source"}
 		<!-- draw arrow at start of path -->
 		<path
 			fill="none"
@@ -46,12 +45,12 @@
 			class="animated"
 			stroke={protocols[type][0] ?? "var(--font-colour)"}
 			d={path}
-			marker-end="url(#{$patch.startHandle?.handleId}line)"
+			marker-end="url(#{$patch.fromHandle?.id}line)"
 		/>
 	{/if}
 	<circle
-		cx={$patch.targetX}
-		cy={$patch.targetY}
+		cx={$patch.to?.x}
+		cy={$patch.to?.y}
 		fill="var(--font-colour)"
 		r={3}
 		stroke={protocols[type][0] ?? "var(--font-colour)"}
