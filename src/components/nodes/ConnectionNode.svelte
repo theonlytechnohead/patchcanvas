@@ -24,7 +24,11 @@
 	export let dragHandle: $$Props["dragHandle"] = undefined;
 	export let type: $$Props["type"];
 	export let isConnectable: $$Props["isConnectable"];
-	export let selected: $$Props["selected"] = undefined;
+	export let selected: $$Props["selected"];
+	export let selectable: $$Props["selectable"];
+	export let deletable: $$Props["deletable"];
+	export let draggable: $$Props["draggable"];
+	export let parentId: $$Props["parentId"] = undefined;
 	export let zIndex: $$Props["zIndex"];
 	export let positionAbsoluteX: $$Props["positionAbsoluteX"];
 	export let positionAbsoluteY: $$Props["positionAbsoluteY"];
@@ -46,6 +50,10 @@
 	type;
 	isConnectable;
 	selected;
+	selectable;
+	deletable;
+	draggable;
+	parentId;
 	zIndex;
 	positionAbsoluteX;
 	positionAbsoluteY;

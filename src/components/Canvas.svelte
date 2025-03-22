@@ -211,8 +211,8 @@
   deleteKey={"Delete"}
   on:dragover={onDragOver}
   on:drop={onDrop}
-  on:nodeclick={(event) => console.log("on node click", event.detail.node)}
-  on:edgeclick={(event) => console.log("on edge click: ", event.detail.edge)}
+  on:nodeclick={(event) => console.log("Node clicked:", event.detail.node)}
+  on:edgeclick={(event) => console.log("Edge clicked:", event.detail.edge)}
 >
   {#each iterableProtocols as [protocol, value] (value[1])}
     <ColouredMarker id={protocol} type={MarkerType.ArrowClosed} />

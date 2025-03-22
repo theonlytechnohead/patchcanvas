@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.16",
-    "@xyflow/svelte": "^0.0.41",
+    "@xyflow/svelte": "^0.1.21",
     "download.js": "^1.0.0",
     "lodash": "^4.17.21",
     "svelte-persisted-store": "^0.12.0"

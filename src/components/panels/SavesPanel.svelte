@@ -19,7 +19,7 @@
 	}
 
 	export function load(data: any) {
-		$current = data;
+		$current = structuredClone(data);
 		$current.uniqueFlow = [{}];
 	}
 

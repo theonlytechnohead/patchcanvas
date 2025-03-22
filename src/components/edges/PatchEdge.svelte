@@ -26,6 +26,8 @@
 	export let markerEnd: $$Props["markerEnd"] = undefined;
 	export let animated: $$Props["animated"] = false;
 	export let selected: $$Props["selected"] = false;
+	export let selectable: $$Props["selectable"] = undefined;
+	export let deletable: $$Props["deletable"] = undefined;
 	export let label: $$Props["label"] = "";
 	export let labelStyle: $$Props["labelStyle"] = "";
 	export let data: $$Props["data"] = undefined;
@@ -53,6 +55,8 @@
 	targetHandleId;
 	animated;
 	selected;
+	selectable;
+	deletable;
 	label;
 	labelStyle;
 	data;
