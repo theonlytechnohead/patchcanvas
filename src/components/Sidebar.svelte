@@ -152,7 +152,7 @@
     :global(.svelte-flow__panel.main:has(aside)) {
       margin: 0;
       right: 0;
-      top: calc(6em - 0.1em - 0.1em);
+      top: calc(6em - 0.14em - 0.14em);
     }
 
     :global(.svelte-flow__panel.main aside) {
@@ -167,7 +167,7 @@
     :global(.svelte-flow__panel.main aside .nodes) {
       display: none;
     }
-    
+
     :global(.svelte-flow__panel.main aside .eraser) {
       display: none;
     }
@@ -183,7 +183,7 @@
     }
 
     :global(.svelte-flow__panel.saves:has(aside.show)) {
-      top: calc(6em - 0.1em - 0.1em);
+      top: calc(6em - 0.14em - 0.14em);
     }
 
     :global(.svelte-flow__panel.saves aside) {
