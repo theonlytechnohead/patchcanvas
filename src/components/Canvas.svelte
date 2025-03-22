@@ -92,8 +92,17 @@
   const edges = writable(structuredClone(get(current).edges));
 
   $: {
-    $current.nodes = $nodes;
-    $current.edges = $edges;
+    current.update((c) => ({ ...c, nodes: $nodes, edges: $edges }));
+  }
+
+  $: {
+    if ($current.updated) {
+      nodes.set(get(current).nodes);
+      edges.set(get(current).edges);
+      current.update((c) => ({ ...c, updated: false }));
+      // schedule a view fit on the next render (after SvelteFlow updates from the current save state)
+      setTimeout(() => fitView(fitViewOptions), 0);
+    }
   }
 
   function validateConnection(connection: Edge | Connection): boolean {

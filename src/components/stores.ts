@@ -10,19 +10,21 @@ export const initialPreferences = {
 	version: LATEST_PREFERENCES,
 	theme: "dark" as ColorMode
 }
-export const preferences = persisted("preferences", initialPreferences)
+export const preferences = persisted("preferences", structuredClone(initialPreferences))
 
 
 export const save = {
 	version: LATEST_SAVE,
-	uniqueFlow: [{}], // every {} is fully unique, i.e. {} === {} evaluates to false
+	updated: false,
 	title: "PatchCanvas",
 	nodes: initialNodes,
 	edges: initialEdges
 }
-export const current = persisted("current", save)
+
+export const current = persisted("current", structuredClone(save))
 
 export const initialSaves: { [name: string]: typeof save } = {}
-export const saves = persisted("saves", initialSaves)
+export const saves = persisted("saves", structuredClone(initialSaves))
 
+/** Mode for loading fixed patchcanvases, e.g. from anderserver for WPBC */
 export const mode = writable<"wpbc" | undefined>()

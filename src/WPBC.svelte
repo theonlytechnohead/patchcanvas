@@ -6,8 +6,10 @@
 
   mode.set("wpbc");
 
+  let loaded = false;
+
   onMount(() => {
-    if ($mode === "wpbc") {
+    if ($mode === "wpbc" && !loaded) {
       // load the requested canvas
       const canvas = new URLSearchParams(window.location.search).get("canvas");
       if (canvas !== null && typeof canvas === "string" && 0 < canvas.length) {
@@ -17,7 +19,14 @@
           .then((r) => r.json())
           .then((c) => {
             console.log("Loaded requested canvas:", c);
-            current.set(c);
+            $current = structuredClone(c);
+            $current.updated = true;
+            console.log(
+              "Load complete?",
+              $current.nodes.length,
+              $current.edges.length,
+            );
+            loaded = true;
           })
           .catch((e) => {
             console.log("Couldn't fetch requested canvas:", e);
@@ -29,15 +38,17 @@
       }
     }
   });
+
+  $: console.log("Save changed", $current.nodes.length, $current.edges.length);
 </script>
 
 <main>
   <div style:height="100%">
     <!-- https://svelteflow.dev/api-reference -->
     <SvelteFlowProvider>
-      {#each $current.uniqueFlow as flow (flow)}
+      {#if loaded}
         <Canvas />
-      {/each}
+      {/if}
     </SvelteFlowProvider>
   </div>
 </main>

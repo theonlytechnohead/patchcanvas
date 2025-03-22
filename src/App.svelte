@@ -4,15 +4,15 @@
   import { current } from "./components/stores";
 
   if (window.location.pathname !== "/") window.location.pathname = "/";
+
+  $: console.log("Save changed", $current.nodes.length, $current.edges.length);
 </script>
 
 <main>
   <div style:height="100%">
     <!-- https://svelteflow.dev/api-reference -->
     <SvelteFlowProvider>
-      {#each $current.uniqueFlow as flow (flow)}
-        <Canvas />
-      {/each}
+      <Canvas />
     </SvelteFlowProvider>
   </div>
 </main>

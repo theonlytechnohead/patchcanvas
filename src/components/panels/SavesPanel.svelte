@@ -11,14 +11,17 @@
 		let reader = new FileReader();
 		reader.readAsText(importFiles[0]);
 		reader.onload = (event: ProgressEvent<FileReader>) => {
-			let data = JSON.parse(event.target?.result as string);
+			let data = JSON.parse(
+				event.target?.result as string,
+			) as typeof save;
 			load(data);
 		};
 	}
 
-	export function load(data: any) {
+	export function load(data: typeof save) {
+		console.log("Loading", data.title);
 		$current = structuredClone(data);
-		$current.uniqueFlow = [{}];
+		$current.updated= true;
 	}
 
 	function out(data: typeof save) {
