@@ -3,7 +3,7 @@
 	"name": "PatchCanvas",
 	"icons": [
 		{
-			"src": "/favicon.ico",
+			"src": "/favicon.png",
 			"sizes": "256x256",
 			"type": "image/png"
 		}
