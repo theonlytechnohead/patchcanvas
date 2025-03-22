@@ -23,7 +23,7 @@
 		console.log("Loading", `${data.title}...`);
 		current.set(structuredClone(data));
 		console.log("Loaded, triggering update...");
-		tick().then(() => current.update((c) => ({ ...c, updated: true })));
+		current.update((c) => ({ ...c, updated: true }));
 	}
 
 	function out(data: typeof save) {

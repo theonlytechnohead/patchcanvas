@@ -28,7 +28,7 @@
   import { iterableProtocols } from "./protocolTypes";
   import ColouredMarker from "./markers/ColouredMarker.svelte";
   import { get } from "svelte/store";
-  import { LATEST_SAVE, preferences, current } from "./stores";
+  import { LATEST_SAVE, preferences, current, mode } from "./stores";
   import { initialEdges, initialNodes } from "./nodes_and_edges";
   import lodash from "lodash";
 
@@ -96,7 +96,7 @@
   }
 
   $: {
-    if ($current.updated) {
+    if ($current.updated && $current.mode === $mode) {
       nodes.set(get(current).nodes);
       edges.set(get(current).edges);
       current.update((c) => ({ ...c, updated: false }));
