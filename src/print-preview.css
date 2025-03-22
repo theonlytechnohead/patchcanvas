@@ -1,6 +1,6 @@
 @media screen {
 
-	[print-preview="false"] .key {
+	[print-preview="false"] .key, [print-preview="false"] .qr {
 		display: none !important;
 	}
 
@@ -32,7 +32,7 @@
 				fill: transparent !important;
 			}
 
-			.svelte-flow__panel:not(.key) {
+			.svelte-flow__panel:not(.key, .qr) {
 				display: none !important;
 			}
 

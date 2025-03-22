@@ -21,6 +21,7 @@
     "vite": "^5.4.14"
   },
   "dependencies": {
+    "@svelte-put/qr": "1.2.1",
     "@types/lodash": "^4.17.16",
     "@xyflow/svelte": "^0.1.21",
     "download.js": "^1.0.0",

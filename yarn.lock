@@ -278,6 +278,13 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.32.1.tgz#512db088df67afee8f07183cdf8c9eecd64f6ef8"
   integrity sha512-ar80GhdZb4DgmW3myIS9nRFYcpJRSME8iqWgzH2i44u+IdrzmiXVxeFnExQ5v4JYUSpg94bWjevMG8JHf1Da5Q==
 
+"@svelte-put/qr@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@svelte-put/qr/-/qr-1.2.1.tgz#d785848c7b38ceb076df743b97cfed641dab86da"
+  integrity sha512-VIAze6mCVWdiyq6xnMFhbD3dbTvz9CDFVN3lVkDvx6SYFcstgHuIyb7Pi3aJIr2ClDc4U+W2U+SGhFuQBskvBg==
+  dependencies:
+    qrcode-generator "^1.4.4"
+
 "@svelte-put/shortcut@3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@svelte-put/shortcut/-/shortcut-3.1.1.tgz#aba4d7407024d5cff38727e12925c8f81e877079"
@@ -897,6 +904,11 @@ postcss@^8.4.43:
     nanoid "^3.3.8"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
+
+qrcode-generator@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/qrcode-generator/-/qrcode-generator-1.4.4.tgz#63f771224854759329a99048806a53ed278740e7"
+  integrity sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==
 
 queue-microtask@^1.2.2:
   version "1.2.3"

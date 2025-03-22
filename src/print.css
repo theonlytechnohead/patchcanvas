@@ -2,7 +2,7 @@
 	fill: transparent !important;
 }
 
-.svelte-flow__panel:not(.key) {
+.svelte-flow__panel:not(.key, .qr) {
 	display: none !important;
 }
 

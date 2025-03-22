@@ -11,13 +11,14 @@
 </script>
 
 <script lang="ts">
+  import { Panel } from "@xyflow/svelte";
+  import { get } from "svelte/store";
   import NodePanel from "./panels/NodePanel.svelte";
   import ProtocolPanel from "./panels/ProtocolPanel.svelte";
   import CanvasPanel from "./panels/CanvasPanel.svelte";
   import SavesPanel from "./panels/SavesPanel.svelte";
-  import { Panel } from "@xyflow/svelte";
   import KeyPanel from "./panels/KeyPanel.svelte";
-  import { get } from "svelte/store";
+  import QrPanel from "./panels/QRPanel.svelte";
 
   let showCanvases: boolean = false;
 </script>
@@ -43,6 +44,10 @@
 
 <Panel position={"top-left"} class="key">
   <KeyPanel />
+</Panel>
+
+<Panel position={"bottom-right"} class="qr">
+  <QrPanel />
 </Panel>
 
 <Panel position={"top-left"} class="saves">
