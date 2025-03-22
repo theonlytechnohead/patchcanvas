@@ -4,6 +4,8 @@
 
 	export let showCanvases: boolean;
 
+	const minimapWidth = window.innerWidth / 10;
+
 	function rename() {
 		let newName = prompt(undefined, $current.title);
 		if (newName !== null) $current.title = newName;
@@ -11,7 +13,7 @@
 </script>
 
 <div class="title">
-	<h1>{$current.title}</h1>
+	<h1 style="--window-width: {minimapWidth}">{$current.title}</h1>
 	{#if $mode === undefined}
 		<button on:click={rename}>✎ Rename</button>
 	{/if}
@@ -19,7 +21,7 @@
 
 <div class="buttons">
 	{#if $mode === undefined}
-		<button on:click={() => (showCanvases = !showCanvases)}>📦 Canvases</button
+		<button on:click={() => (showCanvases = !showCanvases)}>{showCanvases ? "🗄️ Protocols" : "📦 Canvases"}</button
 		>
 	{/if}
 	<button on:click={() => store()}>💾 Save</button>
@@ -29,8 +31,13 @@
 	.title {
 		position: relative;
 		& h1 {
+			--window-width: 0;
+			--minimap-width: calc(1px * var(--window-width));
+			max-width: calc(100dvw - var(--minimap-width) - 30px - 2em);
 			margin: 0;
-			overflow-wrap: break-word;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 		& button {
 			position: absolute;
@@ -57,7 +64,6 @@
 
 		& button {
 			position: relative;
-			flex-grow: 1;
 			padding-block: 0.5em;
 		}
 	}

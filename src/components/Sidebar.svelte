@@ -22,12 +22,16 @@
   let showCanvases: boolean = false;
 </script>
 
-<Panel position={"top-left"} class="main">
-  <aside class={showCanvases ? "hide" : ""}>
+<Panel position={"top-left"} class="canvas">
+  <aside>
     <div>
       <CanvasPanel bind:showCanvases />
     </div>
+  </aside>
+</Panel>
 
+<Panel position={"top-left"} class="main">
+  <aside class={showCanvases ? "hide" : ""}>
     <div>
       <NodePanel />
     </div>
@@ -44,7 +48,7 @@
 <Panel position={"top-left"} class="saves">
   <aside class={showCanvases ? "show" : ""}>
     <div class="scroller">
-      <SavesPanel bind:showCanvases bind:this={savesPanel} />
+      <SavesPanel bind:this={savesPanel} />
     </div>
   </aside>
 </Panel>
@@ -53,7 +57,14 @@
   :global(.svelte-flow__minimap) {
     transition: 0.5s opacity 0.2s ease-in-out;
   }
+
+  :global(.svelte-flow__panel.canvas:has(aside)) {
+    /* Svelte Flow Panels are usually 5 */
+    z-index: 6;
+  }
+
   :global(.svelte-flow__panel.main:has(aside)) {
+    top: 7.5em;
     transition-property: margin, right, left;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
@@ -74,7 +85,7 @@
   }
 
   :global(.svelte-flow__panel.saves:has(aside.show)) {
-    top: 0;
+    top: 7.5em;
     bottom: 0;
   }
 
@@ -86,6 +97,8 @@
 
     & .scroller {
       padding: 1em;
+      /* only leave enough padding for the current save outline */
+      padding-right: 0.1em;
       flex: 1;
       overflow-y: auto;
       scrollbar-gutter: stable;

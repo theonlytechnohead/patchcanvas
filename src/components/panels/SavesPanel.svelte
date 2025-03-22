@@ -4,8 +4,6 @@
 	import { current, mode, save, saves } from "../stores";
 	import { get } from "svelte/store";
 
-	export let showCanvases: boolean;
-
 	let importFiles: FileList;
 	function upload() {
 		if (!importFiles[0]) return;
@@ -63,7 +61,6 @@
 <h1>📦 Canvases</h1>
 
 <div class="buttons">
-	<button on:click={() => (showCanvases = !showCanvases)}>◀ Back</button>
 	<button on:click={reset}>➕ New</button>
 	<button>
 		📂 Import
