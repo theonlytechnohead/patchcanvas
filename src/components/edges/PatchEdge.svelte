@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {
-		getSmoothStepPath,
+		getBezierPath,
 		type EdgeProps,
 		useEdges,
 		BaseEdge,
@@ -36,7 +36,7 @@
 
 	export let edgeClass: $$Props["class"] = "";
 
-	$: [edgePath, labelX, labelY] = getSmoothStepPath({
+	$: [edgePath, labelX, labelY] = getBezierPath({
 		sourceX,
 		sourceY,
 		sourcePosition,
