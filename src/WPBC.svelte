@@ -2,7 +2,7 @@
   import { SvelteFlowProvider } from "@xyflow/svelte";
   import Canvas from "./components/Canvas.svelte";
   import { current, mode } from "./components/stores";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
   mode.set("wpbc");
 
@@ -13,20 +13,19 @@
       // load the requested canvas
       const canvas = new URLSearchParams(window.location.search).get("canvas");
       if (canvas !== null && typeof canvas === "string" && 0 < canvas.length) {
-        console.log("Requested canvas is:", canvas);
+        console.log("Fetching", `${canvas}...`);
         // fetch the canvas from anderserver
         fetch(`https://anderserver.ddns.net/patchcanvas/wpbc/${canvas}.patch`)
           .then((r) => r.json())
           .then((c) => {
-            console.log("Loaded requested canvas:", c);
+            console.log("Fetched requested canvas, updating...");
             $current = structuredClone(c);
-            $current.updated = true;
-            console.log(
-              "Load complete?",
-              $current.nodes.length,
-              $current.edges.length,
-            );
-            loaded = true;
+            if ($current.mode !== $mode)
+              throw new Error("Fetched a save with an incorrect mode!");
+            tick()
+              .then(() => ($current.updated = true))
+              .then(() => (loaded = true))
+              .then(() => console.log("Update complete!"));
           })
           .catch((e) => {
             console.log("Couldn't fetch requested canvas:", e);

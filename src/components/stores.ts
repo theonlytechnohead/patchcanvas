@@ -16,6 +16,7 @@ export const preferences = persisted("preferences", structuredClone(initialPrefe
 export const save = {
 	version: LATEST_SAVE,
 	updated: false,
+	mode: undefined as string | undefined,
 	title: "PatchCanvas",
 	nodes: initialNodes,
 	edges: initialEdges
