@@ -46,7 +46,7 @@
   <KeyPanel />
 </Panel>
 
-<Panel position={"bottom-right"} class="qr">
+<Panel position={"bottom-left"} class="qr">
   <QrPanel />
 </Panel>
 

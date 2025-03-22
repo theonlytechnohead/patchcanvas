@@ -1,17 +1,17 @@
 @media screen {
 
-	[print-preview="false"] .key, [print-preview="false"] .qr {
+	[print-preview="false"] .key,
+	[print-preview="false"] .qr {
 		display: none !important;
 	}
 
-
 	[print-preview="true"] {
-
 		& {
 
 			html,
 			body {
 				width: 100%;
+				height: unset;
 			}
 
 			body {
