@@ -75,7 +75,10 @@
       const previewing =
         document.documentElement.getAttribute("print-preview") === String(true);
       document.documentElement.setAttribute("print-preview", `${!previewing}`);
-      fitView(fitViewOptions);
+      fitView({
+        duration: 500,
+        padding: 0.1
+      });
     }
   });
 
