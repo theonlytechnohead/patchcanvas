@@ -33,7 +33,7 @@
 
 <Panel position={"top-left"} class="main">
   <aside class={showCanvases ? "hide" : ""}>
-    <div>
+    <div class="nodes">
       <NodePanel />
     </div>
     <div class="rotate">
@@ -140,9 +140,23 @@
       transition: 0.3s opacity 0.1s ease-in-out;
     }
 
+    :global(.svelte-flow__panel.canvas:has(aside)) {
+      margin: 0;
+      right: 0;
+    }
+
+    :global(.svelte-flow__panel.canvas aside) {
+      border-bottom: none;
+    }
+
     :global(.svelte-flow__panel.main:has(aside)) {
       margin: 0;
       right: 0;
+      top: calc(6em - 0.1em - 0.1em);
+    }
+
+    :global(.svelte-flow__panel.main aside) {
+      border-top: none;
     }
 
     :global(.svelte-flow__panel.main:has(aside.hide)) {
@@ -150,29 +164,37 @@
       right: 100%;
     }
 
+    :global(.svelte-flow__panel.main aside .nodes) {
+      display: none;
+    }
+    
+    :global(.svelte-flow__panel.main aside .eraser) {
+      display: none;
+    }
+
+    aside {
+      border-radius: 0;
+      padding-block: 0.5em;
+    }
+
     :global(.svelte-flow__panel.saves:has(aside)) {
       margin: 0;
       right: 0;
     }
 
-    aside {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-
-    :global(.svelte-flow__panel.main aside) {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1em;
+    :global(.svelte-flow__panel.saves:has(aside.show)) {
+      top: calc(6em - 0.1em - 0.1em);
     }
 
     :global(.svelte-flow__panel.saves aside) {
       height: 100%;
+      border-top: none;
+      padding-right: 1em;
     }
 
     .rotate {
       width: 7em;
-      height: 8em;
+      height: 7em;
       transform: rotateZ(-90deg);
     }
   }
