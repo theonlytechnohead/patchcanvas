@@ -4,8 +4,6 @@
   import { current } from "./components/stores";
 
   if (window.location.pathname !== "/") window.location.pathname = "/";
-
-  $: console.log("Save changed", $current.nodes.length, $current.edges.length);
 </script>
 
 <main>

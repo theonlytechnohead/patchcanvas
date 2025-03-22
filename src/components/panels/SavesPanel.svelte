@@ -3,6 +3,7 @@
 	import { reset } from "../Sidebar.svelte";
 	import { current, mode, save, saves } from "../stores";
 	import { get } from "svelte/store";
+	import { tick } from "svelte";
 
 	let importFiles: FileList;
 	function upload() {
@@ -19,9 +20,10 @@
 	}
 
 	export function load(data: typeof save) {
-		console.log("Loading", data.title);
-		$current = structuredClone(data);
-		$current.updated= true;
+		console.log("Loading", `${data.title}...`);
+		current.set(structuredClone(data));
+		console.log("Loaded, triggering update...");
+		tick().then(() => current.update((c) => ({ ...c, updated: true })));
 	}
 
 	function out(data: typeof save) {

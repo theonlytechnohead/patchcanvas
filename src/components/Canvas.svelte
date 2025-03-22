@@ -100,8 +100,10 @@
       nodes.set(get(current).nodes);
       edges.set(get(current).edges);
       current.update((c) => ({ ...c, updated: false }));
+      console.log("Update applied!");
       // schedule a view fit on the next render (after SvelteFlow updates from the current save state)
-      setTimeout(() => fitView(fitViewOptions), 0);
+      // 50ms is a safe value for ensuring other state updates actually happen (hopefully)
+      setTimeout(() => fitView(fitViewOptions), 50);
     }
   }
 

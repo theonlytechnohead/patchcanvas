@@ -38,8 +38,6 @@
       }
     }
   });
-
-  $: console.log("Save changed", $current.nodes.length, $current.edges.length);
 </script>
 
 <main>
