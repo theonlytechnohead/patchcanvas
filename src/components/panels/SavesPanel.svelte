@@ -60,13 +60,13 @@
 	}
 </script>
 
-<h1>Canvases</h1>
+<h1>📦 Canvases</h1>
 
 <div class="buttons">
-	<button on:click={() => (showCanvases = !showCanvases)}>Back</button>
-	<button on:click={reset}>New</button>
+	<button on:click={() => (showCanvases = !showCanvases)}>◀ Back</button>
+	<button on:click={reset}>➕ New</button>
 	<button>
-		Import
+		📂 Import
 		<input
 			type="file"
 			accept=".patch"
@@ -87,8 +87,8 @@
 		<div class="contents">
 			{$current.nodes.length} nodes, {$current.edges.length} patches
 		</div>
-		<button on:click={() => store($current)}>Save</button>
-		<button on:click={() => out($current)}>Export</button>
+		<button on:click={() => store($current)}>💾 Save</button>
+		<button on:click={() => out($current)}>📩 Export</button>
 	</div>
 </div>
 
@@ -118,16 +118,17 @@
 	h1,
 	h2 {
 		margin: 0;
+		margin-block-end: 0.25em;
 	}
 	h2 {
 		font-weight: normal;
-		margin-top: 0.5em;
-		margin-bottom: 0.25em;
+		margin-block-start: 0.5em;
+		margin-block-end: 0.25em;
 	}
 	.buttons {
 		display: flex;
 		gap: 0.5em;
-		margin-top: 0.25em;
+		margin-block-start: 0.25em;
 
 		& button {
 			position: relative;
@@ -197,11 +198,16 @@
 
 		& .contents {
 			font-size: 0.85em;
+			margin-block-start: 0.125em;
+		}
+
+		& button {
+			margin-block-start: 0.125em;
 		}
 
 		& button:first-of-type {
 			font-size: 0.85em;
-			margin-left: -0.25em;
+			margin-inline-start: -0.25em;
 		}
 	}
 </style>

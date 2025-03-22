@@ -13,16 +13,16 @@
 <div class="title">
 	<h1>{$current.title}</h1>
 	{#if $mode === undefined}
-		<button on:click={rename}>Rename</button>
+		<button on:click={rename}>✎ Rename</button>
 	{/if}
 </div>
 
 <div class="buttons">
 	{#if $mode === undefined}
-		<button on:click={() => (showCanvases = !showCanvases)}>Canvases</button
+		<button on:click={() => (showCanvases = !showCanvases)}>📦 Canvases</button
 		>
 	{/if}
-	<button on:click={() => store()}>Save</button>
+	<button on:click={() => store()}>💾 Save</button>
 </div>
 
 <style>
@@ -40,6 +40,8 @@
 			bottom: 0;
 			width: 100%;
 			opacity: 0;
+
+			font-size: larger;
 
 			transition: opacity 0.2s ease-in-out;
 
