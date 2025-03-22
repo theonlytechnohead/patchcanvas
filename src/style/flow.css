@@ -1,5 +1,10 @@
 /* https://svelteflow.dev/learn/guides/theming#working-with-built-in-classes */
 
+.svelte-flow {
+	/* Fixes Adaptive Tab Bar Colour extension */
+	background-color: var(--xy-background-color-default) !important;
+}
+
 .svelte-flow__controls-button {
 	width: 3em;
 	height: 3em;

@@ -21,7 +21,11 @@
           })
           .catch((e) => {
             console.log("Couldn't fetch requested canvas:", e);
+            window.location.pathname = "/";
+            window.location.search = "";
           });
+      } else {
+        window.location.pathname = "/";
       }
     }
   });

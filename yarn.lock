@@ -543,10 +543,10 @@
   resolved "https://registry.yarnpkg.com/@types/pug/-/pug-2.0.10.tgz#52f8dbd6113517aef901db20b4f3fca543b88c1f"
   integrity sha512-Sk/uYFOBAB7mb74XcpizmH0KOR2Pv3D2Hmrh1Dmy5BmK3MpdSa5kqZcg6EKBdklU0bFXX9gCfzvpnyUehrPIuA==
 
-"@xyflow/svelte@^0.0.40":
-  version "0.0.40"
-  resolved "https://registry.yarnpkg.com/@xyflow/svelte/-/svelte-0.0.40.tgz#6abab0eca9154a690eb059db24934e099465506a"
-  integrity sha512-cDBaZgKm0oIX7t39HwJqHPZsLRqlNjzPEoh/Q9PvHinM77BDSPksZaQ72M1m7Vw/r6+HkPCNxQzqycSkTrwJNg==
+"@xyflow/svelte@^0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@xyflow/svelte/-/svelte-0.0.41.tgz#1b07880dbaec70464d4b8d37812741821239c703"
+  integrity sha512-6YE8XJVebBRJnio7y6zgfN/L+J65Tw8F21TGj95c4kxMRVcU1cNRbGT/CJJ4xk3g4bSaxStlblgS/Z2I7mlUHA==
   dependencies:
     "@svelte-put/shortcut" "^3.1.0"
     "@xyflow/system" "0.0.21"

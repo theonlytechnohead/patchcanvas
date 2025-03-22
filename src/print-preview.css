@@ -17,6 +17,8 @@
 			body {
 				display: flex;
 				justify-content: center;
+				/* Fixes Adaptive Tab Bar Colour extension */
+				background-color: var(--background-colour) !important;
 			}
 
 			main {
