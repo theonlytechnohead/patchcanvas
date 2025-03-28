@@ -3,7 +3,6 @@
 	import { reset } from "../Sidebar.svelte";
 	import { current, mode, save, saves } from "../stores";
 	import { get } from "svelte/store";
-	import { tick } from "svelte";
 
 	let importFiles: FileList;
 	function upload() {
@@ -37,24 +36,43 @@
 
 	function storeExternally(data: typeof save) {
 		const m = get(mode);
-		if (m === undefined) return;
+		if (m === undefined) return false;
 
+		authenticate(m).then((authenticated) => {
+			if (!authenticated) window.alert('Wrong password!');
+
+			const file = new File([JSON.stringify(data)], data.title + ".patch");
+			const form = new FormData();
+			form.append(m, file);
+
+			const xhr = new XMLHttpRequest();
+			xhr.open("POST", "https://anderserver.ddns.net/patchcanvas/upload");
+			xhr.onload = () => {
+				if (xhr.readyState === xhr.DONE) {
+					window.alert(xhr.responseText);
+				}
+			}
+			xhr.send(form);
+		})
+	}
+
+	async function authenticate(m: string) {
+		// Get password from user
+		const password = window.prompt("Password:");
+		// Early return if they don't put in a password
+		if (password === null) return false;
+		// Encode the password into a UTF-8 buffer
+		const encodedPassword = new TextEncoder().encode(password);
+		// Cryptographically hash the encoded password
+		const hash = await window.crypto.subtle.digest('SHA-256', encodedPassword);
+		// Decode the digest into a hex-string
+		const decodedHash = [...new Uint8Array(hash)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+		// Check the digest matches
 		switch (m) {
 			case "wpbc":
-				const password = window.prompt("Password:");
-				if (password === null || password !== "wpbc1") return;
-				break;
+				return decodedHash === "7c9dcd8978a14a79431ed8c5a64a996c7e324246754adac2397b6d6f9dac65b1";
 		}
-
-		const file = new File([JSON.stringify(data)], data.title + ".patch");
-		const form = new FormData();
-		form.append(m, file);
-
-		const xhr = new XMLHttpRequest();
-		xhr.open("POST", "https://anderserver.ddns.net/patchcanvas/upload");
-		xhr.onreadystatechange = (e) =>
-			xhr.responseText && console.log(xhr.responseText);
-		xhr.send(form);
+		return false;
 	}
 
 	function removeStore(name: string) {
