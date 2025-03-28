@@ -25,7 +25,7 @@ export const initialNodes: Node[] = [
 				"ethernet",
 				"sdi",
 				"audio",
-				"midi",
+				"usb",
 				"osc",
 				"power"
 			], outputs: [
@@ -34,7 +34,7 @@ export const initialNodes: Node[] = [
 				"ethernet",
 				"sdi",
 				"audio",
-				"midi",
+				"usb",
 				"osc"
 			]
 		},
