@@ -1,5 +1,5 @@
 <svg
-  viewBox="-25 -128 512 750"
+  viewBox="-40 -128 530 750"
   xmlns="http://www.w3.org/2000/svg"
   fill="currentColor"
 >

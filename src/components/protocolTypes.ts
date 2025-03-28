@@ -2,7 +2,7 @@ import Audio from "../svg/audio.svelte?raw";
 import Dante from "../svg/dante.svelte?raw";
 import DMX from "../svg/dmx.svelte?raw";
 import Ethernet from "../svg/ethernet.svelte?raw";
-import MIDI from "../svg/midi.svelte?raw";
+import USB from "../svg/usb.svelte?raw";
 import OSC from "../svg/osc.svelte?raw";
 import Power from "../svg/power.svelte?raw";
 import SDI from "../svg/sdi.svelte?raw";
@@ -13,7 +13,7 @@ const ALL_PROTOCOLS = [
 	"sdi",
 	"ethernet",
 	"audio",
-	"midi",
+	"usb",
 	"osc",
 	"power"]
 type Protocol = typeof ALL_PROTOCOLS;
@@ -26,7 +26,7 @@ export const protocols: { [type in ProtocolType]: [string, number, string] } = {
 	"sdi": ["limegreen", 3, SDI],
 	"ethernet": ["gold", 4, Ethernet],
 	"audio": ["orange", 5, Audio],
-	"midi": ["hotpink", 6, MIDI],
+	"usb": ["hotpink", 6, USB],
 	"osc": ["magenta", 7, OSC],
 	"power": ["var(--font-colour)", 8, Power]
 }

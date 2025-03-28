@@ -75,10 +75,13 @@
       const previewing =
         document.documentElement.getAttribute("print-preview") === String(true);
       document.documentElement.setAttribute("print-preview", `${!previewing}`);
-      fitView({
-        duration: 500,
-        padding: 0.1,
-      });
+      if (!previewing)
+        fitView({
+          duration: 500,
+          padding: 0.1,
+        });
+      else
+        fitView(fitViewOptions)
     }
   });
 
@@ -121,7 +124,7 @@
   } satisfies DefaultEdgeOptions;
 
   const fitViewOptions = {
-    padding: 1,
+    padding: 0.5,
     duration: 1000,
   } satisfies FitViewOptions;
 
