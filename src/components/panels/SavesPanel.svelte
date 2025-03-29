@@ -39,9 +39,15 @@
 		if (m === undefined) return false;
 
 		authenticate(m).then((authenticated) => {
-			if (!authenticated) window.alert('Wrong password!');
+			if (!authenticated) {
+				window.alert("Wrong password!");
+				return;
+			}
 
-			const file = new File([JSON.stringify(data)], data.title + ".patch");
+			const file = new File(
+				[JSON.stringify(data)],
+				data.title + ".patch",
+			);
 			const form = new FormData();
 			form.append(m, file);
 
@@ -51,9 +57,9 @@
 				if (xhr.readyState === xhr.DONE) {
 					window.alert(xhr.responseText);
 				}
-			}
+			};
 			xhr.send(form);
-		})
+		});
 	}
 
 	async function authenticate(m: string) {
@@ -64,13 +70,21 @@
 		// Encode the password into a UTF-8 buffer
 		const encodedPassword = new TextEncoder().encode(password);
 		// Cryptographically hash the encoded password
-		const hash = await window.crypto.subtle.digest('SHA-256', encodedPassword);
+		const hash = await window.crypto.subtle.digest(
+			"SHA-256",
+			encodedPassword,
+		);
 		// Decode the digest into a hex-string
-		const decodedHash = [...new Uint8Array(hash)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+		const decodedHash = [...new Uint8Array(hash)]
+			.map((byte) => byte.toString(16).padStart(2, "0"))
+			.join("");
 		// Check the digest matches
 		switch (m) {
 			case "wpbc":
-				return decodedHash === "7c9dcd8978a14a79431ed8c5a64a996c7e324246754adac2397b6d6f9dac65b1";
+				return (
+					decodedHash ===
+					"7c9dcd8978a14a79431ed8c5a64a996c7e324246754adac2397b6d6f9dac65b1"
+				);
 		}
 		return false;
 	}
